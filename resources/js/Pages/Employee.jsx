@@ -3,11 +3,11 @@ import TextInput from '@/Components/TextInput';
 import axios from 'axios';
 
 export default function Employee({ auth, employee }) {
-    const available_dates = JSON.parse(employee.available_dates);
-
+    const available_dates = employee.available_dates ? employee.available_dates : [];
+    console.log(employee);
     // makeReservation
     const checkReservation = (date, hour) => {
-        console.log(date,hour)
+        // console.log(date,hour)
         axios.get('/reservation/check/', {
             date,
             hour
@@ -95,21 +95,27 @@ export default function Employee({ auth, employee }) {
                                         View available dates for the employee.
                                     </p>
                                 </div>
-                                <div className="space-y-6 lg:col-span-2">
-                                    {available_dates.map((date, index) => (
-                                        <div key={index} className="flex items-center space-x-4">
-                                            { date.date }
-                                            {date.hours.map((hour, hourIndex) => (
-                                                // <button key={hourIndex} onClick={checkReservation(date.date, hour.hour)}>
-                                                //     {hour.hour}
-                                                // </button>
-                                                <Link key={hourIndex} href={route('reservation.check', { date: date.date, hour: hour.hour, employee: employee.id })}>
-                                                    {hour.hour}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    ))}
-                                </div>
+                                {/* if availabe_dates not empy */}
+                                {available_dates.length > 0 ? (
+
+                                    <div className="space-y-6 lg:col-span-2">
+                                        {available_dates.map((date, index) => (
+                                            <div key={index} className="flex items-center space-x-4">
+                                                { date.date }
+                                                {date.hours.map((hour, hourIndex) => (
+                                                    <Link key={hourIndex} href={route('reservation.check', { date: date.date, hour: hour, employee: employee.uid })}>
+                                                        {hour}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6 lg:col-span-2">
+                                        <p className="text-sm text-gray-600">No available dates.</p>
+                                    </div>
+                                )}
+
                             </div>
                         </main>
                         <footer className="py-16 text-center text-sm text-black dark:text-white/70">

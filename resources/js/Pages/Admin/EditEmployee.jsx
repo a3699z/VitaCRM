@@ -3,11 +3,12 @@ import AdminLayout from '../../Layouts/AdminLayout';
 import { useEffect, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function EditEmployee({ auth, employee }) {
+export default function EditEmployee({ auth, employee, teams }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        id: employee.id,
+        name: employee.name,
+        email: employee.email,
+        uid: employee.uid,
+        team_key: employee.team_key,
     });
 
     useEffect(() => {
@@ -21,7 +22,7 @@ export default function EditEmployee({ auth, employee }) {
         console.log(data);
         e.preventDefault();
 
-        post(route('admin.employee.update'));
+        post(route('admin.employee.update'), data);
     }
 
 
@@ -65,8 +66,30 @@ export default function EditEmployee({ auth, employee }) {
                                 value={employee.email}
                             />
                         </div>
+
+                        {/* select for teams */}
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="team">
+                                Team
+                            </label>
+                            <select
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="team"
+                                onChange={(e) => {setData('team_key', e.target.value)}}
+                            >
+                                <option value="">Select Team</option>
+                                {teams.map((team) => (
+                                    <option key={team.key} value={team.key}
+                                    // check if team key is equal to employee team key
+                                    selected={team.key === employee.team_key ? 'selected' : ''}
+                                    >
+                                        {team.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         {/* id */}
-                        <input type="hidden" name="id" value={employee.id} />
+                        <input type="hidden" name="uid" value={employee.uid} />
                         <div className="flex items-center justify-between">
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

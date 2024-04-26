@@ -36,16 +36,22 @@ class EmployeeController extends Controller
     //  return array json of employees
     public function search(Request $request): JsonResource
     {
-        $employees = User::where('user_type', 'employee')->get();
+        // $employees = User::where('user_type', 'employee')->get();
+        $employees = new User();
+        $employees = $employees->searchEmployeeByName($request->search);
         return new JsonResource($employees);
     }
 
     /**
      * show employee
      */
-    public function show($id): Response
+    public function show($uid): Response
     {
-        $employee = User::find($id);
+        // $employee = User::find($id);
+        $employee = new User();
+        $employee = $employee->getByUID($uid);
+
+
         return Inertia::render('Employee', [
             'employee' => $employee
         ]);

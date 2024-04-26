@@ -9,6 +9,7 @@ export default function Employees({ auth, employees }) {
     });
 
 
+
     const deleteEmployee = (id) => () => {
         setData('id', id);
         post(route('admin.employee.delete'));
@@ -40,12 +41,12 @@ export default function Employees({ auth, employees }) {
                             </thead>
                             <tbody>
                                 {employees.map((employee) => (
-                                    <tr key={employee.id}>
+                                    <tr key={employee.uid}>
                                         <td className="border px-4 py-2">{employee.name}</td>
                                         <td className="border px-4 py-2">{employee.email}</td>
                                         <td className="border px-4 py-2">
-                                            <Link href={route('admin.employee.edit', employee.id)} className="text-blue-500 hover:text-blue-800">Edit</Link>
-                                            <button onClick={deleteEmployee(employee.id)} className="text-red-500 hover:text-red-800">Delete</button>
+                                            <Link href={route('admin.employee.edit', employee.uid)} className="text-blue-500 hover:text-blue-800">Edit</Link>
+                                            <button onClick={deleteEmployee(employee.uid)} className="text-red-500 hover:text-red-800">Delete</button>
                                         </td>
                                     </tr>
                                 ))}

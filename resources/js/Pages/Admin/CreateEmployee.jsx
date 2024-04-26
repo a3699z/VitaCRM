@@ -3,11 +3,13 @@ import AdminLayout from '../../Layouts/AdminLayout';
 import { useEffect, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function CreateEmployee({ auth }) {
+export default function CreateEmployee({ auth, teams }) {
+    console.log(teams);
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
+        team_key: '',
     });
 
     useEffect(() => {
@@ -72,6 +74,24 @@ export default function CreateEmployee({ auth }) {
                                 placeholder="Password"
                                 onChange={(e) => {setData('password', e.target.value)}}
                             />
+                        </div>
+                        {/* select for teams */}
+                        <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="team">
+                                Team
+                            </label>
+                            <select
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                id="team"
+                                onChange={(e) => {setData('team_key', e.target.value)}}
+                            >
+                                <option value="">Select Team</option>
+                                {teams.map((team) => (
+                                    <option key={team.key} value={team.key}>
+                                        {team.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="flex items-center justify-between">
                             <button

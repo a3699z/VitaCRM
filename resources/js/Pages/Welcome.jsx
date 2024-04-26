@@ -23,6 +23,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             //     console.log(employee);
             // });
             setEmployees(response.data.data);
+            // console.log(response.data.data);
         });
     }
 
@@ -85,7 +86,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             </div>
                             <div>
                                 {employees.map((employee) => (
-                                    <Link key={employee.id} href={route('employee.show', employee.id)}>
+                                    <Link key={employee.uid} href={route('employee.show', employee.uid)}>
                                         {employee.name}
                                     </Link>
                                 ))}

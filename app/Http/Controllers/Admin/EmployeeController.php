@@ -15,35 +15,121 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 // suer firebase databse
 use  Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+// firebase fail to create user
+use Kreait\Firebase\Exception\Auth\EmailExists;
 
 class EmployeeController extends Controller
 {
 
-    public function __construct( Database $database)
+    protected $database;
+    protected $auth;
+    public function __construct( Database $database, FirebaseAuth $auth)
     {
         $this->database = $database;
+        $this->auth = $auth;
     }
 
-    public function store_fire (Request $request)
+    public function store_team(Request $request): RedirectResponse
     {
-        $newPost = $this->database
-            ->getReference('blog/posts')
-            ->push([
-                'title' => 'Post title',
-                'body' => 'This should probably be longer.'
-            ]);
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
 
-        return $newPost->getvalue();
+        $team = [
+            'name' => $request->name,
+        ];
+
+        $this->database->getReference('teams')->push($team);
+
+        return Redirect::route('admin.team.create');
+    }
+
+    public function edit_team ($key): Response
+    {
+        $team = $this->database->getReference('teams/'.$key)->getValue();
+        $team['key'] = $key;
+        return Inertia::render('Admin/EditTeam', [
+            'team' => $team
+        ]);
+    }
+
+    public function update_team(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+        ]);
+
+        $team = [
+            'name' => $request->name,
+        ];
+
+        $this->database->getReference('teams/'.$request->key)->update($team);
+
+        return Redirect::route('admin.team.edit', ['key' => $request->key]);
+    }
+
+    public function index_team(): Response
+    {
+        $teams = $this->database->getReference('teams')->getValue();
+        if (!empty($teams)) {
+            $teams = array_map(function($team, $key) {
+                return [
+                    'key' => $key,
+                    'name' => $team['name'],
+                ];
+            }, $teams, array_keys($teams));
+        } else {
+            $teams = [];
+        }
+        return Inertia::render('Admin/Teams', [
+            'teams' => $teams
+        ]);
     }
     /**
      * show all employees
      */
 
+     public function create (): Response
+     {
+        // get all teams
+        $teams = $this->database->getReference('teams')->getValue();
+        $teams = array_map(function($team, $key) {
+            return [
+                'key' => $key,
+                'name' => $team['name'],
+            ];
+        }, $teams, array_keys($teams));
+         return Inertia::render('Admin/CreateEmployee', [
+             'teams' => $teams
+         ]);
+     }
+
+     public function delete_team ($key): RedirectResponse
+     {
+        //  $request->validate([
+        //      'key' => ['required', 'string'],
+        //  ]);
+        //  dd($key);
+         $this->database->getReference('teams/'.$key)->remove();
+
+         return Redirect::route('admin.teams');
+     }
+
     public function index(): Response
     {
-        $employees = User::where('user_type', 'employee')->get();
+
+        $employees = $this->database->getReference('users')->orderByChild('user_type')->equalTo('employee')->getValue();
+        $employees = array_map(function($employee, $key) {
+            return [
+                'key' => $key,
+                'uid' => $employee['uid'],
+                'name' => $employee['name'],
+                'email' => $employee['email'],
+            ];
+        }, $employees, array_keys($employees));
         return Inertia::render('Admin/Employees', [
-            'employees' => $employees
+            'employees' =>$employees
         ]);
     }
     /**
@@ -52,18 +138,43 @@ class EmployeeController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-        ]);
+        // $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8'],
+        // ]);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->user_type = 'employee'; // 'employee' or 'patient'
-        $user->save();
+        // $user = new User();
+        // $user->name = $request->name;
+        // $user->email = $request->email;
+        // $user->password = Hash::make($request->password);
+        // $user->user_type = 'employee'; // 'employee' or 'patient'
+        // $user->save();
+            // dd($request->team_key);
+        try {
+            $email = $request->email;
+            $password = $request->password;
+            $userProperties = [
+                'email' => $email,
+                'password' => $password,
+                'displayName' => $request->name,
+            ];
+            $firebase_user = $this->auth->createUser($userProperties);
+            // if fibase user created successfully then save the user in the database
+
+        } catch (EmailExists $e) {
+            return back()->withErrors(['email' => 'The provided email is already registered.']);
+        }
+            if ($firebase_user) {
+                $user = [
+                    'uid' => $firebase_user->uid,
+                    'name' => $request->name,
+                    'email' => $email,
+                    'user_type' => 'employee',
+                    'team_key' => $request->team_key,
+                ];
+                $user = $this->database->getReference('users')->push($user);
+            }
 
 
         return Redirect::route('admin.employee.create');
@@ -73,11 +184,25 @@ class EmployeeController extends Controller
      * edit employee
      */
 
-    public function edit($id): Response
+    public function edit($uid): Response
     {
-        $employee = User::find($id);
+        $employee = new User();
+        $employee = $employee->getByUID($uid);
+
+        $teams = $this->database->getReference('teams')->getValue();
+        if (!empty($teams)) {
+            $teams = array_map(function($team, $key) {
+                return [
+                    'key' => $key,
+                    'name' => $team['name'],
+                ];
+            }, $teams, array_keys($teams));
+        } else {
+            $teams = [];
+        }
         return Inertia::render('Admin/EditEmployee', [
-            'employee' => $employee
+            'employee' => $employee,
+            'teams' => $teams
         ]);
     }
 
@@ -85,19 +210,41 @@ class EmployeeController extends Controller
      * update employee
      */
 
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
         ]);
 
-        $user = User::find($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
 
-        return Redirect::route('admin.employee.edit', ['id' => $id]);
+        try {
+            $user = $this->auth->getUser($request->uid);
+            $userProperties = [
+                'email' => $request->email,
+                'displayName' => $request->name,
+            ];
+            $this->auth->updateUser($request->uid, $userProperties);
+
+            $user = new User();
+            $user = $user->getByUID($request->uid);
+            $key = $user['key'];
+            $user = [
+                'uid' => $request->uid,
+                'name' => $request->name,
+                'email' => $request->email,
+                'user_type' => 'employee',
+                'team_key' => $request->team_key,
+            ];
+            $this->database->getReference('users/'.$key)->update($user);
+
+
+        } catch (\Exception $e) {
+            return back()->withErrors(['email' => $e->getMessage()]);
+        }
+
+
+        return Redirect::route('admin.employee.edit', ['uid' => $request->uid]);
     }
 
     /**

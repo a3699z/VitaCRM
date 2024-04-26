@@ -28,10 +28,10 @@ export default function UpdatePasswordForm({ className = '' }) {
                     passwordInput.current.focus();
                 }
 
-                if (errors.current_password) {
-                    reset('current_password');
-                    currentPasswordInput.current.focus();
-                }
+                // if (errors.current_password) {
+                //     reset('current_password');
+                //     currentPasswordInput.current.focus();
+                // }
             },
         });
     };
@@ -47,7 +47,7 @@ export default function UpdatePasswordForm({ className = '' }) {
             </header>
 
             <form onSubmit={updatePassword} className="mt-6 space-y-6">
-                <div>
+                {/* <div>
                     <InputLabel htmlFor="current_password" value="Current Password" />
 
                     <TextInput
@@ -61,7 +61,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                     />
 
                     <InputError message={errors.current_password} className="mt-2" />
-                </div>
+                </div> */}
 
                 <div>
                     <InputLabel htmlFor="password" value="New Password" />

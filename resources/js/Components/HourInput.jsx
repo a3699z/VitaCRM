@@ -8,7 +8,7 @@ export default function HourInput({ hour, index, dateIndex, onChange }) {
             id={`hours.${dateIndex}${index}.hour`}
             type="time"
             placeholder="Hour"
-            value={hour.hour}
+            value={hour}
             onChange={(e) => onChange(index, e.target.value)}
         />
     );

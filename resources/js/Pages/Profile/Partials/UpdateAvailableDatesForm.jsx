@@ -8,9 +8,10 @@ import { Transition } from '@headlessui/react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
+    console.log(user.available_dates);
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        dates : user.available_dates ? JSON.parse(user.available_dates) : [{date: '', hours: [{hour: ''}]}]
+        dates : user.available_dates ? user.available_dates : [{date: '', hours: []}]
     });
 
 
@@ -71,7 +72,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                                             if (index === i) {
                                                 return { ...d, hours: d.hours.map((h, hi) => {
                                                     if (hourIndex === hi) {
-                                                        return { ...h, hour: value };
+                                                        return value;
                                                     }
 
                                                     return h;

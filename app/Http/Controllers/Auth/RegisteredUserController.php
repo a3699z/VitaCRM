@@ -13,13 +13,22 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+
 class RegisteredUserController extends Controller
 {
+    protected $auth;
+    public function __construct( FirebaseAuth $auth)
+    {
+        // check if user is authenticated using firebase auth
+        $this->auth = $auth;
+    }
     /**
      * Display the registration view.
      */
     public function create(): Response
     {
+        // $users = User::all();
         return Inertia::render('Auth/Register');
     }
 
@@ -30,22 +39,55 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+        //     'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        // ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // $user = User::create([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
+        // ]);
+        try {
+            $email = $request->email;
+            $password = $request->password;
+            $userProperties = [
+                'email' => $email,
+                'password' => $password,
+                'displayName' => $request->name,
+            ];
+            $firebase_user = $this->auth->createUser($userProperties);
+        } catch (\Exception $e) {
+            // dd($e);
+            return back()->withErrors(['email' => 'The provided email is already registered.']);
+        }
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->user_type = 'patient'; // 'employee' or 'patient'
+            $user->uid = $firebase_user->uid;
+            $user->saveToFirebase();
 
-        event(new Registered($user));
+        try {
+            $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
+            $user = $signInResult->data();
+            $request->session()->put('firebase_token', $user['idToken']);
+            $request->session()->put('uid', $user['localId']);
 
-        Auth::login($user);
+            // $user = new User($user);
 
-        return redirect(route('dashboard', absolute: false));
+            // event(new Registered($user));
+            // Auth::login($user);
+            // $request->session()->put('user', $user);
+            // $request->session()->regenerate();
+
+            return redirect(route('dashboard', absolute: false));
+        } catch (\Kreait\Firebase\Auth\SignIn\FailedToSignIn $e) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
+        }
     }
 }

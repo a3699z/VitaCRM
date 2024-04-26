@@ -197,6 +197,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'F' => 
         array (
             'Fruitcake\\Cors\\' => 15,
+            'Firevel\\FirebaseAuthentication\\' => 31,
             'Firebase\\JWT\\' => 13,
             'Fig\\Http\\Message\\' => 17,
             'Faker\\' => 6,
@@ -674,6 +675,10 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         array (
             0 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
         ),
+        'Firevel\\FirebaseAuthentication\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firevel/firebase-authentication/src',
+        ),
         'Firebase\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
@@ -771,6 +776,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\ReservationController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReservationController.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
+        'App\\Http\\Middleware\\FirebaseAuthMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/FirebaseAuthMiddleware.php',
         'App\\Http\\Middleware\\HandleInertiaRequests' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleInertiaRequests.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
@@ -1721,6 +1727,9 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'Faker\\ValidGenerator' => __DIR__ . '/..' . '/fakerphp/faker/src/Faker/ValidGenerator.php',
         'Fig\\Http\\Message\\RequestMethodInterface' => __DIR__ . '/..' . '/fig/http-message-util/src/RequestMethodInterface.php',
         'Fig\\Http\\Message\\StatusCodeInterface' => __DIR__ . '/..' . '/fig/http-message-util/src/StatusCodeInterface.php',
+        'Firebase\\FirebaseInterface' => __DIR__ . '/..' . '/ktamas77/firebase-php/src/firebaseInterface.php',
+        'Firebase\\FirebaseLib' => __DIR__ . '/..' . '/ktamas77/firebase-php/src/firebaseLib.php',
+        'Firebase\\FirebaseStub' => __DIR__ . '/..' . '/ktamas77/firebase-php/src/firebaseStub.php',
         'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
         'Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
         'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
@@ -1729,6 +1738,11 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'Firebase\\JWT\\JWTExceptionWithPayloadInterface' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWTExceptionWithPayloadInterface.php',
         'Firebase\\JWT\\Key' => __DIR__ . '/..' . '/firebase/php-jwt/src/Key.php',
         'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
+        'Firevel\\FirebaseAuthentication\\FirebaseAuthenticable' => __DIR__ . '/..' . '/firevel/firebase-authentication/src/FirebaseAuthenticable.php',
+        'Firevel\\FirebaseAuthentication\\FirebaseAuthenticationServiceProvider' => __DIR__ . '/..' . '/firevel/firebase-authentication/src/FirebaseAuthenticationServiceProvider.php',
+        'Firevel\\FirebaseAuthentication\\FirebaseGuard' => __DIR__ . '/..' . '/firevel/firebase-authentication/src/FirebaseGuard.php',
+        'Firevel\\FirebaseAuthentication\\FirebaseIdentity' => __DIR__ . '/..' . '/firevel/firebase-authentication/src/FirebaseIdentity.php',
+        'Firevel\\FirebaseAuthentication\\Http\\Middleware\\AddAccessTokenFromCookie' => __DIR__ . '/..' . '/firevel/firebase-authentication/src/Http/Middleware/AddAccessTokenFromCookie.php',
         'Fruitcake\\Cors\\CorsService' => __DIR__ . '/..' . '/fruitcake/php-cors/src/CorsService.php',
         'Fruitcake\\Cors\\Exceptions\\InvalidOptionException' => __DIR__ . '/..' . '/fruitcake/php-cors/src/Exceptions/InvalidOptionException.php',
         'GPBMetadata\\ApiCore\\Testing\\Mocks' => __DIR__ . '/..' . '/google/gax/metadata/ApiCore/Testing/Mocks.php',

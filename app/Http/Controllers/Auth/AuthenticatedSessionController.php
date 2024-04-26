@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
 // use firebase auth
 use Kreait\Firebase\Contract\Auth as FirebaseAuth;
 
 
 class AuthenticatedSessionController extends Controller
 {
+    protected $auth;
     public function __construct( FirebaseAuth $auth)
     {
         // check if user is authenticated using firebase auth
@@ -31,10 +33,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
-        // // check if user is authenticated using firebase auth
-        $verifyIdToken = $this->auth->verifyIdToken('eyJhbGciOiJSUzI1NiIsImtpZCI6IjJkOWI0ZTY5ZTMyYjc2MTVkNGNkN2NhZmI4ZmM5YjNmODFhNDFhYzAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiQWhtZWQgTW9oYW1lZCBJYnJhaGltIE1hIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2phbWVkYS04NGVhMCIsImF1ZCI6ImphbWVkYS04NGVhMCIsImF1dGhfdGltZSI6MTcxMzg3MDgzNCwidXNlcl9pZCI6IjhaYmlRbDFDWmxZS1hrN1VtN2JTZndtU1Y2RTIiLCJzdWIiOiI4WmJpUWwxQ1psWUtYazdVbTdiU2Z3bVNWNkUyIiwiaWF0IjoxNzEzODcwODM0LCJleHAiOjE3MTM4NzQ0MzQsImVtYWlsIjoiZGV2ZWxvcGVyQHZpaS52aXAtdml0YWxpc3Rlbi5kZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJkZXZlbG9wZXJAdmlpLnZpcC12aXRhbGlzdGVuLmRlIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.pq8-28cDhPGD18PCNG7ddG7ylLXmWQNwxqMdDSiYJdoOTIIpaKwQ7s4lfUzI0BhuNg8tTez-_1qfL8guRbd6pa3cclTDEs23lZ7RZHwq_cJo8rDPdykDK967Io4jMlLRK-dedZLPPt2Q47e1ieB8OrmwFBJj_EhllzD2NWQF7ck7yiX47oUPQrdDPqAo66ISys1bH90gzhZgOmMgIWw0LkCimFIVaUPd8xn3CO2-gkA57Ckvm-nfcYYPdShGzZ5Z2UIvDRv5TlfZ9YWaltFKE_yEOPbVNj2vqeUYXXiIv_WI7e-ZxVPTwmnpepMFc_cvbmm44iTOYzKdRqV9xjIUPA');
-        // $uid = $verifyIdToken->getClaim('sub');
-        dd($verifyIdToken);
+        // $verifyIdToken = $this->auth->verifyIdToken('eyJhbGciOiJSUzI1NiIsImtpZCI6ImEyMzhkZDA0Y2JhYTU4MGIzMDRjODgxZTFjMDA4ZWMyOGZiYmFkZGMiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiYWhtZWQgbW9oYW1lZCBtYWhtb3VkIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL2phbWVkYS04NGVhMCIsImF1ZCI6ImphbWVkYS04NGVhMCIsImF1dGhfdGltZSI6MTcxMzk0NzQ3MCwidXNlcl9pZCI6InlwdkQzQUpXVzJYTFlMdVNwMjBOVDhwV0pFajIiLCJzdWIiOiJ5cHZEM0FKV1cyWExZTHVTcDIwTlQ4cFdKRWoyIiwiaWF0IjoxNzEzOTQ3NDcwLCJleHAiOjE3MTM5NTEwNzAsImVtYWlsIjoiemlkYW5haG1lZDA4NEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ6aWRhbmFobWVkMDg0QGdtYWlsLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.BiVq9MBKlvpxSAtWGeHEKfkKT3znfF4sNsIfnxcJwy2G5wb2mByGmM7wZbKZENU4W8aQs-02NbNFRS0EKtAywfRr1mS6tgOO5mDe3fTvK7-Xx2yP-oDJcQz-vWTw4hXkiY24RfJTBTcpC7x5bpJuBCdnYgXSkMSnkCViOPofMU-S9qFoSCXQrUmGSqDWCtxZASLkbInaQjbBCiLS4SdZJxYm78sUppCPrJTao5tX5fuG3Cf2tjKTcQPZlWc7GH8nC8Y2yXov5FP2zblsd-cxpo48JD4RaurnJjzzpR3C8m5-zFINT0RL_M9saNjGZgL-XOEYuBsnwQNNyC58r4pBnw');
+        // dd($verifyIdToken->claims());
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
@@ -54,16 +54,28 @@ class AuthenticatedSessionController extends Controller
         // if (!empty($request->ref) && $request->ref == 'reserve') {
         //     return redirect()->intended(route('reservation.create'));
         // }
-
-
         // return redirect()->intended(route('dashboard', absolute: false));
-        $email = $request->email;
-        $password = $request->password;
-        $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
-        $user = $signInResult->data();
-        dd($user);
-        $request->session()->put('user', $user);
-        return redirect()->intended(route('dashboard', absolute: false));
+
+        try {
+            $email = $request->email;
+            $password = $request->password;
+            $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
+            $user = $signInResult->data();
+            // dd($user);
+            $request->session()->put('firebase_token', $user['idToken']);
+            $request->session()->put('uid', $user['localId']);
+            // dd(Auth::attempt(['email' => $email, 'password' => $password]));
+            // dd($request->session()->get('firebase_token'));
+
+            if (!empty($request->ref) && $request->ref == 'reserve') {
+                return redirect()->intended(route('reservation.create'));
+            }
+            return redirect()->intended(route('dashboard', absolute: false));
+        } catch (\Kreait\Firebase\Auth\SignIn\FailedToSignIn $e) {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
+        }
     }
 
     /**
@@ -71,7 +83,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        // Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
