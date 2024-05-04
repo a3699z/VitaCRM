@@ -4,7 +4,11 @@ import axios from 'axios';
 
 export default function Employee({ auth, employee }) {
     const available_dates = employee.available_dates ? employee.available_dates : [];
-    console.log(employee);
+    available_dates.length > 0 && available_dates.map((date, index) => {
+        console.log(date.date);
+        console.log(date.hours);
+    });
+
     // makeReservation
     const checkReservation = (date, hour) => {
         // console.log(date,hour)
@@ -76,18 +80,6 @@ export default function Employee({ auth, employee }) {
                                         View information about the employee.
                                     </p>
                                 </div>
-                                <div className="space-y-6 lg:col-span-2">
-                                    <TextInput
-                                        label="First Name"
-                                        value={employee.name}
-                                        disabled
-                                    />
-                                    <TextInput
-                                        label="Email"
-                                        value={employee.email}
-                                        disabled
-                                    />
-                                </div>
                                 {/* available dates with a link for each our  */}
                                 <div className="space-y-6 lg:col-span-2">
                                     <h2 className="text-lg font-medium text-gray-900">Available Dates</h2>
@@ -102,7 +94,7 @@ export default function Employee({ auth, employee }) {
                                         {available_dates.map((date, index) => (
                                             <div key={index} className="flex items-center space-x-4">
                                                 { date.date }
-                                                {date.hours.map((hour, hourIndex) => (
+                                                {date.hours && date.hours.length > 0 && date.hours.map((hour, hourIndex) => (
                                                     <Link key={hourIndex} href={route('reservation.check', { date: date.date, hour: hour, employee: employee.uid })}>
                                                         {hour}
                                                     </Link>

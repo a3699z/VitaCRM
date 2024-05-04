@@ -23,6 +23,16 @@ export default function AdminLayout({ user, header, children }) {
                                 <NavLink href={route('admin.dashboard')} active={route().current('dashboard')}>
                                     Dashboard Admin
                                 </NavLink>
+                                {/* links for users teams reservatinos */}
+                                <NavLink href={route('admin.users')} active={route().current('admin.users')}>
+                                    Users
+                                </NavLink>
+                                <NavLink href={route('admin.teams')} active={route().current('admin.teams')}>
+                                    Teams
+                                </NavLink>
+                                <NavLink href={route('admin.reservations')} active={route().current('admin.reservations')}>
+                                    Reservations
+                                </NavLink>
                             </div>
                         </div>
 

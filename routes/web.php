@@ -9,8 +9,29 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+// guzzle
+use GuzzleHttp\Client;
 
 Route::get('/', function () {
+    $config = Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
+    $config->setHost('https://security.patientus.de/api/open-api-service/swagger.php');
+    $authorization = new Patientus\OVS\SDK\Handlers\AuthorizationHandler(
+        $config
+    );
+    dd($authorization);
+    $authToken = $authorization->getAuthToken('client_identifier', 'client_secret');
+    $config->setAccessToken($authToken);
+
+
+
+
+
+
+
+
+
+
+
 
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

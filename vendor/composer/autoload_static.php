@@ -121,6 +121,7 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
+            'Patientus\\OVS\\SDK\\' => 18,
         ),
         'N' => 
         array (
@@ -465,6 +466,10 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
+        'Patientus\\OVS\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src',
+        ),
         'NunoMaduro\\Collision\\' => 
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
@@ -761,7 +766,11 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
     );
 
     public static $classMap = array (
+        'App\\CustomFirebaseAuth' => __DIR__ . '/../..' . '/app/CustomFirebaseAuth.php',
+        'App\\Events\\ReservationBooked' => __DIR__ . '/../..' . '/app/Events/ReservationBooked.php',
         'App\\Http\\Controllers\\Admin\\EmployeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/EmployeeController.php',
+        'App\\Http\\Controllers\\Admin\\ReservationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ReservationController.php',
+        'App\\Http\\Controllers\\Admin\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
         'App\\Http\\Controllers\\Auth\\EmailVerificationNotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/EmailVerificationNotificationController.php',
@@ -775,11 +784,16 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'App\\Http\\Controllers\\EmployeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\ReservationController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReservationController.php',
+        'App\\Http\\Controllers\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/SettingsController.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
         'App\\Http\\Middleware\\FirebaseAuthMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/FirebaseAuthMiddleware.php',
+        'App\\Http\\Middleware\\FirebaseGuestMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/FirebaseGuestMiddleware.php',
         'App\\Http\\Middleware\\HandleInertiaRequests' => __DIR__ . '/../..' . '/app/Http/Middleware/HandleInertiaRequests.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
+        'App\\Listeners\\SendEmailToEmployee' => __DIR__ . '/../..' . '/app/Listeners/SendEmailToEmployee.php',
+        'App\\Mail\\ReservationBooked' => __DIR__ . '/../..' . '/app/Mail/ReservationBooked.php',
+        'App\\Models\\Reservation' => __DIR__ . '/../..' . '/app/Models/Reservation.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -5872,6 +5886,28 @@ class ComposerStaticInitda9b7a1dc1dd923105198c572cc7df8d
         'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/Xml.php',
         'PHPUnit\\Util\\Xml\\Loader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml/Loader.php',
         'PHPUnit\\Util\\Xml\\XmlException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Exception/XmlException.php',
+        'Patientus\\OVS\\SDK\\Configuration' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Configuration.php',
+        'Patientus\\OVS\\SDK\\Consts\\AuthTokenType' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Consts/AuthTokenType.php',
+        'Patientus\\OVS\\SDK\\Consts\\HttpStatusCode' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Consts/HttpStatusCode.php',
+        'Patientus\\OVS\\SDK\\Consts\\ParticipantType' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Consts/ParticipantType.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\AccessDeniedException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/AccessDeniedException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\ApiException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/ApiException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\HostCommunicationException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/HostCommunicationException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidAuthTokenException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidAuthTokenException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidHostException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidHostException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidLogFilePathException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidLogFilePathException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidOvsSessionException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidOvsSessionException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidParticipantTypeException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidParticipantTypeException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\InvalidRoomNameException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/InvalidRoomNameException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\MissingClientCredentialException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/MissingClientCredentialException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\TooManyRequestException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/TooManyRequestException.php',
+        'Patientus\\OVS\\SDK\\Exceptions\\UnknownException' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Exceptions/UnknownException.php',
+        'Patientus\\OVS\\SDK\\Handlers\\AuthorizationHandler' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Handlers/AuthorizationHandler.php',
+        'Patientus\\OVS\\SDK\\Handlers\\BaseHandler' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Handlers/BaseHandler.php',
+        'Patientus\\OVS\\SDK\\Handlers\\OvsSessionHandler' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Handlers/OvsSessionHandler.php',
+        'Patientus\\OVS\\SDK\\Models\\AuthToken' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Models/AuthToken.php',
+        'Patientus\\OVS\\SDK\\Models\\OvsBasicSession' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Models/OvsBasicSession.php',
+        'Patientus\\OVS\\SDK\\Models\\OvsSession' => __DIR__ . '/..' . '/patientus/tele-pat-ovs-client-php-sdk/src/Models/OvsSession.php',
         'PharIo\\Manifest\\Application' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Application.php',
         'PharIo\\Manifest\\ApplicationName' => __DIR__ . '/..' . '/phar-io/manifest/src/values/ApplicationName.php',
         'PharIo\\Manifest\\Author' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Author.php',

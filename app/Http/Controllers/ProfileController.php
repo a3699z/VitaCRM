@@ -118,13 +118,14 @@ class ProfileController extends Controller
     // update_dates
     public function update_dates(Request $request): RedirectResponse
     {
-        // it is an array of dates every one has date attribute and hours atrribute which is array of hours available in this day
         $dates = $request->dates;
+        $avialable_dates = array();
         foreach($dates as $date) {
-            if ($date['date'] != null && !empty($date['hours'])) {
+            // check if date is today or in the future
+            if ($date['date'] != null && !empty($date['hours']) && strtotime($date['date']) >= strtotime(date('Y-m-d'))) {
                 $hours = array();
                 foreach ($date['hours'] as $hour) {
-                    if (!empty($hour)) {
+                    if (!empty($hour) && strtotime($date['date'] . ' ' . $hour) >= strtotime(date('Y-m-d H:i'))) {
                         $hours[] = $hour;
                     }
                 }

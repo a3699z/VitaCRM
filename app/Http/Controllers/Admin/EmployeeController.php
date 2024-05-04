@@ -105,6 +105,38 @@ class EmployeeController extends Controller
          ]);
      }
 
+     public function show_team ($key): Response
+     {
+        $team = $this->database->getReference('teams/'.$key)->getValue();
+        $team['key'] = $key;
+        $employees_arr = $this->database->getReference('users')->orderByChild('team_key')->equalTo($key)->getValue();
+        $reservations = [];
+        $employees = [];
+        if (!empty($employees_arr)) {
+            foreach ($employees_arr as $employee_key => $employee) {
+                $employee['key'] = $employee_key;
+                $employee_reservations = $this->database->getReference('reservations')->orderByChild('employee_key')->equalTo($employee_key)->getValue();
+                if (!empty($employee_reservations)) {
+                    $employee_reservations = array_map(function($reservation, $key){
+                        $reservation['key'] = $key;
+                        $reservation['patient'] = $this->database->getReference('users/'.$reservation['user_key'])->getValue();
+                        $reservation['employee'] = $this->database->getReference('users/'.$reservation['employee_key'])->getValue();
+                        return $reservation;
+                    }, $employee_reservations, array_keys($employee_reservations));
+                    $reservations = array_merge($reservations, $employee_reservations);
+                }
+                $employees[] = $employee;
+            }
+        }
+        // dd($reservations);
+
+        return Inertia::render('Admin/ShowTeam', [
+            'team' => $team,
+            'employees' => $employees,
+            'reservations' => $reservations
+        ]);
+     }
+
      public function delete_team ($key): RedirectResponse
      {
         //  $request->validate([

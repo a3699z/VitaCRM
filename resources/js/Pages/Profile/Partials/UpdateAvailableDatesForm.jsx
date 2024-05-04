@@ -11,7 +11,14 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     console.log(user.available_dates);
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-        dates : user.available_dates ? user.available_dates : [{date: '', hours: []}]
+        dates : user.available_dates ? user.available_dates.map((date) => {
+            return {
+                date: date.date,
+                hours: date.hours? date.hours.map((hour) => {
+                    return hour
+                }) : []
+            }
+        })  : [{date: '', hours: []}]
     });
 
 
@@ -21,6 +28,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         e.preventDefault();
 
         patch(route('dates.update'));
+
     };
     // every employee has a list of available dates and every date has hours on that date
     // so we need to loop through the dates and hours and update them
@@ -106,6 +114,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                             </div>
                         ))}
+
                         {/* add hour button  */}
                         <button
                             type="button"

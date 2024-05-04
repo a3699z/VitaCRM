@@ -35,7 +35,7 @@ export default function Index({ auth, reservations }) {
                         {auth.user.user_type === 'employee' ? <th className="px-4 py-2">Patient</th> : <th className="px-4 py-2">Doctor</th>}
                         <th className="px-4 py-2">Date</th>
                         <th className="px-4 py-2">Time</th>
-                        <th className="px-4 py-2">Actions</th>
+                        {auth.user.user_type === 'employee' ? <th className="px-4 py-2">Action</th> : <th className="px-4 py-2">Status</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -44,11 +44,14 @@ export default function Index({ auth, reservations }) {
                             {auth.user.user_type === 'employee' ? <td className="border px-4 py-2">{reservation.reservation_with.name}</td> : <td className="border px-4 py-2">{reservation.reservation_with.name}</td>}
                             <td className="border px-4 py-2">{reservation.date}</td>
                             <td className="border px-4 py-2">{reservation.time}</td>
-                            <td className="border px-4 py-2">
-                                {/* accept and decline button */}
-                                <button onClick={(e) => {accept(reservation.key)}}>Accept</button>
-                                <button onClick={(e) => {decline(reservation.key)}}>Decline</button>
-                            </td>
+                            {auth.user.user_type === 'employee' ?  <td className="border px-4 py-2">
+                                    {/* accept and decline button */}
+                                    <button onClick={(e) => {accept(reservation.key)}}>Accept</button>
+                                    <button onClick={(e) => {decline(reservation.key)}}>Decline</button>
+                                </td> :
+                                <td className="border px-4 py-2">{reservation.status}</td>
+                            }
+
                         </tr>
                     ))}
                 </tbody>

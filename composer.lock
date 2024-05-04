@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d6add444834419830e8eb549c201fff",
+    "content-hash": "07ee0ec70f7b32dbe9683d10a9590def",
     "packages": [
         {
             "name": "beste/clock",
@@ -3793,6 +3793,51 @@
                 }
             ],
             "time": "2024-03-06T16:17:14+00:00"
+        },
+        {
+            "name": "patientus/tele-pat-ovs-client-php-sdk",
+            "version": "1.1.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.patientus.de/repository/de.patientus.php/patientus/tele-pat-ovs-client-php-sdk/1.1.0/patientus-tele-pat-ovs-client-php-sdk-1.1.0.zip",
+                "reference": "caea8653894ddf6732875771973b6ac13f77c186",
+                "shasum": "caea8653894ddf6732875771973b6ac13f77c186"
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.5",
+                "php": "^5.6 || ^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Patientus\\OVS\\SDK\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Patientus\\OVS\\Test\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Dev team",
+                    "email": "dev@patientus.de"
+                }
+            ],
+            "description": "Patientus OVS PHP SDK",
+            "keywords": [
+                "api",
+                "patientus",
+                "php",
+                "sdk"
+            ],
+            "time": "2023-05-16T16:04:14+00:00"
         },
         {
             "name": "phpoption/phpoption",

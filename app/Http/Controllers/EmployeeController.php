@@ -50,6 +50,26 @@ class EmployeeController extends Controller
         // $employee = User::find($id);
         $employee = new User();
         $employee = $employee->getByUID($uid);
+        $avialable_dates = [];
+
+        // check if employy->available_dates is in the future
+        if (!empty($employee['avialable_dates'])) {
+            foreach ($employee['avialable_dates'] as $date) {
+                if (strtotime($date['date']) >= strtotime(date('Y-m-d'))) {
+                    $hours = [];
+                    foreach ($date['hours'] as $hour) {
+                        if ( strtotime($date['date'] . ' ' . $hour) >= strtotime(date('Y-m-d H:i'))) {
+                            $hours[] = $hour;
+                        }
+                    }
+                    $avialable_dates[] = [
+                        'date' => $date['date'],
+                        'hours' => $hours
+                    ];
+                }
+            }
+        }
+        $employee['avialable_dates'] = $avialable_dates;
 
 
         return Inertia::render('Employee', [
