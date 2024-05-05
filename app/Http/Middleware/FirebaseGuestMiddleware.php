@@ -28,7 +28,7 @@ class FirebaseGuestMiddleware
         //         return redirect()->route('dashboard');
         //     }
         // }
-        if (CustomFirebaseAuth::call_static($request, 'check')) {
+        if (CustomFirebaseAuth::call_static($request, 'getUserData')) {
             return redirect()->route('dashboard');
         }
         return $next($request);
