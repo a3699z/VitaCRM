@@ -199,4 +199,53 @@ class ReservationController extends Controller
         }
     }
 
+
+    public function start_session( Request $request, $key )
+    {
+        $user = CustomFirebaseAuth::call_static($request, 'getUserData');
+        $reservation = $this->database->getReference('reservations/'.$key)->getValue();
+        $room_name = $reservation['date'].'-'.$reservation['time'].'-'.$key;
+        if ($reservation['status'] == 'accepted') {
+            if ($user['user_type'] == 'employee' && $reservation['employee_key'] == $user['key']) {
+                $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
+                $config->setHost(env('OVS_API_URL'));
+
+                $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
+                    $config
+                );
+                $authToken = $authorization->getAuthToken(env('CLIENT_IDENTIFIER'), env('CLIENT_SECRET'));
+                $config->setAccessToken($authToken);
+                $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
+                    $config
+                );
+                $ovsSession = $ovsSessionHandler->getOvsSession(
+                    $room_name,
+                    \Patientus\OVS\SDK\Consts\ParticipantType::MODERATOR
+                );
+                dd($ovsSession);
+            } else if ($user['user_type'] == 'patient' && $reservation['user_key'] == $user['key']) {
+                $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
+                $config->setHost(env('OVS_API_URL'));
+
+                $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
+                    $config
+                );
+                $authToken = $authorization->getAuthToken(env('CLIENT_IDENTIFIER'), env('CLIENT_SECRET'));
+                $config->setAccessToken($authToken);
+                $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
+                    $config
+                );
+                $ovsSession = $ovsSessionHandler->getOvsSession(
+                    $room_name,
+                    \Patientus\OVS\SDK\Consts\ParticipantType::PUBLISHER
+                );
+                dd($ovsSession);
+
+
+            }
+        }
+        return Redirect::route('dashboard');
+
+    }
+
 }

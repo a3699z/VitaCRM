@@ -19,7 +19,8 @@ class MailMessage extends SimpleMessage implements Renderable
      *
      * @var array|string
      */
-    public $view;
+    // viwes is for verify email
+    public $view = 'notifications::email';
 
     /**
      * The view data for the message.

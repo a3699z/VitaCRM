@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use App\CustomFirebaseAuth;
 
 class VerifyEmail extends Notification
 {
@@ -46,9 +47,10 @@ class VerifyEmail extends Notification
     {
         $verificationUrl = $this->verificationUrl($notifiable);
 
-        if (static::$toMailCallback) {
-            return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
-        }
+        // if (static::$toMailCallback) {
+        //     return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
+        // }
+        // dd($verificationUrl);
 
         return $this->buildMailMessage($verificationUrl);
     }
@@ -79,15 +81,21 @@ class VerifyEmail extends Notification
         if (static::$createUrlCallback) {
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
+        $request = request();
+        $user = CustomFirebaseAuth::call_static($request, 'getUserData');
 
-        return URL::temporarySignedRoute(
+        $url = URL::temporarySignedRoute(
             'verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
-                'id' => $notifiable->getKey(),
-                'hash' => sha1($notifiable->getEmailForVerification()),
+                'id' => $user['uid'],
+                'hash' => sha1($user['email']),
             ]
         );
+        // dd($url);
+        return $url;
+
+
     }
 
     /**

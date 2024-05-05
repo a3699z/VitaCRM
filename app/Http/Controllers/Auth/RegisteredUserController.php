@@ -72,9 +72,19 @@ class RegisteredUserController extends Controller
 
         try {
             $signInResult = $this->auth->signInWithEmailAndPassword($email, $password);
+            // check if the user is verified
+            // if (!$signInResult->data()['emailVerified']) {
+            //     return back()->withErrors(['email' => 'Please verify your email address.']);
+            // }
             $user = $signInResult->data();
             $request->session()->put('firebase_token', $user['idToken']);
             $request->session()->put('uid', $user['localId']);
+
+            // send verification email using firebase
+            $this->auth->sendEmailVerificationLink($email);
+
+
+            //
 
             // $user = new User($user);
 

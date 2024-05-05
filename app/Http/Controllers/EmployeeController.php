@@ -14,10 +14,21 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
+use App\CustomFirebaseAuth;
+// firebase auth
 
+use Kreait\Firebase\Contract\Auth as FirebaseAuth;
 
 class EmployeeController extends Controller
 {
+
+    protected $auth;
+
+    public function __construct(FirebaseAuth $auth)
+    {
+        // check if user is authenticated using firebase auth
+        $this->auth = $auth;
+    }
     /**
      * show all employees
      */
@@ -45,8 +56,11 @@ class EmployeeController extends Controller
     /**
      * show employee
      */
-    public function show($uid): Response
+    public function show(Request $request, $uid): Response
     {
+
+        // $log_user = $this->auth->getUser($request->session()->get('uid'));
+        // dd($log_user);
         // $employee = User::find($id);
         $employee = new User();
         $employee = $employee->getByUID($uid);

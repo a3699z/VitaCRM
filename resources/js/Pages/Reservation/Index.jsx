@@ -36,6 +36,7 @@ export default function Index({ auth, reservations }) {
                         <th className="px-4 py-2">Date</th>
                         <th className="px-4 py-2">Time</th>
                         {auth.user.user_type === 'employee' ? <th className="px-4 py-2">Action</th> : <th className="px-4 py-2">Status</th>}
+                        <th className="px-4 py-2">Start Session</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,9 @@ export default function Index({ auth, reservations }) {
                                 </td> :
                                 <td className="border px-4 py-2">{reservation.status}</td>
                             }
+                            <td className="border px-4 py-2">
+                                <Link href={`/session/${reservation.key}`} className="text-blue-500">Start Session</Link>
+                            </td>
 
                         </tr>
                     ))}

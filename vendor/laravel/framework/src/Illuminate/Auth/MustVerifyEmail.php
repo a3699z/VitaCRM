@@ -3,6 +3,7 @@
 namespace Illuminate\Auth;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
+use App\CustomFirebaseAuth;
 
 trait MustVerifyEmail
 {
@@ -35,6 +36,7 @@ trait MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
+        // dd('sendEmailVerificationNotification');
         $this->notify(new VerifyEmail);
     }
 
@@ -45,6 +47,13 @@ trait MustVerifyEmail
      */
     public function getEmailForVerification()
     {
-        return $this->email;
+        // return $this->email;
+        // get the email from the firebase
+        $request = request();
+        $user = CustomFirebaseAuth::call_static($request, 'getUserData');
+        if ($user) {
+            return $user['email'];
+        }
+
     }
 }

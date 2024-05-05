@@ -9,30 +9,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-// guzzle
 use GuzzleHttp\Client;
 
 Route::get('/', function () {
-    // $config = Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
-    // $config->setHost('https://security.patientus.de/api/open-api-service/swagger.php');
-    // $authorization = new Patientus\OVS\SDK\Handlers\AuthorizationHandler(
-    //     $config
-    // );
-    // dd($authorization);
-    // $authToken = $authorization->getAuthToken('client_identifier', 'client_secret');
-    // $config->setAccessToken($authToken);
-
-
-
-
-
-
-
-
-
-
-
-
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -44,14 +23,14 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
-})->middleware(['firebase'])->name('dashboard');
+})->middleware(['firebase', 'firebaseVerified'])->name('dashboard');
 
 Route::get('/employees/search', [EmployeeController::class, 'search'])->name('employees.search');
 Route::get('/employee/{uid}', [EmployeeController::class, 'show'])->name('employee.show');
 Route::get('/reservation/check/', [ReservationController::class, 'check'])->name('reservation.check');
 
 // Route::middleware('auth')->group(function () {
-Route::middleware('firebase')->group(function () {
+Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -76,6 +55,9 @@ Route::middleware('firebase')->group(function () {
 
     Route::post('/reservation/accept/', [ReservationController::class, 'accept'])->name('reservation.accept');
     Route::post('/reservation/decline/', [ReservationController::class, 'decline'])->name('reservation.decline');
+
+
+    Route::get('/session/{key}', [ReservationController::class, 'start_session'])->name('session.start');
 
 
 });
