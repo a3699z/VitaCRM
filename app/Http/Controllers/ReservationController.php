@@ -153,7 +153,6 @@ class ReservationController extends Controller
                 ];
             }, $reservations, array_keys($reservations));
         }
-        dd($reservations);
         return Inertia::render('Reservation/Index', [
             'reservations' => $reservations
         ]);
