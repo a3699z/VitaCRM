@@ -153,6 +153,7 @@ class ReservationController extends Controller
                 ];
             }, $reservations, array_keys($reservations));
         }
+        dd($reservations);
         return Inertia::render('Reservation/Index', [
             'reservations' => $reservations
         ]);
@@ -208,12 +209,13 @@ class ReservationController extends Controller
         if ($reservation['status'] == 'accepted') {
             if ($user['user_type'] == 'employee' && $reservation['employee_key'] == $user['key']) {
                 $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
-                $config->setHost(env('OVS_API_URL'));
+                $config->setHost('https://sandbox.patientus.de/');
 
                 $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
                     $config
                 );
-                $authToken = $authorization->getAuthToken(env('CLIENT_IDENTIFIER'), env('CLIENT_SECRET'));
+                $authToken = $authorization->getAuthToken('vipvitalisten', '.2lH#GVr}X7p*rW7');
+                dd($authToken);
                 $config->setAccessToken($authToken);
                 $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
                     $config
@@ -225,12 +227,13 @@ class ReservationController extends Controller
                 dd($ovsSession);
             } else if ($user['user_type'] == 'patient' && $reservation['user_key'] == $user['key']) {
                 $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
-                $config->setHost(env('OVS_API_URL'));
+                $config->setHost('https://sandbox.patientus.de/');
 
                 $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
                     $config
                 );
-                $authToken = $authorization->getAuthToken(env('CLIENT_IDENTIFIER'), env('CLIENT_SECRET'));
+
+                $authToken = $authorization->getAuthToken('vipvitalisten', '.2lH#GVr}X7p*rW7');
                 $config->setAccessToken($authToken);
                 $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
                     $config
@@ -240,8 +243,6 @@ class ReservationController extends Controller
                     \Patientus\OVS\SDK\Consts\ParticipantType::PUBLISHER
                 );
                 dd($ovsSession);
-
-
             }
         }
         return Redirect::route('dashboard');
