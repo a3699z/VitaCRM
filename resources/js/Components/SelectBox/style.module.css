@@ -1,0 +1,69 @@
+.container {
+  width: 100%;
+  position: relative;
+}
+
+.selectBoxContainer {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 16px 0 0 16px;
+}
+
+.selectBoxSelectedItemContainer {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+}
+.selectBoxSelectedItem {
+  color: #4b739b;
+  font-size: 0.875rem;
+}
+.selectBoxBtn {
+  outline: none;
+  border: none;
+  background-color: #ca9b31;
+  border-radius: 0 16px 16px 0;
+  border: 4px solid white;
+  padding: 20px 32px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 19px;
+}
+
+.optionsContainer {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  z-index: 10;
+  background-color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.option {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.doctorName {
+  margin: 0;
+  color: #344054;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+.doctorProfession {
+  margin: 0;
+  color: #475467;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}

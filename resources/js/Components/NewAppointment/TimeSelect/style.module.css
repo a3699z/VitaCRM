@@ -1,0 +1,28 @@
+.timeSelectContainer {
+  display: flex;
+  flex-direction: column;
+  margin: 24px 0;
+  gap: 24px;
+}
+.timeSelect {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.timeBox {
+  border: 1px solid #eaecf0;
+  border-radius: 4px;
+  padding: 12px 36px;
+  text-align: center;
+  color: #ca9b31cc;
+  font-size: 16px;
+  font-weight: 600;
+}
+.timeBoxSelected {
+  border-color: #ca9b31cc;
+}
+.timeBoxDisabled {
+  border-color: #eaecf066;
+  text-decoration: line-through;
+  color: #66708566;
+}

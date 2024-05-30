@@ -1,10 +1,7 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import DayInput from '@/Components/DayInput';
-import HourInput from '@/Components/HourInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
 export default function ContactsInsuranceForm({ className = '' }) {
     const user = usePage().props.auth.user;

@@ -1,0 +1,151 @@
+.container {
+  background-color: #f9f8f2;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding: 6.875rem;
+}
+
+.rightSide {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  color: rgba(89, 62, 0, 1);
+  font-size: 3.33rem;
+  font-weight: 700;
+  line-height: 170%;
+  letter-spacing: -0.36px;
+  opacity: 0.4;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.bigTitle {
+  color: rgba(34, 46, 85, 1);
+  font-size: 3.75rem;
+  font-weight: 800;
+  line-height: 130%;
+  letter-spacing: -1.2px;
+  margin: 0;
+  margin-bottom: 61px;
+}
+
+.desc {
+  color: rgba(149, 159, 179, 1);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.36px;
+}
+
+.btnGroup {
+  margin-top: 60px;
+  display: flex;
+  gap: 12px;
+}
+
+.videoBtn {
+  color: rgb(255, 255, 255, 0.9);
+  border: none;
+  background-color: rgba(202, 155, 49, 1);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1rem;
+  word-wrap: break-word;
+  padding: 1rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1.5px solid rgba(202, 155, 49, 1);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.videoBtn:hover {
+  color: #ca9b31;
+  background-color: #f9f8f2;
+}
+.onSiteBtn {
+  color: #ca9b31;
+  background-color: #f9f8f2;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1rem;
+  word-wrap: break-word;
+  padding: 1rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid rgba(202, 155, 49, 1);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.onSiteBtn:hover {
+  background-color: #ca9b31;
+  color: #f9f8f2;
+}
+
+.leftSide {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.bannerImg {
+  width: 90%;
+  height: auto;
+  max-width: 600px;
+}
+
+@media screen and (max-width: 1280px) {
+  .container {
+    padding: 1.25rem;
+  }
+
+  .leftSide {
+    justify-content: flex-end;
+  }
+  .bannerImg {
+    padding-left: 4rem;
+    width: 80%;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .bigTitle {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  .desc {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .leftSide {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .title {
+    font-size: 1rem;
+  }
+  .bigTitle {
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+  .btnGroup {
+    margin-top: 2rem;
+    flex-direction: column;
+  }
+}

@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'firebase' => \App\Http\Middleware\FirebaseAuthMiddleware::class,
             'firebase.guest' => \App\Http\Middleware\FirebaseGuestMiddleware::class,
             'firebaseVerified' => \App\Http\Middleware\FirebaseVerifiedMiddleware::class,
+            'employee' => \App\Http\Middleware\EmployeeMiddleware::class,
+            'patient' => \App\Http\Middleware\PatientMiddleware::class,
         ]);
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,

@@ -1,4 +1,3 @@
-import { forwardRef, useEffect, useRef } from 'react';
 
 export default function DayInput({ day, index, onChange }) {
     return (

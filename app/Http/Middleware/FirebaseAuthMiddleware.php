@@ -4,19 +4,14 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Kreait\Firebase\Contract\Auth as FirebaseAuth;
 use App\CustomFirebaseAuth;
+use App\Http\Facades\Auth;
+
 
 
 class FirebaseAuthMiddleware
 {
-    protected $auth;
-
-    public function __construct( FirebaseAuth $auth)
-    {
-        $this->auth = $auth;
-    }
     /**
      * Handle an incoming request.
      *
@@ -26,26 +21,10 @@ class FirebaseAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!CustomFirebaseAuth::call_static($request, 'check')) {
+        if (!Auth::check()) {
             return redirect()->route('login');
+            // return response()->json(['message' => 'Unauthorized'], 401);
         }
-
-        // dd(CustomFirebaseAuth::call_static($request, 'check'));
-
-        // $idToken = $request->session()->get('firebase_token');
-
-        //     // dd($request->session()->get('firebase_token'));
-        //     // dd($idToken);
-        // if (!$idToken) {
-        //     return redirect()->route('login');
-        // }
-        // try {
-        //     $verifyIdToken = $this->auth->verifyIdToken($idToken);
-        //     $request->merge(['uid' => $verifyIdToken->claims()->get('sub')]);
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('login');
-        // }
-
         return $next($request);
     }
 }

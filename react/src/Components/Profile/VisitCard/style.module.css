@@ -1,0 +1,108 @@
+.container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+}
+
+.profilePhoto {
+  border-radius: 50%;
+}
+
+.appointmentInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.doctorInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.profilePhoto {
+  max-width: 96px;
+  max-height: 96px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.appointmentType {
+  margin: 0;
+  color: #d4aa2c;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 19px;
+  word-wrap: break-word;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.doctorName {
+  margin: 0;
+  color: #191534;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profession {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date {
+  color: #000000;
+  font-size: 12px;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+.time {
+  color: #000000;
+  font-size: 12px;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.btnGroup {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  cursor: pointer;
+  color: #667085cc;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  word-wrap: break-word;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: 1px solid #667085cc;
+  background-color: #ffffff;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: #667085;
+  color: #ffffff;
+}

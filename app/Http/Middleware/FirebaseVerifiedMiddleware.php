@@ -7,17 +7,10 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+use App\Http\Facades\Auth;
 
 class FirebaseVerifiedMiddleware
 {
-
-    protected $auth;
-
-    public function __construct(FirebaseAuth $auth)
-    {
-        $this->auth = $auth;
-    }
-
     /**
      * Handle an incoming request.
      *
@@ -25,10 +18,9 @@ class FirebaseVerifiedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // get userdate
-        $user = $this->auth->getUser($request->session()->get('uid'));
-        if (!$user->emailVerified) {
+        if (!Auth::emailVerifed($request)) {
             return redirect()->route('verification.notice');
+            // return response()->json(['message' => 'Email not verified'], 403);
         }
         return $next($request);
     }

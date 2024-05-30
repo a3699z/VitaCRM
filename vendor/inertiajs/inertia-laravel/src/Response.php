@@ -104,6 +104,9 @@ class Response implements Responsable
             'version' => $this->version,
         ];
 
+
+
+
         if ($request->header('X-Inertia')) {
             return new JsonResponse($page, 200, ['X-Inertia' => 'true']);
         }

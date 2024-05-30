@@ -1,6 +1,3 @@
-import { forwardRef, useEffect, useRef } from 'react';
-
-
 export default function HourInput({ hour, index, dateIndex, onChange }) {
     return (
         <input

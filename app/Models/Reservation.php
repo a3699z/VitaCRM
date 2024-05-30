@@ -25,11 +25,33 @@ class Reservation
     use HasFactory, Notifiable, SyncsWithFirebase;
 
     protected $database;
+    protected $path = 'reservations';
+
+    protected $where = array();
+
 
     public function __construct(array $attributes = [], FirebaseDatabase $database)
     {
         $this->database = $database;
     }
+
+    public function get($attr = null) {
+        if ($attr) {
+            $this->path = $this->path . '/' . $attr;
+        }
+
+    }
+
+    public function where($key, $value) {
+        $this->where[$key] = $value;
+    }
+
+    public function first() {
+
+        return array_shift($reservations);
+    }
+
+
 
     // table
     // protected $table = 'users_no';

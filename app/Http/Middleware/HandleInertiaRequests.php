@@ -4,19 +4,11 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-use App\Models\User;
-use App\CustomFirebaseAuth;
+use App\Http\Facades\Auth;
 
 
 class HandleInertiaRequests extends Middleware
 {
-
-    protected $auth;
-    public function __construct( FirebaseAuth $auth)
-    {
-            $this->auth = $auth;
-    }
     /**
      * The root template that is loaded on the first page visit.
      *
@@ -39,45 +31,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // $idToken = $request->session()->get('firebase_token');
-        // if ($idToken) {
-        //     try {
-        //         $verifyIdToken = $this->auth->verifyIdToken($idToken);
-        //         // $request->session()->put('user', $verifyIdToken->claims());
-        //         // get user data from firebase
-        //         $user = $this->auth->getUser($verifyIdToken->claims()->get('sub'));
-        //         // dd($user);
-        //         if ($user) {
-        //            $user_data =  new User();
-        //            $user_data = $user_data->getByKey('uid', $user->uid);
-        //         }
-        //     } catch (\Throwable $th) {
-        //         $user_data = null;
-        //         $request->session()->forget('firebase_token');
-        //         $request->session()->forget('user');
-        //     }
-        // } else {
-        //     $user_data = null;
-        // }
-
-
-        $user_data = CustomFirebaseAuth::call_static($request, 'getUserData');
+        $user_data = Auth::check() ? Auth::getUserData() : null;
 
 
         return [
             ...parent::share($request),
             'auth' => [
-                // 'user' => $request->session()->get('user'),
                 'user' => $user_data,
             ],
         ];
-
-        // return [
-        //     ...parent::share($request),
-        //     'auth' => [
-        //         // 'user' => $request->session()->get('user'),
-        //         'user' => $request->user(),
-        //     ],
-        // ];
     }
 }

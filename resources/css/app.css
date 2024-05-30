@@ -1,3 +1,96 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.container {
+    height: 120px;
+    flex-shrink: 0;
+    background: #fff;
+    box-shadow: 0px 12px 30px 0px rgba(25, 21, 52, 0.1);
+    padding: 0 108px;
+  }
+
+  .navbar {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100%;
+  }
+
+  .rightContainer {
+    display: flex;
+    align-items: center;
+    gap: 94px;
+  }
+
+  .linkContainer {
+    display: flex;
+    gap: 40px;
+  }
+
+  .link {
+    color: rgba(1, 1, 1, 1);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 170%;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: 0.3s;
+  }
+
+  .link:hover {
+    opacity: 1;
+  }
+
+  .leftContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+  }
+  .authContainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+    gap: 18px;
+  }
+
+  .registerLink {
+    color: rgba(140, 138, 154, 1);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+    text-decoration: none;
+  }
+
+  .profileBtn {
+    border-radius: 8px;
+    background: #c7982e;
+    display: flex;
+    padding: 16px 32px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .linkContainer {
+      display: none;
+    }
+
+    .profileBtn {
+      padding: 8px 16px;
+    }
+  }
+  @media (max-width: 640px) {
+    .container {
+      padding: 0 30px;
+    }
+    .authContainer {
+      display: none;
+    }
+  }

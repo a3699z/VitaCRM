@@ -53,7 +53,7 @@ class ReservationBooked extends Mailable
         //     view: 'view.mail.reservation-booked',
         // );
         return new Content(
-            view: 'mail.reservation-booked',
+            view: 'mail.reservation-booked'
         );
     }
 

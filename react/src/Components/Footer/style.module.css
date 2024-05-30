@@ -1,0 +1,159 @@
+.container {
+  background-color: #ffffff;
+}
+.footer {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 60px 0;
+  gap: 60px;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+}
+
+.paragraph {
+  font-size: 16px;
+  line-height: 30px;
+}
+.list {
+}
+.title {
+  color: #222e55;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 27.2px;
+  letter-spacing: 0.64px;
+  word-wrap: break-word;
+  margin: 20px 0;
+}
+.listItem {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: 10px;
+}
+.listIcon {
+}
+
+.listTitle {
+  margin: 0;
+  color: #01010199;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 30px;
+  word-wrap: break-word;
+}
+.listParagraph {
+  margin: 0;
+  color: black;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+  word-wrap: break-word;
+  grid-column: 2;
+  text-decoration: none;
+}
+
+.servicesList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.servicesListItem {
+  color: #01010199;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27.2px;
+  word-wrap: break-word;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  place-items: center;
+  gap: 12px;
+}
+.galleryPhoto {
+  width: 100%;
+  height: auto;
+}
+
+.copyright {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  padding: 0 110px;
+}
+
+.copyText {
+  color: #01010199;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+.socialMedia {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.socialLink {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  width: 22px;
+  height: 22px;
+}
+.socialIcon {
+  width: 22px;
+  height: 22px;
+}
+
+@media screen and (max-width: 1280px) {
+  .footer {
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+  }
+  .copyright {
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+  .copyright {
+    margin-top: 3rem;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .socialMedia {
+    justify-content: flex-start;
+  }
+}

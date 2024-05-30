@@ -1,0 +1,114 @@
+.container {
+  max-width: 1280px;
+  margin: auto;
+  height: 500px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  padding: 140px 0;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+.title {
+  color: rgba(89, 62, 0, 0.4);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 30.6px;
+  word-wrap: break-word;
+  margin: 0;
+  text-align: center;
+}
+
+.bigTitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 130%;
+  letter-spacing: -2%;
+  color: rgba(34, 46, 85, 1);
+  text-align: center;
+}
+
+.bigTitleColored {
+  color: rgba(208, 161, 54, 1);
+}
+
+.slideItem {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.slideParagraph {
+  max-width: 862px;
+  color: #222e55;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 34px;
+  word-wrap: break-word;
+  text-align: center;
+  margin: 0;
+}
+
+.slideName {
+  color: #222e55;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 40.8px;
+  word-wrap: break-word;
+  margin: 0;
+  margin-top: 51px;
+  margin-bottom: 8px;
+}
+
+.slideProfession {
+  color: #222e55;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 34px;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.bullet {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #e4e4e4;
+  border-radius: 50%;
+  margin: 0 3px;
+  transition: 0.3s;
+}
+
+.bulletActive {
+  width: 20px;
+  border-radius: 8px;
+  background-color: #d2a238;
+}
+
+@media screen and (max-width: 1280px) {
+  .container {
+    padding: 0 20px;
+  }
+  .titleContainer {
+    margin-bottom: 30px;
+  }
+  .title {
+    font-size: 16px;
+  }
+  .bigTitle {
+    font-size: 24px;
+  }
+  .slideParagraph {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .slideName {
+    margin-top: 34px;
+  }
+}

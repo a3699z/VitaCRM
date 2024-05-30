@@ -1,0 +1,48 @@
+.card {
+  background-color: #ffffff;
+  box-shadow: 0px 5px 25px rgba(5, 43, 71, 0.09);
+  border-radius: 8px;
+  padding-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.cardImgContainer {
+  object-fit: contain;
+}
+.cardImg {
+  width: 100%;
+  max-height: 200px;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+}
+
+.cardBody {
+  padding: 0 20px;
+  display: grid;
+}
+
+.cardTitle {
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: capitalize;
+  word-wrap: break-word;
+}
+
+.cardText {
+  color: black;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  word-wrap: break-word;
+}
+
+.cardLink {
+  color: #ca9b31;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  word-wrap: break-word;
+  text-decoration: none;
+}

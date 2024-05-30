@@ -6,7 +6,8 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Facades\Auth;
+use App\Http\Facades\Database;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,7 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-use Kreait\Firebase\Contract\Database;
+use Kreait\Firebase\Contract\Database as FirebaseDatabase;
 use App\CustomFirebaseAuth;
 use App\Events\ReservationBooked;
 use App\Mail\ReservationBooked as MailReservationBooked;
@@ -29,7 +30,7 @@ class ReservationController extends Controller
     protected $auth;
     protected $database;
 
-    public function __construct(FirebaseAuth $auth, Database $database)
+    public function __construct(FirebaseAuth $auth, FirebaseDatabase $database)
     {
         // check if user is authenticated using firebase auth
         $this->auth = $auth;
@@ -41,122 +42,111 @@ class ReservationController extends Controller
      */
     public function check(Request $request): RedirectResponse
     {
-        $employee = new User();
-        $employee = $employee->getByUID($request->employee);
-
-        // session(['reservation' => [
-        //     'employee' => $employee,
-        //     'date' => $request->date,
-        //     'time' => $request->hour
-        // ]]);
-        // session_start();
-        // $_SESSION['reservation'] =  [
-        //     'employee' => $employee,
-        //     'date' => $request->date,
-        //     'time' => $request->hour
-        // ];
         $request->session()->put('reservation', [
-            'employee' => $employee,
+            'employee_uid' => $request->employeeUID,
             'date' => $request->date,
-            'time' => $request->hour
+            'hour' => $request->hour,
+            'is_online' => $request->online
         ]);
-        // cech if user is authenticated in firebase
-        if (CustomFirebaseAuth::call_static($request, 'check')) {
-            return Redirect::route('reservation.create', ['employee' =>$request->emplyee, 'date'=>$request->date,'hour'=>$request->hour]);
+        $check = $this->reservation_exists($request->session()->get('reservation'));
+        if ($check) {
+            $request->session()->forget('reservation');
+            return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
+        }
+        if (Auth::check()) {
+            return Redirect::route('reservation.create');
         } else {
             return Redirect::route('login', ['ref' => 'reserve']);
         }
     }
 
+    public function create(Request $request)
+    {
+        if (!$request->session()->has('reservation')) {
+            return Redirect::route('dashboard');
+        }
+        $check = $this->reservation_exists($request->session()->get('reservation'));
+        if ($check) {
+            $request->session()->forget('reservation');
+            return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
+        }
+        $reservation_session = $request->session()->get('reservation');
+        $employee = Auth::getUserData($reservation_session['employee_uid']);
+        return Inertia::render('Reservation/Create/index', [
+            'employee' => $employee,
+            'date' => $reservation_session['date'],
+            'hour' => $reservation_session['hour'],
+            'is_online' => $reservation_session['is_online']
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         try {
-            $reservation_session = $request->session()->get('reservation');
-            // $reservation = $this->database->getReference('reservations')->push([
-            //     'employee_key' => $reservation_session['employee']['key'],
-            //     'date' => $reservation_session['date'],
-            //     'time' => $reservation_session['time'],
-            //     'insurance_type' => $request->insurance_type,
-            //     'insurance_policy_number' => $request->insurance_policy_number,
-            //     'user_key' => CustomFirebaseAuth::call_static($request, 'getUserData')['key'],
-            //     'status' => 'pending'
-            // ]);
-            $avialable_dates = $this->database->getReference('users/'.$reservation_session['employee']['key'].'/available_dates')->getValue();
-            // dd($avialable_dates);
-            foreach ($avialable_dates as $avialable_date) {
-                if ($avialable_date['date'] == $reservation_session['date']) {
-                    foreach ($avialable_date['hours'] as $hour) {
-                        if ($hour == $reservation_session['time']) {
-                            $reservation = $this->database->getReference('reservations')->push([
-                                'employee_key' => $reservation_session['employee']['key'],
-                                'date' => $reservation_session['date'],
-                                'time' => $reservation_session['time'],
-                                'insurance_type' => $request->insurance_type,
-                                'insurance_policy_number' => $request->insurance_policy_number,
-                                'user_key' => CustomFirebaseAuth::call_static($request, 'getUserData')['key'],
-                                'status' => 'pending'
-                            ]);
-                            if ($reservation->getKey()) {
-                                $time_index = array_search($reservation_session['time'], $avialable_date['hours']);
-                                $date_index = array_search($reservation_session['date'], array_column($avialable_dates, 'date'));
-                                if ($time_index !== false) {
-                                    unset($avialable_dates[$date_index]['hours'][$time_index]);
-                                }
-                                // update
-                                $this->database->getReference('users/'.$reservation_session['employee']['key'].'/available_dates')->set($avialable_dates);
-                                break;
-                            }
-                        }
-                    }
-                    if (isset($reservation) && !empty($reservation->getKey())) {
-                        break;
-                    }
-                }
+            $check = $this->reservation_exists(array(
+                'employee_uid' => $request->employee_uid,
+                'date' => $request->date,
+                'hour' => $request->hour
+            ));
+            if ($check) {
+                $request->session()->forget('reservation');
+                return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
             }
 
-            Mail::to($request->session()->get('reservation')['employee']['email'])->send(new MailReservationBooked($reservation->getKey()));
+            $employee = Auth::getUserData($request->employee_uid);
+            $reservation = [
+                'user_uid' => Auth::getUID(),
+                'employee_uid' => $employee['uid'],
+                'date' => $request->date,
+                'hour' => $request->hour,
+                'insurance_type' => $request->insurance_type,
+                'insurance_policy_number' => $request->insurance_policy_number,
+                'is_online' => $request->is_online ? true : false,
+                'status' => 'pending'
+            ];
+            $reservation = Database::push('reservations', $reservation);
+            $request->session()->forget('reservation');
+
+            Mail::to($employee['email'])->send(new MailReservationBooked($reservation->getKey()));
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return Redirect::back()->with('error', 'Error occured while booking reservation');
         }
         return Redirect::route('dashboard');
     }
 
+    public function reservation_exists($reservation)
+    {
+        $reservations = Database::getWhere('reservations', 'employee_uid', $reservation['employee_uid']);
+        $reservations = array_filter($reservations, function($res) use ($reservation) {
+            return $res['date'] == $reservation['date'] && $res['hour'] == $reservation['hour'];
+        });
+        if (!empty($reservations)) {
+            return true;
+        }
+    }
+
     public function index ( Request $request )
     {
-        $user = CustomFirebaseAuth::call_static($request, 'getUserData');
-        if ($user['user_type'] == 'employee') {
-            $reservations = $this->database->getReference('reservations')->orderByChild('employee_key')->equalTo($user['key'])->getValue();
-            $reservations = array_map(function($reservation, $key) {
-                return [
-                    'key' => $key,
-                    'reservation_with' => $this->database->getReference('users/'.$reservation['user_key'])->getValue(),
-                    'date' => $reservation['date'],
-                    'time' => $reservation['time'],
-                    'insurance_type' => $reservation['insurance_type'],
-                    'insurance_policy_number' => $reservation['insurance_policy_number'],
-                    'status' => $reservation['status']
-                ];
-            }, $reservations, array_keys($reservations));
+        if (Auth::employee()) {
+            $reservations = Database::getWhere('reservations', 'employee_uid', Auth::getUID());
+            $reservations = array_map(function ($reservation) {
+                $reservation['reservation_with'] = Auth::getUserData($reservation['user_uid']);
+                return $reservation;
+            }, $reservations);
         } else {
-            $reservations = $this->database->getReference('reservations')->orderByChild('user_key')->equalTo($user['key'])->getValue();
-            $reservations = array_map(function($reservation, $key) {
-                return [
-                    'key' => $key,
-                    'reservation_with' => $this->database->getReference('users/'.$reservation['employee_key'])->getValue(),
-                    'date' => $reservation['date'],
-                    'time' => $reservation['time'],
-                    'insurance_type' => $reservation['insurance_type'],
-                    'insurance_policy_number' => $reservation['insurance_policy_number'],
-                    'status' => $reservation['status']
-                ];
-            }, $reservations, array_keys($reservations));
+            $reservations = Database::getWhere('reservations', 'user_uid', Auth::getUID());
+            $reservations = array_map(function ($reservation) {
+                $reservation['reservation_with'] = Auth::getUserData($reservation['employee_uid']);
+                return $reservation;
+            }, $reservations);
         }
         return Inertia::render('Reservation/Index', [
             'reservations' => $reservations
         ]);
     }
+
+
 
     public function accept (Request $request)
     {
@@ -214,8 +204,8 @@ class ReservationController extends Controller
                     $config
                 );
                 $authToken = $authorization->getAuthToken('vipvitalisten', '.2lH#GVr}X7p*rW7');
-                dd($authToken);
                 $config->setAccessToken($authToken);
+                // create doctor session
                 $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
                     $config
                 );
@@ -246,6 +236,27 @@ class ReservationController extends Controller
         }
         return Redirect::route('dashboard');
 
+    }
+
+    public function get_hours(Request $request)
+    {
+        // get hours for the selected date
+        $date = $request->date;
+        $online = $request->online;
+
+        // echo $date;exit;
+
+        // hours from 8:00 to 15:00
+        $hours = [];
+        $hour = '08:00';
+        $end_hour = '15:00';
+        while (strtotime($hour) <= strtotime($end_hour)) {
+            $hours[] = $hour;
+            $hour = date('H:i', strtotime($hour . ' +60 minutes'));
+        }
+        return response()->json([
+            'hours' => $hours
+        ]);
     }
 
 }

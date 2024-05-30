@@ -61,11 +61,22 @@ class OvsSessionHandler extends BaseHandler
             $httpClientOptions['headers'] = [
                 'Authorization' => $this->config->getAccessToken()->getTokenType() . ' ' . $this->config->getAccessToken()->getAccessToken()
             ];
-
+            // dd(self::ENDPOINT_PATH);
             $response = $this->httpClient->get($this->config->getHost() . '/' . sprintf(self::ENDPOINT_PATH, $roomName, $role), $httpClientOptions);
 
             $result = $response->getBody()->getContents();
             $result = json_decode($result, true);
+            // dd($result);
+
+            return array(
+                'apiKey' => isset($result['apiKey']) ? $result['apiKey'] : null,
+                'sessionId' => isset($result['sessionId']) ? $result['sessionId'] : null,
+                'token' => isset($result['token']) ? $result['token'] : null,
+                'preJoin' => array(
+                    'sessionId' => isset($result['preJoin']['sessionId']) ? $result['preJoin']['sessionId'] : null,
+                    'token' => isset($result['preJoin']['token']) ? $result['preJoin']['token'] : null
+                )
+            );
 
             return new OvsSession(
                 isset($result['apiKey']) ? $result['apiKey'] : null,

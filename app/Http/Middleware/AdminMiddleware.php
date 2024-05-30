@@ -20,7 +20,7 @@ class AdminMiddleware
     {
 
         // if (!Auth::check() || !Auth::user()->is_admin) {
-        if (!CustomFirebaseAuth::call_static($request, 'check') || !CustomFirebaseAuth::call_static($request, 'getUserData')['is_admin']) {
+        if (!CustomFirebaseAuth::check($request) || !CustomFirebaseAuth::call_static($request, 'getUserData')['is_admin']) {
             // inherita admin layout
             return redirect('/');
         }

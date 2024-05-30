@@ -1,0 +1,54 @@
+.container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 4px;
+}
+.titleContainer {
+  padding: 24px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.title {
+  color: #141417;
+  font-size: 18px;
+  font-weight: 600;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.info {
+  margin: 0;
+  color: #14141799;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.14;
+  word-wrap: break-word;
+  margin: 0;
+}
+.formContainer {
+  padding: 20px 24px;
+}
+.formTitle {
+  color: #141417;
+  font-size: 14px;
+  font-weight: 500;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.submitBtn {
+  padding: 14px 16px;
+  width: 100%;
+  border-radius: 8px;
+  background: #d4aa2c;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  border: none;
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}

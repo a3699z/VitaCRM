@@ -1,0 +1,134 @@
+.container {
+  max-width: 1280px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding-top: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    display: block;
+  }
+  .formContainer {
+    padding: 77px 20px 0 !important;
+  }
+  .heroImgContainer {
+    display: none !important;
+  }
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 77px;
+}
+
+.headContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+}
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  gap: 12px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 38px;
+  color: #222e55;
+  margin: 0;
+}
+
+.subTitle {
+  margin: 0;
+}
+
+.form {
+  width: 100%;
+}
+
+.heroImgContainer {
+  display: inline-block;
+}
+
+.heroImg {
+  height: 100%;
+}
+
+.submitBtn {
+  cursor: pointer;
+  background-color: rgba(212, 170, 44, 1);
+  border: 1px solid rgba(212, 170, 44, 1);
+  width: 100%;
+  padding: 10px 18px;
+  border-radius: 8px;
+  outline: none;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  line-height: 24px;
+  box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05);
+  transition: 0.3s;
+  margin-top: 24px;
+}
+
+.submitBtn:hover {
+  background-color: rgb(235, 182, 25, 1);
+  border-color: rgb(235, 182, 25, 1);
+}
+
+.registerText {
+  color: rgba(71, 84, 103, 1);
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  margin-top: 32px;
+}
+.link {
+  color: rgba(212, 170, 44, 1);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footerContainer {
+  width: 100%;
+}
+
+.footerText {
+  color: rgba(71, 84, 103, 1);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.check_container {
+    display: flex;
+    gap: 8px;
+  }
+  .input + span {
+    min-width: 16px;
+    height: 16px !important;
+    border: 1px solid rgba(208, 213, 221, 1);
+    border-radius: 4px;
+    margin-top: 3px;
+    background-color: rgba(255, 255, 255, 1);
+  }
+  .input:checked + span {
+    background-color: rgba(212, 170, 44, 1);
+    border-color: rgba(212, 170, 44, 1);
+  }
+
+  .input {
+    display: none;
+  }
