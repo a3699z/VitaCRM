@@ -3,16 +3,16 @@ import { Link } from '@inertiajs/react';
 
 import styles from "./style.module.css";
 
-import arrowDownIcon from "../../Assets/SelectBox/arrowDown.svg";
+import arrowDownIcon from "@/Assets/SelectBox/arrowDown.svg";
 
-import avatar1 from "../../Assets/SelectBox/Avatar.png";
-import avatar2 from "../../Assets/SelectBox/Avatar-1.png";
-import avatar3 from "../../Assets/SelectBox/Avatar-2.png";
-import avatar4 from "../../Assets/SelectBox/Avatar-3.png";
-import avatar5 from "../../Assets/SelectBox/Avatar-4.png";
-import avatar6 from "../../Assets/SelectBox/Avatar-5.png";
-import avatar7 from "../../Assets/SelectBox/Avatar-6.png";
-import avatar8 from "../../Assets/SelectBox/Avatar-7.png";
+import avatar1 from "@/Assets/SelectBox/Avatar.png";
+import avatar2 from "@/Assets/SelectBox/Avatar-1.png";
+import avatar3 from "@/Assets/SelectBox/Avatar-2.png";
+import avatar4 from "@/Assets/SelectBox/Avatar-3.png";
+import avatar5 from "@/Assets/SelectBox/Avatar-4.png";
+import avatar6 from "@/Assets/SelectBox/Avatar-5.png";
+import avatar7 from "@/Assets/SelectBox/Avatar-6.png";
+import avatar8 from "@/Assets/SelectBox/Avatar-7.png";
 
 // import route from "@inertiajs/react";
 
@@ -133,9 +133,9 @@ const SelectBox = (employees) => {
             >
               <div>
                 <h5 className={styles.doctorName}>{employee.name}</h5>
-                {/* <p className={styles.doctorProfession}>{doctor.profession}</p> */}
+                <p className={styles.doctorProfession}>{employee.profession}</p>
               </div>
-              {/* <img src={doctor.img} alt="" /> */}
+              <img src={employee.profile_image?'/images/'+employee.profile_image:avatar3} alt="" />
             </Link>
           ))}
         </div>

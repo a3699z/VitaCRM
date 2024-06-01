@@ -13,9 +13,11 @@ import profilePhoto from "@/Assets/Profile/visit/profile.png";
 import videoIcon from "@/Assets/Profile/visit/videoIcon.svg";
 import editIcon from "@/Assets/Profile/visit/editIcon.svg";
 import calendarIcon from "@/Assets/Profile/visit/calendarIcon.svg";
+import InputError from '@/Components/InputError';
 
 export default function Create({ auth, employee, date, hour, is_online }) {
-
+    // errors from inerita
+    console.log(errors);
     const { data, setData, post, processing, errors, reset } = useForm({
         insurance_type: 'legal',
         insurance_policy_number: '',
@@ -34,25 +36,21 @@ export default function Create({ auth, employee, date, hour, is_online }) {
             <Navbar user={auth.user} />
             <div className="min-h-screen bg-gray-100">
                 <Head title="Dashboard" />
-                <div>
-                    {employee.name}
-                    {date}
-                    {hour}
-                    {is_online ? 'Online' : 'Offline'}
-                </div>
                 <div className={styles.visitContainer}>
 
                     <div className={styles.container}>
                         <div className={styles.appointmentInfo}>
                             <div className={styles.doctorInfo}>
-                            <img src={profilePhoto} alt="" className={styles.profilePhoto} />
+                            <img src={employee.profile_image ? '/images/'+employee.profile_image : profilePhoto} alt="" className={styles.profilePhoto} />
                             <div className={styles.info}>
+                                {is_online ?
                                 <h4 className={styles.appointmentType}>
                                     <img src={videoIcon} alt="" />
                                     Videosprechstunde Termin
                                 </h4>
+                                : ''}
                                 <h5 className={styles.doctorName}>{employee.name}</h5>
-                                <h6 className={styles.profession}>Krankenpfleger</h6>
+                                { employee.profession ? <h6 className={styles.profession}>{employee.profession}</h6> : '' }
                             </div>
                             </div>
                             <div className={styles.dateInfo}>
@@ -104,6 +102,7 @@ export default function Create({ auth, employee, date, hour, is_online }) {
                                         <option value="legal">Legal Insurance</option>
                                         <option value="private">Private Insurance</option>
                                     </select>
+                                    <InputError error={errors.insurance_type} />
                                 </div>
                                 <FormGroup
                                     id={"insurance_policy_number"}
@@ -113,6 +112,7 @@ export default function Create({ auth, employee, date, hour, is_online }) {
                                     onChange={(e) => setData('insurance_policy_number', e.target.value)}
                                     type="text"
                                 />
+                                <InputError error={errors.insurance_policy_number} />
                             </form>
                             <div className={styles.btnGroup}>
                                 {/* <button className={styles.cancelBtn}>ABBRECHEN</button> */}

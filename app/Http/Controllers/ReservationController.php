@@ -2,46 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Facades\Auth;
 use App\Http\Facades\Database;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Inertia\Response;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Casts\Json;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-use Kreait\Firebase\Contract\Database as FirebaseDatabase;
-use App\CustomFirebaseAuth;
-use App\Events\ReservationBooked;
 use App\Mail\ReservationBooked as MailReservationBooked;
-// mail
 use Illuminate\Support\Facades\Mail;
 
 
 class ReservationController extends Controller
 {
-    protected $auth;
-    protected $database;
-
-    public function __construct(FirebaseAuth $auth, FirebaseDatabase $database)
-    {
-        // check if user is authenticated using firebase auth
-        $this->auth = $auth;
-        $this->database =  $database;
-    }
 
     /**
      * check reservation
      */
     public function check(Request $request): RedirectResponse
     {
+        // validate request
+        $request->validate([
+            'employeeUID' => 'required',
+            'date' => 'required',
+            'hour' => 'required',
+        ]);
+        // dd($request->all());
         $request->session()->put('reservation', [
             'employee_uid' => $request->employeeUID,
             'date' => $request->date,
@@ -63,7 +48,7 @@ class ReservationController extends Controller
     public function create(Request $request)
     {
         if (!$request->session()->has('reservation')) {
-            return Redirect::route('dashboard');
+            return Redirect::route('site.index');
         }
         $check = $this->reservation_exists($request->session()->get('reservation'));
         if ($check) {
@@ -82,6 +67,14 @@ class ReservationController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'insurance_type' => 'required',
+            'insurance_policy_number' => 'required',
+            'is_online' => 'required',
+            'employee_uid' => 'required',
+            'date' => 'required',
+            'hour' => 'required',
+        ]);
         try {
             $check = $this->reservation_exists(array(
                 'employee_uid' => $request->employee_uid,
@@ -112,7 +105,7 @@ class ReservationController extends Controller
         } catch (\Exception $e) {
             return Redirect::back()->with('error', 'Error occured while booking reservation');
         }
-        return Redirect::route('dashboard');
+        return Redirect::route('site.index');
     }
 
     public function reservation_exists($reservation)
@@ -148,111 +141,51 @@ class ReservationController extends Controller
 
 
 
-    public function accept (Request $request)
+    public function accept (Request $request, $key)
     {
-        $this->database->getReference('reservations/'.$request->key.'/status')->set('accepted');
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Reservation accepted'
-        ]);
-
+        Database::set('reservations/'.$key.'/status', 'accepted');
+        $reservation = Database::getOneReference('reservations/'.$key);
+        if ($reservation['is_online']) {
+            $reservation['reservation_with'] = Auth::getUserData($reservation['user_uid']);
+            $call = [
+                'employee_uid' => $reservation['employee_uid'],
+                'patient_uid' => $reservation['user_uid'],
+                'date' => $reservation['date'],
+                'hour' => $reservation['hour'],
+                'reservation_key' => $key,
+                'room_name' => 'call_'.$key,
+                'topic' => 'Call with '.$reservation['reservation_with']['name'].' on '.$reservation['date'].' at '.$reservation['hour'].'.'
+            ];
+            Database::push('calls', $call);
+        }
+        return Redirect::back()->with('status', 'Reservation accepted');
     }
 
-    public function decline (Request $request)
+    public function decline (Request $request, $key)
     {
-        try {
-            $reservation = $this->database->getReference('reservations/'.$request->key)->getValue();
-            $available_dates = $this->database->getReference('users/'.$reservation['employee_key'].'/available_dates')->getValue();
-            $date_index = array_search($reservation['date'], array_column($available_dates, 'date'));
-            if ($date_index === false) {
-                $available_dates[] = [
-                    'date' => $reservation['date'],
-                    'hours' => [$reservation['time']]
-                ];
-            } else {
-                if (!in_array($reservation['time'], $available_dates[$date_index]['hours'])) {
-                    $available_dates[$date_index]['hours'][] = $reservation['time'];
-                }
-            }
-            $this->database->getReference('users/'.$reservation['employee_key'].'/available_dates')->set($available_dates);
-            $this->database->getReference('reservations/'.$request->key)->remove();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Reservation declined'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error occured while declining reservation'
-            ]);
-        }
-    }
-
-
-    public function start_session( Request $request, $key )
-    {
-        $user = CustomFirebaseAuth::call_static($request, 'getUserData');
-        $reservation = $this->database->getReference('reservations/'.$key)->getValue();
-        $room_name = $reservation['date'].'-'.$reservation['time'].'-'.$key;
-        if ($reservation['status'] == 'accepted') {
-            if ($user['user_type'] == 'employee' && $reservation['employee_key'] == $user['key']) {
-                $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
-                $config->setHost('https://sandbox.patientus.de/');
-
-                $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
-                    $config
-                );
-                $authToken = $authorization->getAuthToken('vipvitalisten', '.2lH#GVr}X7p*rW7');
-                $config->setAccessToken($authToken);
-                // create doctor session
-                $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
-                    $config
-                );
-                $ovsSession = $ovsSessionHandler->getOvsSession(
-                    $room_name,
-                    \Patientus\OVS\SDK\Consts\ParticipantType::MODERATOR
-                );
-                dd($ovsSession);
-            } else if ($user['user_type'] == 'patient' && $reservation['user_key'] == $user['key']) {
-                $config = \Patientus\OVS\SDK\Configuration::getDefaultConfiguration();
-                $config->setHost('https://sandbox.patientus.de/');
-
-                $authorization = new \Patientus\OVS\SDK\Handlers\AuthorizationHandler(
-                    $config
-                );
-
-                $authToken = $authorization->getAuthToken('vipvitalisten', '.2lH#GVr}X7p*rW7');
-                $config->setAccessToken($authToken);
-                $ovsSessionHandler = new \Patientus\OVS\SDK\Handlers\OvsSessionHandler(
-                    $config
-                );
-                $ovsSession = $ovsSessionHandler->getOvsSession(
-                    $room_name,
-                    \Patientus\OVS\SDK\Consts\ParticipantType::PUBLISHER
-                );
-                dd($ovsSession);
-            }
-        }
-        return Redirect::route('dashboard');
-
+        Database::delete('reservations/'.$key);
+        return Redirect::back()->with('status', 'Reservation declined');
     }
 
     public function get_hours(Request $request)
     {
-        // get hours for the selected date
         $date = $request->date;
         $online = $request->online;
+        $employee_uid = $request->employeeUID;
 
-        // echo $date;exit;
-
-        // hours from 8:00 to 15:00
         $hours = [];
         $hour = '08:00';
         $end_hour = '15:00';
+        $reservations = Database::getWhere('reservations', 'employee_uid', $employee_uid);
         while (strtotime($hour) <= strtotime($end_hour)) {
+            foreach ($reservations as $reservation) {
+                if (($reservation['date'] == $date && $reservation['hour'] == $hour) || (strtotime($date . ' ' . $hour) < time())) {
+                    break;
+                }
+            }
             $hours[] = $hour;
             $hour = date('H:i', strtotime($hour . ' +60 minutes'));
+
         }
         return response()->json([
             'hours' => $hours

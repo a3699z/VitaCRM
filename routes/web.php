@@ -24,23 +24,32 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['firebase', 'firebaseVerified'])->name('dashboard');
 
-Route::get('/employees/search', [EmployeeController::class, 'search'])->name('employees.search');
 Route::get('/employee/{uid}', [EmployeeController::class, 'show'])->name('employee.show');
 Route::post('/reservation/check/', [ReservationController::class, 'check'])->name('reservation.check');
 Route::get('/reservation/get_hours/', [ReservationController::class, 'get_hours'])->name('reservation.get_hours');
 
 // Route::middleware('auth')->group(function () {
 Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::patch('/dates', [ProfileController::class, 'update_dates'])->name('dates.update');
-    Route::patch('/contacts', [ProfileController::class, 'update_contacts'])->name('contacts.update');
-    Route::patch('/professional', [ProfileController::class, 'update_professional'])->name('professional.update');
-    Route::patch('/patientinfo', [ProfileController::class, 'update_patientinfo'])->name('patientinfo.update');
 
-    // Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
-    // Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::middleware('employee')->group(function () {
+        Route::get('/reservation/accept/{key}', [ReservationController::class, 'accept'])->name('reservation.accept');
+        Route::get('/reservation/decline/{key}', [ReservationController::class, 'decline'])->name('reservation.decline');
+    });
+
+    Route::get('call/{key}', [VideoController::class, 'call'])->name('call');
+    Route::get('/api/call/{key}', [VideoController::class, 'api_call'])->name('api_call');
+
+    // reach assets folder in public folder
+    Route::get('/call/assets', function () {
+        return response()->file(public_path('assets/'));
+    });
+
+    Route::post('/update_profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/update_employee_info', [ProfileController::class, 'update_employee_info'])->name('profile.update_employee');
+
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/visit/{key}', [ProfileController::class, 'visit'])->name('visit');
 
     Route::middleware('patient')->group(function () {
         Route::get('/reservation/create', [ReservationController::class, 'create'])->name('reservation.create');
@@ -50,17 +59,6 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
         Route::post('/reservation/store', [ReservationController::class, 'store'])->name('reservation.store');
     });
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
-
-
-    Route::middleware('employee')->group(function () {
-        Route::post('/reservation/accept/', [ReservationController::class, 'accept'])->name('reservation.accept');
-        Route::post('/reservation/decline/', [ReservationController::class, 'decline'])->name('reservation.decline');
-    });
-
-
-    Route::get('/session/{key}', [ReservationController::class, 'start_session'])->name('session.start');
-
-
 });
 
 require __DIR__.'/auth.php';

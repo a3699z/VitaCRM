@@ -18,6 +18,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
+        // dd(session()->flash('status'));
         return Inertia::render('Auth/Login/index', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
@@ -36,21 +37,28 @@ class AuthenticatedSessionController extends Controller
             'checked' => 'required|accepted',
         ]);
 
-
+        // dd($request->all());
         try {
-            Auth::signInWithEmailAndPassword($request);
-
-            Auth::sendEmailVerificationLink($request->email);
-
-            if (!empty($request->ref) && $request->ref == 'reserve') {
-                return redirect()->intended(route('reservation.create'));
+            $user = Auth::signInWithEmailAndPassword($request);
+            if ($user != 'success') {
+                return back()->withErrors([
+                    'email' => 'The provided credentials do not match our records.',
+                ]);
             }
-            return redirect()->intended(route('dashboard', absolute: false));
+
+            // Auth::sendEmailVerificationLink($request->email);
+
         } catch (\Kreait\Firebase\Auth\SignIn\FailedToSignIn $e) {
             return back()->withErrors([
                 'email' => 'The provided credentials do not match our records.',
             ]);
         }
+
+
+        if (!empty($request->ref) && $request->ref == 'reserve') {
+            return redirect()->intended(route('reservation.create'));
+        }
+        return redirect()->intended(route('site.index', absolute: false));
     }
 
     /**

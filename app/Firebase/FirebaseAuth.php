@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use App\Models\User;
+// firebase auth exception
+// use Kreait\Firebase\Exception\AuthException;
+use Inertia\Inertia;
+
 
 class FirebaseAuth
 {
@@ -59,6 +63,7 @@ class FirebaseAuth
 
     public function check(): bool
     {
+        // return true;
         $firebase_token = $this->session->get('firebase_token');
         if (empty($firebase_token)) {
             return false;
@@ -94,22 +99,12 @@ class FirebaseAuth
                 'displayName' => $request->name,
             ];
             $firebase_user = $this->auth->createUser($userProperties);
+            return $firebase_user;
         } catch (\Exception $e) {
-            return back()->withErrors(['email' => 'The provided email is already registered.']);
+            return false;
+            // return back()->withErrors(['email' => 'The provided email is already registered.']);
         }
 
-        try {
-
-            Database::push('users', [
-                'username' => $request->username,
-                'user_type' => 'patient',
-                'uid' => $firebase_user->uid,
-            ]);
-            $this->signInWithEmailAndPassword($request);
-            $this->sendEmailVerificationLink($email);
-        } catch (\Throwable $th) {
-            return null;
-        }
     }
 
     public function sendEmailVerificationLink($email)
@@ -145,14 +140,16 @@ class FirebaseAuth
 
     public function signInWithEmailAndPassword(Request $request)
     {
+        // dd($request->all());
         try {
             $signInResult = $this->auth->signInWithEmailAndPassword($request->email, $request->password);
             $user = $signInResult->data();
-            $request->session()->put('firebase_token', $user['idToken']);
-            $request->session()->put('uid', $user['localId']);
-            $request->session()->put('firebase_refresh_token', $user['refreshToken']);
-        } catch (\Throwable $th) {
-            return null;
+            $this->session->put('firebase_token', $user['idToken']);
+            $this->session->put('uid', $user['localId']);
+            $this->session->put('firebase_refresh_token', $user['refreshToken']);
+            return true;
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -180,6 +177,27 @@ class FirebaseAuth
         }
     }
 
+    public function getUser($uid = null)
+    {
+        if ($uid == null) {
+            $uid = $this->getUID();
+        }
+        try {
+            return $this->auth->getUser($uid);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function updateUser($uid, $properties)
+    {
+        try {
+            $this->auth->updateUser($uid, $properties);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
 
     public function getUID()
     {
@@ -194,17 +212,48 @@ class FirebaseAuth
         try {
             $user = $this->auth->getUser($uid);
             $user_data = $this->database->getReference('users')->orderByChild('uid')->equalTo($uid)->getValue();
+            // $user_data = Database::getOneWhere('users', 'uid', $uid);
             $user_data = array_map(function ($value, $key) {
                 $value['key'] = $key;
                 return $value;
             }, $user_data, array_keys($user_data));
             $user_data = $user_data[0];
+            // dd($user_data);
             $user_data['emailVerified'] = $user->emailVerified;
             $user_data['email'] = $user->email;
             $user_data['name'] = $user->displayName;
+            // if (!empty($user_data['team_key'])) {
+            //     $user_data['team'] = Database::getOneWhere('teams', 'key', $user_data['team_key']);
+            // }
+            if (!empty($user_data['specializations'])) {
+                // it is a string of specializations keys separated by comma
+                $specializations = explode(',', $user_data['specializations']);
+                $user_data['specializations'] = $specializations;
+            }
             return $user_data;
         } catch (\Throwable $th) {
             return null;
+        }
+    }
+
+    public function changeUserPassword($uid, $password)
+    {
+        try {
+            $this->auth->changeUserPassword($uid, $password);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    // check if current_password is correct
+    public function checkCurrentPassword($uid, $current_password)
+    {
+        try {
+            $user = $this->auth->getUser($uid);
+            $signInResult = $this->auth->signInWithEmailAndPassword($user->email, $current_password);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 
@@ -226,6 +275,24 @@ class FirebaseAuth
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function admin() {
+        $user = $this->getUserData();
+        if (isset($user['is_admin']) && $user['is_admin']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function deleteUser($uid)
+    {
+        try {
+            $this->auth->deleteUser($uid);
+        } catch (\Throwable $th) {
+            return null;
         }
     }
 }

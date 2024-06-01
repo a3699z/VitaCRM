@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "@inertiajs/react";
 import styles from "./style.module.css";
 
-import logo from "../../Assets/Logo.png";
-import avatar from "../../Assets/Home/avatar.svg";
-import menu from "../../Assets/Home/menu.svg";
+import logo from "@/Assets/Logo.png";
+import avatar from "@/Assets/Home/avatar.svg";
+import menu from "@/Assets/Home/menu.svg";
 
 
 const NavBar2 = () => {

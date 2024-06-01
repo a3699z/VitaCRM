@@ -1,6 +1,6 @@
 import React from "react";
 
-import chooseImg from "../../../Assets/Home/chooseUs.png";
+import chooseImg from "@/Assets/Home/chooseUs.png";
 import styles from "./style.module.css";
 
 const ChooseUs = () => {

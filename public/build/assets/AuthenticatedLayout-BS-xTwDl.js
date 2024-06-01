@@ -1,1 +1,0 @@
-import{r as a,j as r}from"./app-DAY16ALy.js";import"./ResponsiveNavLink-CP9sOMvc.js";import{N as t}from"./index-W-OS8lo7.js";function x({user:e,header:i,children:s}){return a.useState(!1),r.jsxs(r.Fragment,{children:[r.jsx(t,{user:e}),r.jsx("div",{className:"min-h-screen bg-gray-100",children:r.jsx("main",{children:s})})]})}export{x as A};

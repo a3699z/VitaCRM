@@ -6,6 +6,9 @@ namespace App\Firebase;
 use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
+
+use App\Http\Facades\Auth;
+
 class FirebaseDatabase
 {
 
@@ -16,160 +19,35 @@ class FirebaseDatabase
         $this->database = Firebase::database();
     }
 
-    public function getReference(string $path)
-    {
-        return $this->database->getReference($path);
-    }
-
-    public function getReferenceFromUrl(string $url)
-    {
-        return $this->database->getReferenceFromUrl($url);
-    }
-
-    public function getSnapshot(string $path)
-    {
-        return $this->database->getReference($path)->getSnapshot();
-    }
-
-    public function getSnapshotFromUrl(string $url)
-    {
-        return $this->database->getReferenceFromUrl($url)->getSnapshot();
-    }
-
-    public function getValue(string $path)
+    public function getReferences(string $path)
     {
         $items = $this->database->getReference($path)->getValue();
-        $items = array_map(function ($value, $key) {
-            $value['key'] = $key;
-            return $value;
+        if (empty($items)) {
+            return [];
+        }
+        $items = array_map(function ($item, $key) {
+            $item['key'] = $key;
+            return $item;
         }, $items, array_keys($items));
         return $items;
     }
 
-    public function getValueFromUrl(string $url)
+    public function getOneReference (string $path)
     {
-        return $this->database->getReferenceFromUrl($url)->getValue();
-    }
-
-    public function setValue(string $path, $value)
-    {
-        return $this->database->getReference($path)->set($value);
-    }
-
-    public function setValueFromUrl(string $url, $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->set($value);
-    }
-
-    public function pushFromUrl(string $url, $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->push($value);
-    }
-
-    public function update(string $path, array $value)
-    {
-        return $this->database->getReference($path)->update($value);
-    }
-
-    public function updateFromUrl(string $url, array $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->update($value);
-    }
-
-    public function remove(string $path)
-    {
-        return $this->database->getReference($path)->remove();
-    }
-
-    public function removeFromUrl(string $url)
-    {
-        return $this->database->getReferenceFromUrl($url)->remove();
-    }
-
-    public function orderByChild(string $path, string $child)
-    {
-        return $this->database->getReference($path)->orderByChild($child);
-    }
-
-    public function orderByChildFromUrl(string $url, string $child)
-    {
-        return $this->database->getReferenceFromUrl($url)->orderByChild($child);
-    }
-
-    public function orderByKey(string $path)
-    {
-        return $this->database->getReference($path)->orderByKey();
-    }
-
-    public function orderByKeyFromUrl(string $url)
-    {
-        return $this->database->getReferenceFromUrl($url)->orderByKey();
-    }
-
-    public function orderByValue(string $path)
-    {
-        return $this->database->getReference($path)->orderByValue();
-    }
-
-    public function orderByValueFromUrl(string $url)
-    {
-        return $this->database->getReferenceFromUrl($url)->orderByValue();
-    }
-
-    public function startAt(string $path, $value)
-    {
-        return $this->database->getReference($path)->startAt($value);
-    }
-
-    public function startAtFromUrl(string $url, $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->startAt($value);
-    }
-
-    public function endAt(string $path, $value)
-    {
-        return $this->database->getReference($path)->endAt($value);
-    }
-
-
-    public function endAtFromUrl(string $url, $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->endAt($value);
-    }
-
-    public function equalTo(string $path, $value)
-    {
-        return $this->database->getReference($path)->equalTo($value);
-    }
-
-    public function equalToFromUrl(string $url, $value)
-    {
-        return $this->database->getReferenceFromUrl($url)->equalTo($value);
-    }
-
-    public function limitToFirst(string $path, int $limit)
-    {
-        return $this->database->getReference($path)->limitToFirst($limit);
-    }
-
-    public function limitToFirstFromUrl(string $url, int $limit)
-    {
-        return $this->database->getReferenceFromUrl($url)->limitToFirst($limit);
-    }
-
-    public function limitToLast(string $path, int $limit)
-    {
-        return $this->database->getReference($path)->limitToLast($limit);
-    }
-
-    public function limitToLastFromUrl(string $url, int $limit)
-    {
-        return $this->database->getReferenceFromUrl($url)->limitToLast($limit);
+        $item = $this->database->getReference($path)->getValue();
+        if (empty($item)) {
+            return [];
+        }
+        $item['key'] = $this->database->getReference($path)->getKey();
+        return $item;
     }
 
     public function getWhere(string $path, string $key, $value)
     {
         $return =  $this->database->getReference($path)->orderByChild($key)->equalTo($value)->getValue();
+        if (count($return) == 0) {
+            return [];
+        }
         $return = array_map(function ($item, $key) {
             $item['key'] = $key;
             return $item;
@@ -180,11 +58,14 @@ class FirebaseDatabase
     public function getOneWhere(string $path, string $key, $value)
     {
         $return =  $this->database->getReference($path)->orderByChild($key)->equalTo($value)->getValue();
+        if (count($return) == 0) {
+            return [];
+        }
         $return = array_map(function ($item, $key) {
             $item['key'] = $key;
             return $item;
         }, $return, array_keys($return));
-        return $return[0];
+        return count($return) > 0 ? $return[0] : [];
     }
 
     public function countWhere(string $path, string $key, $value)
@@ -198,5 +79,35 @@ class FirebaseDatabase
     {
         return $this->database->getReference($path)->push($value);
     }
+
+    public function set($path, $value)
+    {
+        return $this->database->getReference($path)->set($value);
+    }
+
+    public function update($path, $value)
+    {
+        return $this->database->getReference($path)->update($value);
+    }
+
+    public function delete($path)
+    {
+        return $this->database->getReference($path)->remove();
+    }
+
+
+    public function getAllUsers()
+    {
+        $users = $this->database->getReference('users')->getValue();
+        $users = array_map(function ($user, $key) {
+            $user['key'] = $key;
+            $user_data = Auth::getUser($user['uid']);
+            $user['email'] = $user_data->email;
+            // $user['name'] = $user_data->displayName;
+            return $user;
+        }, $users, array_keys($users));
+        return $users;
+    }
+
 
 }

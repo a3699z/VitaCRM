@@ -18,10 +18,10 @@ class FirebaseVerifiedMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::emailVerifed($request)) {
-            return redirect()->route('verification.notice');
-            // return response()->json(['message' => 'Email not verified'], 403);
-        }
+        // if (!Auth::emailVerifed($request)) {
+        //     return redirect()->route('verification.notice');
+        //     // return response()->json(['message' => 'Email not verified'], 403);
+        // }
         return $next($request);
     }
 }

@@ -2,77 +2,61 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Inertia\Response;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-// suer firebase databse
-use  Kreait\Firebase\Contract\Database;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-// firebase fail to create user
-use Kreait\Firebase\Exception\Auth\EmailExists;
+
+use App\Http\Facades\Auth;
+use App\Http\Facades\Database;
 
 class ReservationController extends Controller
 {
 
-    protected $database;
-    protected $auth;
-
-    public function __construct( Database $database, FirebaseAuth $auth)
+    public function index()
     {
-        $this->database = $database;
-        $this->auth = $auth;
-    }
-
-    public function index(): Response
-    {
-        $reservations = $this->database->getReference('reservations')->getValue();
-        if (!empty($reservations)) {
-            $reservations = array_map(function($reservation, $key){
-                $reservation['key'] = $key;
-                $reservation['patient'] = $this->database->getReference('users/'.$reservation['user_key'])->getValue();
-                $reservation['employee'] = $this->database->getReference('users/'.$reservation['employee_key'])->getValue();
-                return $reservation;
-            }, $reservations, array_keys($reservations));
-        } else {
-            $reservations = [];
-        }
-
-        return Inertia::render('Admin/Reservations', [
-            'reservations' => $reservations
+        $reservations  = Database::getReferences('/reservations');
+        $reservations = array_map(function ($item) {
+            $item['employee'] = Auth::getUserData($item['employee_uid']);
+            $item['user'] = Auth::getUserData($item['user_uid']);
+            if (!empty($item['employee']) && !empty($item['user'])) {
+                return $item;
+            }
+        }, $reservations);
+        $reservations = array_filter($reservations);
+        return view('admin.reservations.list', [
+            'reservations' => $reservations,
+            'emptyMessage' => 'No reservations found.'
         ]);
     }
 
-    public function delete (Request $request): RedirectResponse
+    public function show (Request $request, $key)
     {
-        try {
-            $reservation = $this->database->getReference('reservations/'.$request->key)->getValue();
-            $available_dates = $this->database->getReference('users/'.$reservation['employee_key'].'/available_dates')->getValue();
-            $date_index = array_search($reservation['date'], array_column($available_dates, 'date'));
-            if ($date_index === false) {
-                $available_dates[] = [
-                    'date' => $reservation['date'],
-                    'hours' => [$reservation['time']]
-                ];
-            } else {
-                if (!in_array($reservation['time'], $available_dates[$date_index]['hours'])) {
-                    $available_dates[$date_index]['hours'][] = $reservation['time'];
-                }
-            }
-            $this->database->getReference('users/'.$reservation['employee_key'].'/available_dates')->set($available_dates);
-            $this->database->getReference('reservations/'.$request->key)->remove();
-        } catch (\Exception $e) {
-            return Redirect::route('admin.reservations')->with('error', 'Failed to delete reservation');
-        }
-
-        return Redirect::route('admin.reservations')->with('success', 'Reservation deleted');
+        $reservation = Database::getOneReference('/reservations/'.$key);
+        $reservation = (object) $reservation;
+        $reservation->employee = Auth::getUserData($reservation->employee_uid);
+        $reservation->user = Auth::getUserData($reservation->user_uid);
+        return view('admin.reservations.detail', [
+            'reservation' => $reservation
+        ]);
     }
 
+    public function delete (Request $request, $key)
+    {
+        Database::delete('/reservations/'.$key);
+        return Redirect::route('admin.reservations');
+    }
+
+    public function update (Request $request, $key)
+    {
+        $data = $request->all();
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        if (empty($data['status'])) {
+            $data['status'] = 'pending';
+        } else {
+            $data['status'] = 'accepted';
+        }
+        Database::update('/reservations/'.$key, $data);
+
+        return Redirect::route('admin.reservations.show', ['key' => $key]);
+    }
 }

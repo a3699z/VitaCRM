@@ -34,11 +34,32 @@ class HandleInertiaRequests extends Middleware
         $user_data = Auth::check() ? Auth::getUserData() : null;
 
 
+        // $uid = $_COOKIE['uid'];
+        // dd($uid);
+
+        // $user_data = Auth::getUserData($uid);
+        // session()->put('uid', $uid);
+
+        // dd($user_data);
+
+
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $user_data,
             ],
+
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('error'),
+            ],
+
+            // firebase erros
+            'errors' => function () use ($request) {
+                return $this->resolveValidationErrors($request);
+            },
+
+
         ];
     }
 }

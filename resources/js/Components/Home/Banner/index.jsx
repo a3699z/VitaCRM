@@ -1,10 +1,10 @@
 import React from "react";
 
 import styles from "./style.module.css";
-import bannerImg from "../../../Assets/Home/banner/bannerImg.png";
-import videoIcon from "../../../Assets/Home/banner/video-square.svg";
-import buildingsIcon from "../../../Assets/Home/banner/buildings-alt.svg";
-// import arrowDownIcon from "../../../Assets/Home/banner/arrowDown.svg";
+import bannerImg from "@/Assets/Home/banner/bannerImg.png";
+import videoIcon from "@/Assets/Home/banner/video-square.svg";
+import buildingsIcon from "@/Assets/Home/banner/buildings-alt.svg";
+// import arrowDownIcon from "@/Assets/Home/banner/arrowDown.svg";
 import SelectBox from "../../SelectBox";
 
 const Banner = (employees) => {

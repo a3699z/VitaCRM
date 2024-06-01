@@ -1,59 +1,31 @@
-@extends('admin.layouts.auth')
+@extends('admin.layouts.master')
 @section('content')
-    <p class="login-box-msg">{{ __('sign_in_to_start_your_session') }}</p>
-
-    <form method="POST" action="{{ route('admin.login') }}">
-        @csrf
-        <div class="input-group mb-3">
-            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
-                value="{{ old('email') }}" placeholder="{{ __('email') }}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                </div>
+    <div class="page-wrapper default-version">
+        <div class="form-area bg_img" data-background="{{asset('assets/admin/images/1.jpg')}}">
+            <div class="form-wrapper">
+                <h4 class="logo-text mb-15">@lang('Welcome to') <strong>{{__($general->sitename)}}</strong></h4>
+                <p>{{__($pageTitle)}} @lang('to')  {{__($general->sitename)}} @lang('dashboard')</p>
+                <form action="{{ route('admin.login') }}" method="POST" class="cmn-form mt-30">
+                    @csrf
+                    <div class="form-group">
+                        <label for="email">@lang('Username')</label>
+                        <input type="text" name="username" class="form-control b-radius--capsule" id="username" value="{{ old('username') }}" placeholder="@lang('Enter your username')">
+                        <i class="las la-user input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">@lang('Password')</label>
+                        <input type="password" name="password" class="form-control b-radius--capsule" id="pass" placeholder="@lang('Enter your password')">
+                        <i class="las la-lock input-icon"></i>
+                    </div>
+                    <div class="form-group d-flex justify-content-between align-items-center">
+                        <a href="{{ route('admin.password.reset') }}" class="text-muted text--small"><i class="las la-lock"></i>@lang('Forgot password?')</a>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="submit-btn mt-25 b-radius--capsule">@lang('Login') <i class="las la-sign-in-alt"></i></button>
+                    </div>
+                </form>
             </div>
-            @error('email')
-                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-            @enderror
-        </div>
-        <div class="input-group mb-3">
-            <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
-                placeholder="{{ __('password') }}" value="">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                </div>
-            </div>
-            @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong></span>
-            @enderror
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="icheck-primary">
-                <input type="checkbox" id="remember">
-                <x-forms.label name="remember_me" :required="false" for="remember" />
-            </div>
-
-            <a href="{{ route('admin.password.request') }}">{{ __('i_forgot_my_password') }}</a>
-        </div>
-        @if (config('captcha.active'))
-            <div class="input-group mt-3 text-center">
-                {!! NoCaptcha::display() !!}
-                @if ($errors->has('g-recaptcha-response'))
-                    <span class="text-danger text-sm">
-                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
-                    </span>
-                @endif
-            </div>
-        @endif
-        <button type="submit" class="btn btn-primary btn-block mt-4">
-            {{ __('sign_in') }}
-            <i class="fas fa-arrow-right"></i>
-        </button>
-    </form>
+        </div><!-- login-area end -->
+    </div>
 @endsection
 
-@section('backend_auth_script')
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-@endsection

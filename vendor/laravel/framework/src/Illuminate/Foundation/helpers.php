@@ -146,6 +146,7 @@ if (! function_exists('asset')) {
      */
     function asset($path, $secure = null)
     {
+        // return 'https://crea8.abncw.com/'.$path;
         return app('url')->asset($path, $secure);
     }
 }

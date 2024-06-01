@@ -3,63 +3,140 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
-use Inertia\Response;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-// suer firebase databse
-use  Kreait\Firebase\Contract\Database;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-// firebase fail to create user
-use Kreait\Firebase\Exception\Auth\EmailExists;
+use App\Http\Facades\Auth;
+use App\Http\Facades\Database;
 
 class UserController extends Controller
 {
-    protected $database;
-    protected $auth;
-    public function __construct( Database $database, FirebaseAuth $auth)
-    {
-        $this->database = $database;
-        $this->auth = $auth;
-    }
 
-    public function index(): Response
+    public function index()
     {
-        $users = $this->database->getReference('users')->getValue();
-        $users = array_map(function($user, $key){
-            $user['key'] = $key;
-            $user['team'] = isset($user['team_key']) ? $this->database->getReference('teams/'.$user['team_key'])->getValue() : [];
-            return $user;
-        }, $users, array_keys($users));
-        return Inertia::render('Admin/Users', [
-            'users' => $users
+        $users = Database::getAllUsers();
+        return view('admin.users.list', [
+            'users' => $users,
+            'emptyMessage' => 'No users found.'
         ]);
     }
 
-    public function show(Request $request, $uid): Response
+    public function show(Request $request, $uid)
     {
-        $user = new User();
-        $user = $user->getByUID($uid);
-        return Inertia::render('Admin/ShowUser', [
-            'user' => $user
+        $user = Auth::getUserData($uid);
+        $user = (object) $user;
+        $teams = Database::getReferences('teams');
+        return view('admin.users.detail', [
+            'user' => $user,
+            'teams' => $teams
         ]);
     }
 
-    public function delete (Request $request): RedirectResponse
+    public function update (ProfileUpdateRequest $request, $uid)
     {
-        $user = new User();
-        $user = $user->getByUID($request->uid);
-        // dd($user);
-        $this->database->getReference('users/'.$user['key'])->remove();
-        $this->auth->deleteUser($request->uid);
+        $data = array();
+        if (!empty($request->username)) {
+            $data['username'] = $request->username;
+        }
+        if (!empty($request->name)) {
+            $data['name'] = $request->name;
+            Auth::updateUser($uid, [
+                'displayName' => $request->name
+            ]);
+        }
+        if (!empty($request->email)) {
+            $data['email'] = $request->email;
+            Auth::updateUser($uid, [
+                'email' => $request->email
+            ]);
+        }
+
+        if (!empty($request->email_verified)) {
+            Auth::updateUser($uid, [
+                'emailVerified' => $request->email_verified
+            ]);
+        }
+
+        if (!empty($data)) {
+            Database::update('users/' . Auth::getUserData($uid)['key'], $data);
+        }
+
+        return Redirect::route('admin.users.show', ['uid' => $uid]);
+    }
+
+    public function delete (Request $request, $uid)
+    {
+        Database::delete('users/' . Auth::getUserData($uid)['key']);
+        Auth::deleteUser($uid);
         return Redirect::route('admin.users');
     }
 
+
+    public function reservations (Request $request, $uid)
+    {
+        $user = Auth::getUserData($uid);
+        if (empty($user)) {
+            return Redirect::route('admin.users');
+        }
+        if ($user['user_type'] == 'employee') {
+            $reservations = Database::getWhere('reservations', 'employee_uid', $uid);
+        } else {
+            $reservations = Database::getWhere('reservations', 'user_uid', $uid);
+        }
+        $reservations = array_map(function ($item) {
+            $item['user'] = Auth::getUserData($item['user_uid']);
+            if (!empty($item['user'])) {
+                return $item;
+            }
+        }, $reservations);
+        $reservations = array_filter($reservations);
+        return view('admin.users.reservations', [
+            'reservations' => $reservations,
+            'emptyMessage' => 'No reservations found.'
+        ]);
+    }
+
+    public function employees()
+    {
+        $users = Database::getWhere('users', 'user_type', 'employee');
+        $users = array_map(function ($user) {
+            return Auth::getUserData($user['uid']);
+        }, $users);
+        $users = array_filter($users);
+        return view('admin.users.list', [
+            'users' => $users,
+            'emptyMessage' => 'No employees found.'
+        ]);
+    }
+
+    public function patients()
+    {
+        $users = Database::getWhere('users', 'user_type', 'patient');
+        $users = array_map(function ($user) {
+            return Auth::getUserData($user['uid']);
+        }, $users);
+        $users = array_filter($users);
+        return view('admin.users.list', [
+            'users' => $users,
+            'emptyMessage' => 'No patients found.'
+        ]);
+    }
+
+    public function create()
+    {
+        $teams = Database::getReferences('teams');
+        return view('admin.users.create' , [
+            'teams' => $teams
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->merge([
+            'user_type' => 'employee',
+        ]);
+        Auth::createUser($request);
+        return Redirect::route('admin.users.employees');
+    }
 
 }

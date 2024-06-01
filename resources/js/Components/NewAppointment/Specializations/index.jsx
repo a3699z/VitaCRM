@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./style.module.css";
 
-import hashtagIcon from "../../../Assets/NewAppointment/hashtagIcon.svg";
+import hashtagIcon from "@/Assets/NewAppointment/hashtagIcon.svg";
 
 const tags = [
   {
@@ -42,13 +42,13 @@ const tags = [
   },
 ];
 
-const Specializations = () => {
+const Specializations = ({tags}) => {
   return (
     <div className={styles.container}>
       <h5 className={styles.title}>Specializations</h5>
 
       <div className={styles.tags}>
-        {tags.map((tag, i) => (
+        {/* {tags.map((tag, i) => (
           <span key={tag.id}>
             <p className={styles.tag} key={tag.id}>
               <img src={hashtagIcon} alt="" />
@@ -56,6 +56,15 @@ const Specializations = () => {
             </p>
             {(i + 1) % 3 === 0 && <br />}
           </span>
+        ))} */}
+        {tags.map((tag, i) => (
+            <span>
+            <p className={styles.tag}>
+              <img src={hashtagIcon} alt="" />
+                {tag}
+            </p>
+            {(i + 1) % 3 === 0 && <br />}
+            </span>
         ))}
       </div>
     </div>

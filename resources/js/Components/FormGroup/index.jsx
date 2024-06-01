@@ -9,6 +9,8 @@ const FormGroup = ({
   placeholder,
   type = "text",
   info,
+value="",
+error=""
 }) => {
   return (
     <div className={styles.formGroup}>
@@ -22,11 +24,15 @@ const FormGroup = ({
         className={styles.input}
         placeholder={placeholder}
         onChange={onChange}
+        value={value}
       />
       {info && (
         <span className={styles.info}>Muss mindestens 8 Zeichen haben.</span>
       )}
+        {error && <span className={styles.error}>{error}</span>}
+
     </div>
+
   );
 };
 

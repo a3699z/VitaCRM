@@ -17,13 +17,7 @@ import profileImg from "@/Assets/NewAppointment/profile.png";
 import PatientReviews from "@/Components/NewAppointment/PatientReviews";
 
 export default function Employee({ auth, employee, dates }) {
-    // console.log(dates)
-    const available_dates = employee.available_dates ? employee.available_dates : [];
-    available_dates.length > 0 && available_dates.map((date, index) => {
-        console.log(date.date);
-        console.log(date.hours);
-    });
-
+    console.log(employee);
     // makeReservation
     // const checkReservation = (date, hour) => {
     //     // console.log(date,hour)
@@ -45,83 +39,35 @@ export default function Employee({ auth, employee, dates }) {
                 {/* <NavBar2 /> */}
                 <div className={styles.content}>
                     <div className={styles.left}>
-                    <div className={styles.imgContainer}>
-                        <img src={profileImg} alt="" className={styles.profileImg} />
-                    </div>
+                        <div className={styles.imgContainer}>
+                            <img src={employee.profile_image?'/images/'+employee.profile_image:profileImg} alt="" className={styles.profileImg} />
+                        </div>
 
-                    <div className={styles.doctorInfoContainer}>
-                        <Resume />
+                        <div className={styles.doctorInfoContainer}>
+                            <Resume summary={employee.summary?employee.summary:''} />
 
-                        <Education />
+                            <Education university={employee.university?employee.university:''} department={employee.department?employee.department:''} />
 
-                        <Certificates />
+                            <Certificates cerfiticate_source={employee.certificate_source?employee.certificate_source:''} certificate={employee.certificate?employee.certificate:''} />
 
-                        <Specializations />
+                            <Specializations tags={employee.specializations?employee.specializations:[]} />
 
-                        <PatientReviews />
-                    </div>
+                            <PatientReviews />
+                        </div>
                     </div>
 
                     <div className={styles.right}>
                     <div>
-                        <h5 className={styles.doctorName}>Spezialist, Leslie Alexander</h5>
-                        <p className={styles.doctorProfession}>Krankenpfleger</p>
+                        <h5 className={styles.doctorName}>Spezialist, {employee.name}</h5>
+                        { employee.profession ? <p className={styles.doctorProfession}>{employee.profession}</p> : '' }
                     </div>
 
-                    <Hashtag />
+                    <Hashtag tags={employee.specializations?employee.specializations:[]} />
                     <SpeedAppointment dates={dates} employeeUID={employee.uid} />
                     </div>
                 </div>
                 <Footer />
             </div>
-            {/* <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100"> */}
-                {/* <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-
-                    <div className="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-                        <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                            <main className="mt-6">
-                                <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                                    <div className="space-y-6 lg:col-span-2">
-                                        <h2 className="text-lg font-medium text-gray-900">Employee Information</h2>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            View information about the employee.
-                                        </p>
-                                    </div>
-                                    <div className="space-y-6 lg:col-span-2">
-                                        <h2 className="text-lg font-medium text-gray-900">Available Dates</h2>
-                                        <p className="mt-1 text-sm text-gray-600">
-                                            View available dates for the employee.
-                                        </p>
-                                    </div>
-                                    {available_dates.length > 0 ? (
-
-                                        <div className="space-y-6 lg:col-span-2">
-                                            {available_dates.map((date, index) => (
-                                                <div key={index} className="flex items-center space-x-4">
-                                                    { date.date }
-                                                    {date.hours && date.hours.length > 0 && date.hours.map((hour, hourIndex) => (
-                                                        <Link key={hourIndex} href={route('reservation.check', { date: date.date, hour: hour, employee: employee.uid })}>
-                                                            {hour}
-                                                        </Link>
-                                                    ))}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-6 lg:col-span-2">
-                                            <p className="text-sm text-gray-600">No available dates.</p>
-                                        </div>
-                                    )}
-
-                                </div>
-                            </main>
-                            <footer className="py-16 text-center text-sm text-black dark:text-white/70">
-                            </footer>
-                        </div>
-                    </div>
-                </div> */}
-            {/* </div> */}
-
         </>
     );
 }

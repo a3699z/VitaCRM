@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./style.module.css";
 
-import patientProfile from "../../../Assets/NewAppointment/patientProfile.png";
-import starIcon from "../../../Assets/NewAppointment/startIcon.svg";
-import doctorProfile from "../../../Assets/NewAppointment/doctorProfile.png";
+import patientProfile from "@/Assets/NewAppointment/patientProfile.png";
+import starIcon from "@/Assets/NewAppointment/startIcon.svg";
+import doctorProfile from "@/Assets/NewAppointment/doctorProfile.png";
 
 const Rewiev = () => {
   return (

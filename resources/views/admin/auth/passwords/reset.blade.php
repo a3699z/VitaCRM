@@ -1,53 +1,36 @@
-@extends('admin.layouts.auth')
+@extends('admin.layouts.master')
 @section('content')
-    <h3 class="mb-3">
-        {{ __('reset_password') }}
-    </h3>
+    <div class="page-wrapper default-version">
+        <div class="form-area bg_img" data-background="{{asset('assets/admin/images/1.jpg')}}">
+            <div class="form-wrapper">
+                <h4 class="logo-text mb-15"><strong>@lang('Reset Password')</strong></h4>
+                <form action="{{ route('admin.password.change') }}" method="POST" class="cmn-form mt-30">
+                    @csrf
 
-    <form method="POST" action="{{ route('admin.password.update') }}">
-        @csrf
+                    <input type="hidden" name="email" value="{{ $email }}">
+                    <input type="hidden" name="token" value="{{ $token }}">
 
-        <input type="hidden" name="token" value="{{ $token }}">
+                    <div class="form-group">
+                        <label for="pass">@lang('New Password')</label>
+                        <input type="password" name="password" class="form-control b-radius--capsule" id="password" placeholder="@lang('New password')">
+                        <i class="las la-lock input-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">@lang('Retype New Password')</label>
+                        <input type="password" name="password_confirmation" class="form-control b-radius--capsule" id="password_confirmation" placeholder="@lang('Retype New password')">
+                        <i class="las la-lock input-icon"></i>
+                    </div>
 
-        <div class="form-group row">
-            <x-forms.label name="email" for="password" class="col-md-4" />
-            <div class="col-md-8">
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                    name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                    <div class="form-group d-flex justify-content-between align-items-center">
+                        <a href="{{ route('admin.login') }}" class="text-muted text--small"><i class="las la-lock"></i>@lang('Login Here')</a>
+                    </div>
 
-                @error('email')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+                    <div class="form-group">
+                        <button type="submit" class="submit-btn mt-25 b-radius--capsule">@lang('Reset Password') <i class="las la-sign-in-alt"></i></button>
+                    </div>
+                </form>
             </div>
-        </div>
-
-        <div class="form-group row">
-            <x-forms.label name="password" for="password" class="col-md-4" />
-            <div class="col-md-8">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                    name="password" required autocomplete="new-password">
-
-                @error('password')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <x-forms.label name="confirm_password" for="password-confirm" class="col-md-4" />
-            <div class="col-md-8">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required
-                    autocomplete="new-password">
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100 d-block">
-            {{ __('reset_password') }}
-        </button>
-
-    </form>
+        </div><!-- login-area end -->
+    </div>
 @endsection
+

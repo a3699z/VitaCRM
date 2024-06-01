@@ -2,9 +2,9 @@ import React from "react";
 import Card from "../Card";
 
 import styles from "./style.module.css";
-import about1 from "../../../Assets/Home/about/about-1.png";
-import about2 from "../../../Assets/Home/about/about-2.png";
-import about3 from "../../../Assets/Home/about/about-3.png";
+import about1 from "@/Assets/Home/about/about-1.png";
+import about2 from "@/Assets/Home/about/about-2.png";
+import about3 from "@/Assets/Home/about/about-3.png";
 
 const limitText = (text) => text.slice(0, 150) + "...";
 

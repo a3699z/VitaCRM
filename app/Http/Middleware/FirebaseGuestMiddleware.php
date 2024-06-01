@@ -5,18 +5,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+use App\Http\Facades\Auth;
 use App\CustomFirebaseAuth;
 
 class FirebaseGuestMiddleware
 {
-    protected FirebaseAuth $auth;
-
-    public function __construct(FirebaseAuth $auth)
-    {
-        $this->auth = $auth;
-    }
 
     public function handle(Request $request, Closure $next)
     {
@@ -28,8 +21,9 @@ class FirebaseGuestMiddleware
         //         return redirect()->route('dashboard');
         //     }
         // }
-        if (CustomFirebaseAuth::call_static($request, 'getUserData')) {
-            return redirect()->route('dashboard');
+        // if (CustomFirebaseAuth::call_static($request, 'getUserData')) {
+        if (Auth::check()) {
+            return redirect()->route('site.index');
         }
         return $next($request);
     }

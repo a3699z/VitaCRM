@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import styles from "./style.module.css";
-import bgImg from "../../../Assets/Home/reviews/reviewsBackground.png";
+import bgImg from "@/Assets/Home/reviews/reviewsBackground.png";
 
 const reviews = [
   {

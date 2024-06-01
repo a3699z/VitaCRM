@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from '@inertiajs/react';
 import styles from "./style.module.css";
 import { useState } from 'react';
-import logo from "../../Assets/Logo.png";
-import avatar from "../../Assets/Home/avatar.svg";
-import menu from "../../Assets/Home/menu.svg";
+import logo from "@/Assets/Logo.png";
+import avatar from "@/Assets/Home/avatar.svg";
+import menu from "@/Assets/Home/menu.svg";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import Dropdown from '@/Components/Dropdown';
 
@@ -55,9 +55,9 @@ const Navbar = (user) => {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('profile.index')}>Profile</Dropdown.Link>
                                         {/* reservations */}
-                                        <Dropdown.Link href={route('reservations.index')}>Reservations</Dropdown.Link>
+                                        {/* <Dropdown.Link href={route('reservations.index')}>Reservations</Dropdown.Link> */}
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -106,7 +106,7 @@ const Navbar = (user) => {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('profile.index')}>Profile</ResponsiveNavLink>
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>

@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./style.module.css";
 import { Link } from "@inertiajs/react";
 
-import leftTop from "../../../Assets/Home/contactUs/leftTop.png";
-import rightBottom from "../../../Assets/Home/contactUs/rightBottom.png";
+import leftTop from "@/Assets/Home/contactUs/leftTop.png";
+import rightBottom from "@/Assets/Home/contactUs/rightBottom.png";
 
 const ContactUs = () => {
   return (

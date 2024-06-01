@@ -2,21 +2,21 @@ import React from "react";
 
 import styles from "./style.module.css";
 
-import logo from "../../Assets/Logo.png";
-import pinIcon from "../../Assets/Footer/pinIcon.png";
-import phoneIcon from "../../Assets/Footer/phoneIcon.png";
-import mailIcon from "../../Assets/Footer/mailIcon.png";
+import logo from "@/Assets/Logo.png";
+import pinIcon from "@/Assets/Footer/pinIcon.png";
+import phoneIcon from "@/Assets/Footer/phoneIcon.png";
+import mailIcon from "@/Assets/Footer/mailIcon.png";
 
-import galleryPhoto1 from "../../Assets/Footer/gallery/1.png";
-import galleryPhoto2 from "../../Assets/Footer/gallery/2.png";
-import galleryPhoto3 from "../../Assets/Footer/gallery/3.png";
-import galleryPhoto4 from "../../Assets/Footer/gallery/4.png";
-import galleryPhoto5 from "../../Assets/Footer/gallery/5.png";
-import galleryPhoto6 from "../../Assets/Footer/gallery/6.png";
+import galleryPhoto1 from "@/Assets/Footer/gallery/1.png";
+import galleryPhoto2 from "@/Assets/Footer/gallery/2.png";
+import galleryPhoto3 from "@/Assets/Footer/gallery/3.png";
+import galleryPhoto4 from "@/Assets/Footer/gallery/4.png";
+import galleryPhoto5 from "@/Assets/Footer/gallery/5.png";
+import galleryPhoto6 from "@/Assets/Footer/gallery/6.png";
 
-import instagramIcon from "../../Assets/Footer/instagram.png";
-import facebookIcon from "../../Assets/Footer/facebook.png";
-import youtubeIcon from "../../Assets/Footer/youtube.png";
+import instagramIcon from "@/Assets/Footer/instagram.png";
+import facebookIcon from "@/Assets/Footer/facebook.png";
+import youtubeIcon from "@/Assets/Footer/youtube.png";
 import { Link } from "@inertiajs/react";
 
 const contactList = [

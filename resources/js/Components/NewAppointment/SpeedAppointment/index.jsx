@@ -5,9 +5,11 @@ import TimeSelect from "../TimeSelect";
 import DateSelect from "../DateSelect";
 import axios from "axios";
 import { useEffect } from "react";
+import InputError from '@/Components/InputError';
 
-import rightArrowIcon from "../../../Assets/NewAppointment/rightArrowIcon.svg";
-import leftArrowIcon from "../../../Assets/NewAppointment/leftArrowIcon.svg";
+
+import rightArrowIcon from "@/Assets/NewAppointment/rightArrowIcon.svg";
+import leftArrowIcon from "@/Assets/NewAppointment/leftArrowIcon.svg";
 
 import { Head, Link, useForm } from '@inertiajs/react';
 
@@ -29,27 +31,27 @@ const SpeedAppointment = ({dates, employeeUID}) => {
     const [activeTab, setActiveTab] = useState("online");
 
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, get, processing, errors, reset } = useForm({
         date: dates[0].date,
         hour: null,
-        online: activeTab === "online" ? 1 : 0,
+        online: 1,
         employeeUID: employeeUID,
     });
 
 
-
     const selectDate = (date) => {
-        axios.get('/reservation/get_hours/', {
+        axios.get('/reservation/get_hours?date='+date+'&employeeUID='+employeeUID, {
             date: date,
+            employeeUID: employeeUID,
         }).then((response) => {
             setData("date", date);
             setHours(response.data.hours);
             const dateBoxes = document.querySelectorAll(`.${styles.dateBox}`);
             dateBoxes.forEach((dateBox) => {
-                dateBox.classList.remove(styles.dateBoxSelected);
+                dateBox.classList.remove(styles.selectedDateBox);
             });
             const selectedDate = document.querySelector(`.${styles.dateBox}[data-date="${date}"]`);
-            selectedDate.classList.add(styles.dateBoxSelected);
+            selectedDate.classList.add(styles.selectedDateBox);
         });
     }
 
@@ -63,12 +65,17 @@ const SpeedAppointment = ({dates, employeeUID}) => {
         event.target.classList.add(styles.timeBoxSelected);
     }
 
+    const handleActivaTab = (tab) => {
+        setActiveTab(tab);
+        setData("online", tab === "online" ? 1 : 0);
+    }
 
     useEffect(() => {
         selectDate(dates[0].date)
     }, []);
 
     const submit = () => {
+        // console.log(data);
         post(route('reservation.check'));
     }
 
@@ -111,7 +118,7 @@ const SpeedAppointment = ({dates, employeeUID}) => {
             styles.tabBtn,
             activeTab == "online" && styles.active,
           ].join(" ")}
-          onClick={() => setActiveTab("online")}
+          onClick={() => handleActivaTab("online")}
         >
           Videosprechstunde
         </button>
@@ -120,7 +127,7 @@ const SpeedAppointment = ({dates, employeeUID}) => {
             styles.tabBtn,
             activeTab == "onsite" && styles.active,
           ].join(" ")}
-          onClick={() => setActiveTab("onsite")}
+          onClick={() => handleActivaTab("onsite")}
         >
           Vor-Ort-Termin
         </button>
@@ -150,6 +157,7 @@ const SpeedAppointment = ({dates, employeeUID}) => {
                 <img src={rightArrowIcon} alt="" />
                 </button>
             </div>
+            <InputError message={errors.date} />
         </div>
 
 
@@ -179,6 +187,7 @@ const SpeedAppointment = ({dates, employeeUID}) => {
                     );
                 })}
             </div>
+            <InputError message={errors.hour} />
         </div>
 
         <button className={styles.submitBtn} onClick={() => submit()}>Termin vereinbaren</button>

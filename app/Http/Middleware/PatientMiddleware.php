@@ -17,7 +17,7 @@ class PatientMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::patient()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('site.index');
         }
         return $next($request);
     }

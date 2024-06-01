@@ -13,6 +13,7 @@ import Checkbox from "@/Components/Checkbox/index.jsx";
 import logo from "@/Assets/Logo.png";
 import heroImg from "@/Assets/Auth/heroImg.png";
 import Navbar from '@/Components/Navbar';
+import { usePage } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
     const params = new URLSearchParams(window.location.search);
@@ -22,7 +23,8 @@ export default function Login({ status, canResetPassword }) {
         email: '',
         password: '',
         remember: false,
-        ref: ref ? ref : ''
+        ref: ref ? ref : '',
+        checked: false
     });
 
     useEffect(() => {
@@ -34,7 +36,16 @@ export default function Login({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('login'));
+        // on errors
+        post(route('login'), {
+            preserveScroll: true,
+            onError: (errors) => {
+                console.log(errors);
+            },
+            onSuccess: () => {
+                console.log('success');
+            }
+        });
     };
 
     return (
@@ -72,6 +83,7 @@ export default function Login({ status, canResetPassword }) {
                             }}
                             placeholder={"Ihre E-Mail eingeben"}
                         />
+                        <InputError message={errors.email} />
                         <FormGroup
                             id={"password"}
                             label={"Passwort*"}
@@ -83,6 +95,7 @@ export default function Login({ status, canResetPassword }) {
                             type={"password"}
                             info={"Muss mindestens 8 Zeichen haben."}
                         />
+                        <InputError message={errors.password} />
 
                         <div className={styles.container}>
                             <label

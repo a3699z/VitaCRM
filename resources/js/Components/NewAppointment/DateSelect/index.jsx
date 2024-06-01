@@ -3,8 +3,8 @@ import React from "react";
 import styles from "./style.module.css";
 import axios from "axios";
 
-import rightArrowIcon from "../../../Assets/NewAppointment/rightArrowIcon.svg";
-import leftArrowIcon from "../../../Assets/NewAppointment/leftArrowIcon.svg";
+import rightArrowIcon from "@/Assets/NewAppointment/rightArrowIcon.svg";
+import leftArrowIcon from "@/Assets/NewAppointment/leftArrowIcon.svg";
 
 const DateSelect = ({dates}) => {
     // scroll

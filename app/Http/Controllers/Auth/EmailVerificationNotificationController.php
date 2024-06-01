@@ -45,7 +45,7 @@ class EmailVerificationNotificationController extends Controller
         $user = CustomFirebaseAuth::call_static($request, 'getUserData');
         if ($user) {
             if (isset($user['email_verified_at'])) {
-                return redirect()->intended(route('dashboard', absolute: false));
+                return redirect()->intended(route('site.index', absolute: false));
             }
         }
         $user = CustomFirebaseAuth::call_static($request, 'getUserData');
