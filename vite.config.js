@@ -10,7 +10,7 @@ const asssetsFolder = path.resolve(
 
 export default defineConfig({
     server: {
-        host: process.env.APP_URL || "localhost",
+        host: 'https://crm.vip-vitalisten.de/'
     },
     plugins: [
         laravel({
