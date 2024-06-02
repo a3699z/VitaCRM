@@ -9,9 +9,7 @@ const asssetsFolder = path.resolve(
 );
 
 export default defineConfig({
-    server: {
-        host: 'https://crm.vip-vitalisten.de/'
-    },
+    base: "https://crm.vip-vitalisten.de/",
     plugins: [
         laravel({
             input: "resources/js/app.jsx",
