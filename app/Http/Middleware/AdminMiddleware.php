@@ -22,7 +22,6 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
         if (!Auth::admin()) {
             return redirect('/');
         }
