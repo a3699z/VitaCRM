@@ -9,6 +9,9 @@ const asssetsFolder = path.resolve(
 );
 
 export default defineConfig({
+    server: {
+        host: process.env.APP_URL || "localhost",
+    },
     plugins: [
         laravel({
             input: "resources/js/app.jsx",
