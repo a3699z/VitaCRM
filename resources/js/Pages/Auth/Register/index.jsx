@@ -54,7 +54,7 @@ export default function Register() {
                         </div>
 
                         <form className={styles.form} onSubmit={submit}>
-                        <FormGroup
+                        {/* <FormGroup
                             id={"username"}
                             label={"Benutzername*"}
                             name={"username"}
@@ -63,9 +63,22 @@ export default function Register() {
                             }}
                             placeholder={"username"}
 
-                        />
+                        /> */}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="username" className={styles.label}>
+                                Benutzername*
+                            </label>
+                            <input
+                                type="text"
+                                name="username"
+                                id="username"
+                                className={styles.input}
+                                placeholder="username"
+                                onChange={(e) => setData('username', e.target.value)}
+                            />
+                        </div>
                         <InputError message={errors.username} className="mt-2" />
-                        <FormGroup
+                        {/* <FormGroup
                             id={"name"}
                             label={"Name*"}
                             name={"name"}
@@ -73,9 +86,22 @@ export default function Register() {
                                 setData('name', e.target.value);
                             }}
                             placeholder={"Ihre name eingeben"}
-                        />
-                            <InputError message={errors.name} className="mt-2" />
-                        <FormGroup
+                        /> */}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="name" className={styles.label}>
+                                Name*
+                            </label>
+                            <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                className={styles.input}
+                                placeholder="Ihre name eingeben"
+                                onChange={(e) => setData('name', e.target.value)}
+                            />
+                        </div>
+                        <InputError message={errors.name} className="mt-2" />
+                        {/* <FormGroup
                             id={"email"}
                             label={"E-mail*"}
                             name={"email"}
@@ -83,9 +109,23 @@ export default function Register() {
                                 setData('email', e.target.value);
                             }}
                             placeholder={"Ihre E-Mail eingeben"}
-                        />
+                        /> */}
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email" className={styles.label}>
+                                E-mail*
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                className={styles.input}
+                                placeholder="Ihre E-Mail eingeben"
+                                onChange={ (e) => setData('email', e.target.value) }
+                            />
+                        </div>
                             <InputError message={errors.email} className="mt-2" />
-                        <FormGroup
+                        {/* <FormGroup
                             id={"password"}
                             label={"Passwort*"}
                             name={"password"}
@@ -95,8 +135,23 @@ export default function Register() {
                             placeholder={"••••••••"}
                             type={"password"}
                             info={"Muss mindestens 8 Zeichen haben."}
-                        />
-                            <InputError message={errors.password} className="mt-2" />
+                        /> */}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password" className={styles.label}>
+                                Passwort*
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                className={styles.input}
+                                placeholder="••••••••"
+                                onChange={ (e) => setData('password', e.target.value) }
+                            />
+                            <span className={styles.info}>Muss mindestens 8 Zeichen haben.</span>
+                        </div>
+
+                        <InputError message={errors.password} className="mt-2" />
 
                             <div className={styles.container}>
                                 <label
@@ -109,7 +164,7 @@ export default function Register() {
                                     }}
                                     className={styles.check_container}
                                 >
-                                    <input type="checkbox" name="a" id="a" className={styles.input} onChange={(e) => {setData('checked', e.target.checked)}} />
+                                    <input type="checkbox" name="a" id="a" className={styles.ckeckboxInput} onChange={(e) => {setData('checked', e.target.checked)}} />
                                     <span></span>
                                     <div
                                     onClick={(e) => {

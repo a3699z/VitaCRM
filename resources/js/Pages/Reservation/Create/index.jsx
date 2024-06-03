@@ -16,8 +16,6 @@ import calendarIcon from "@/Assets/Profile/visit/calendarIcon.svg";
 import InputError from '@/Components/InputError';
 
 export default function Create({ auth, employee, date, hour, is_online }) {
-    // errors from inerita
-    console.log(errors);
     const { data, setData, post, processing, errors, reset } = useForm({
         insurance_type: 'legal',
         insurance_policy_number: '',
@@ -104,14 +102,20 @@ export default function Create({ auth, employee, date, hour, is_online }) {
                                     </select>
                                     <InputError error={errors.insurance_type} />
                                 </div>
-                                <FormGroup
+                                {/*<FormGroup
                                     id={"insurance_policy_number"}
                                     name={"insurance_policy_number"}
                                     label={"Insurance Policy Number"}
                                     placeholder={"123456789"}
                                     onChange={(e) => setData('insurance_policy_number', e.target.value)}
                                     type="text"
-                                />
+                                /> */}
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="insurance_policy_number" className={styles.label}>
+                                        Insurance Policy Number
+                                    </label>
+                                    <input type="text" id="insurance_policy_number" name="insurance_policy_number" onChange={(e) => setData('insurance_policy_number', e.target.value)} className={styles.input} />
+                                </div>
                                 <InputError error={errors.insurance_policy_number} />
                             </form>
                             <div className={styles.btnGroup}>

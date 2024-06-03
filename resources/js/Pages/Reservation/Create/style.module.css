@@ -277,3 +277,35 @@
     font-size: 14px;
     color: rgba(71, 84, 103, 1);
   }
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    padding-bottom: 6px;
+  }
+  .input {
+    border: 1px solid #d7dbea80;
+    border-radius: 8px;
+    background-color: #fafafa;
+    font-size: 16px;
+    line-height: 24px;
+    outline: none;
+    padding: 10px 14px;
+    /*!! rengi sor color: rgba(34, 46, 85, 1); */
+  }
+  .input:placeholder-shown {
+    color: rgba(102, 112, 133, 1);
+  }
+
+  .info {
+    line-height: 20px;
+    font-size: 14px;
+    color: rgba(71, 84, 103, 1);
+  }

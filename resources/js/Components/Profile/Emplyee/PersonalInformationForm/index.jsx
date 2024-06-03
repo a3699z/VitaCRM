@@ -68,7 +68,7 @@ const PersonalInformation = ({auth}) => {
             </div>
 
 
-          <FormGroup
+          {/* <FormGroup
             id={"userName"}
             name={"userName"}
             label={"Benutzername"}
@@ -76,8 +76,22 @@ const PersonalInformation = ({auth}) => {
             onChange={(e) => {setData('userName', e.target.value)}}
             type="text"
             value={auth.user.username}
-          />
-          <FormGroup
+          /> */}
+          <div className={styles.formGroup}>
+            <label htmlFor="userName" className={styles.label}>
+                Benutzername
+            </label>
+            <input
+                type="text"
+                name="userName"
+                id="userName"
+                className={styles.input}
+                placeholder="ritaaagreiner"
+                onChange={ (e) => setData('userName', e.target.value) }
+                value={auth.user.username}
+            />
+            </div>
+          {/* <FormGroup
             id={"name"}
             name={"name"}
             label={"Name"}
@@ -85,8 +99,22 @@ const PersonalInformation = ({auth}) => {
             onChange={(e) => {setData('name', e.target.value)}}
             type="text"
             value={auth.user.name}
-          />
-          <FormGroup
+          /> */}
+            <div className={styles.formGroup}>
+                <label htmlFor="name" className={styles.label}>
+                    Name
+                </label>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    className={styles.input}
+                    placeholder="Rita Greiner"
+                    onChange={ (e) => setData('name', e.target.value) }
+                    value={auth.user.name}
+                />
+            </div>
+          {/* <FormGroup
             id={"email"}
             name={"email"}
             label={"E-mail"}
@@ -94,7 +122,21 @@ const PersonalInformation = ({auth}) => {
             onChange={(e) => {setData('email', e.target.value)}}
             type="mail"
             value={auth.user.email}
-          />
+          /> */}
+            <div className={styles.formGroup}>
+                <label htmlFor="email" className={styles.label}>
+                    E-mail
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    className={styles.input}
+                    placeholder="ritagreiner@gmail.com"
+                    onChange={ (e) => setData('email', e.target.value) }
+                    value={auth.user.email}
+                />
+            </div>
         </form>
         <div className={styles.btnGroup}>
           {/* <button className={styles.cancelBtn}>ABBRECHEN</button> */}

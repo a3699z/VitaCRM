@@ -29,30 +29,77 @@ const ChangePasswordForm = () => {
       </div>
       <div className={styles.formContainer}>
         <form onSubmit={(e) => updatePassword(e)}>
-          <FormGroup
+          {/* <FormGroup
             id={"password"}
             name={"password"}
             label={"Passwort"}
             placeholder={"Altes Passwort"}
             onChange={ (e) => { setData('current_password', e.target.value) }}
             type="text"
-          />
-          <FormGroup
+          /> */}
+          <div class={styles.formGroup}>
+            <label for="password" class={styles.label}>
+              Passwort
+            </label>
+            <input
+              type="text"
+              name="password"
+              id="password"
+              class={styles.input}
+              placeholder="Altes Passwort"
+              onChange={ (e) => { setData('current_password', e.target.value) }}
+            />
+            </div>
+
+          {/* <FormGroup
             id={"name"}
             name={"name"}
             label={"Neues Passwort"}
             placeholder={"Neues Passwort"}
             onChange={ (e) => { setData('password', e.target.value) }}
             type="text"
-          />
-          <FormGroup
+          /> */}
+            <div class={styles.formGroup}>
+                <label for="name" class={styles.label}>
+                Neues Passwort
+                </label>
+                <input
+                type="text"
+                name="name"
+                id="name"
+                class={styles.input}
+                placeholder="Neues Passwort"
+                onChange={ (e) => { setData('password', e.target.value) }}
+                />
+                </div>
+
+
+
+
+          {/* <FormGroup
             id={"email"}
             name={"email"}
             label={"Neues Passwort (Nochmals)"}
             placeholder={"Neues Passwort (Nochmals)"}
             onChange={ (e) => { setData('password_confirmation', e.target.value) }}
             type="mail"
-          />
+          /> */}
+            <div class={styles.formGroup}>
+                <label for="email" class={styles.label}>
+                Neues Passwort (Nochmals)
+                </label>
+                <input
+                type="mail"
+                name="email"
+                id="email"
+                class={styles.input}
+                placeholder="Neues Passwort (Nochmals)"
+                onChange={ (e) => { setData('password_confirmation', e.target.value) }}
+                />
+                </div>
+
+
+
         </form>
         <button className={styles.submitBtn} type="submit" onClick={(e) => updatePassword(e)}>Passwort zurücksetzen</button>
       </div>

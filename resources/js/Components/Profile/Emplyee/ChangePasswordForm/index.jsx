@@ -15,30 +15,71 @@ const ChangePasswordForm = () => {
       </div>
       <div className={styles.formContainer}>
         <form>
-          <FormGroup
+          {/* <FormGroup
             id={"password"}
             name={"password"}
             label={"Passwort"}
             placeholder={"Altes Passwort"}
             onChange={onChange}
             type="text"
-          />
-          <FormGroup
+          /> */}
+          <div class={styles.formGroup}>
+            <label for="password" class={styles.label}>
+              Passwort
+            </label>
+            <input
+              type="text"
+              name="password"
+              id="password"
+              class={styles.input}
+              placeholder="Altes Passwort"
+              onChange={onChange}
+            />
+            </div>
+          {/* <FormGroup
             id={"name"}
             name={"name"}
             label={"Neues Passwort"}
             placeholder={"Neues Passwort"}
             onChange={onChange}
             type="text"
-          />
-          <FormGroup
+          /> */}
+          <div class={styles.formGroup}>
+            <label for="name" class={styles.label}>
+              Neues Passwort
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class={styles.input}
+              placeholder="Neues Passwort"
+              onChange={onChange}
+            />
+            </div>
+
+          {/* <FormGroup
             id={"email"}
             name={"email"}
             label={"Neues Passwort (Nochmals)"}
             placeholder={"Neues Passwort (Nochmals)"}
             onChange={onChange}
             type="mail"
-          />
+          /> */}
+            <div class={styles.formGroup}>
+                <label for="email" class={styles.label}>
+                Neues Passwort (Nochmals)
+                </label>
+                <input
+                type="mail"
+                name="email"
+                id="email"
+                class={styles.input}
+                placeholder="Neues Passwort (Nochmals)"
+                onChange={onChange}
+                />
+                </div>
+
         </form>
         <button className={styles.submitBtn}>Passwort zurücksetzen</button>
       </div>

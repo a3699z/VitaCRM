@@ -1,19 +1,11 @@
 import { useEffect } from 'react';
-// import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { useParams } from 'react-router-dom';
 import styles from "./style.module.css";
 import FormGroup from "@/Components/FormGroup/index.jsx";
-import Checkbox from "@/Components/Checkbox/index.jsx";
 import logo from "@/Assets/Logo.png";
 import heroImg from "@/Assets/Auth/heroImg.png";
 import Navbar from '@/Components/Navbar';
-import { usePage } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
     const params = new URLSearchParams(window.location.search);
@@ -74,17 +66,32 @@ export default function Login({ status, canResetPassword }) {
                         </div>
 
                         <form className={styles.form} onSubmit={submit}>
-                        <FormGroup
+                        {/* <FormGroup
                             id={"email"}
                             label={"E-mail*"}
                             name={"email"}
                             onChange={(e) => {
+                                console.log(e.target.value);
                                 setData('email', e.target.value);
                             }}
                             placeholder={"Ihre E-Mail eingeben"}
-                        />
+                        /> */}
+
+                        <div className={styles.formGroup}>
+                            <label htmlFor="email" className={styles.label}>
+                                E-mail*
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                className={styles.input}
+                                placeholder="Ihre E-Mail eingeben"
+                                onChange={ (e) => setData('email', e.target.value) }
+                            />
+                        </div>
                         <InputError message={errors.email} />
-                        <FormGroup
+                        {/* <FormGroup
                             id={"password"}
                             label={"Passwort*"}
                             name={"password"}
@@ -94,7 +101,21 @@ export default function Login({ status, canResetPassword }) {
                             placeholder={"••••••••"}
                             type={"password"}
                             info={"Muss mindestens 8 Zeichen haben."}
-                        />
+                        /> */}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password" className={styles.label}>
+                                Passwort*
+                            </label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                className={styles.input}
+                                placeholder="••••••••"
+                                onChange={ (e) => setData('password', e.target.value) }
+                            />
+                            <span className={styles.info}>Muss mindestens 8 Zeichen haben.</span>
+                        </div>
                         <InputError message={errors.password} />
 
                         <div className={styles.container}>
@@ -108,7 +129,7 @@ export default function Login({ status, canResetPassword }) {
                                 }}
                                 className={styles.check_container}
                             >
-                                <input type="checkbox" name="a" id="a" className={styles.input} onChange={(e) => {setData('checked', e.target.checked)}} />
+                                <input type="checkbox" name="a" id="a" className={styles.ckeckboxInput} onChange={(e) => {setData('checked', e.target.checked)}} />
                                 <span></span>
                                 <div
                                 onClick={(e) => {
