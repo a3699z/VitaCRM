@@ -185,7 +185,7 @@ export default function Register() {
                         </button>
                         <p className={styles.registerText}>
                             Haben Sie schon ein Konto?{" "}
-                            <Link to="/login" className={styles.link}>
+                            <Link href="/login" className={styles.link}>
                             Sich anmelden
                             </Link>
                         </p>

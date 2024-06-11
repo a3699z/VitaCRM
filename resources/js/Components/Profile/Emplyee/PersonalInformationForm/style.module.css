@@ -1,115 +1,145 @@
 .container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 4px;
-}
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 4px;
+  }
 
-.titleContainer {
-  border-bottom: 1px solid #d7dbea;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.title {
-  color: #141417;
-  font-size: 18px;
-  font-weight: 600;
-  word-wrap: break-word;
-  margin: 0;
-}
-
-.info {
-  margin: 0;
-  color: #14141799;
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.14;
-  word-wrap: break-word;
-  margin: 0;
-}
-
-.formContainer {
-  padding: 20px 24px;
-}
-
-.formTitle {
-  color: #141417;
-  font-size: 14px;
-  font-weight: 500;
-  word-wrap: break-word;
-  margin: 0;
-}
-
-.btnGroup {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 44px;
-}
-
-.cancelBtn {
-  cursor: pointer;
-  border-radius: 12px;
-  border: 1px solid #072947;
-  padding: 20px 40px;
-  background-color: unset;
-  color: #072947;
-
-  text-align: center;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.26px;
-  text-transform: uppercase;
-}
-
-.saveBtn {
-  cursor: pointer;
-  padding: 20px 40px;
-  border: none;
-  border-radius: 12px;
-  background: #d4aa2c;
-  color: #f1f4f8;
-  text-align: center;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 184.615% */
-  letter-spacing: 0.26px;
-  text-transform: uppercase;
-}
-
-
-.formGroup {
+  .titleContainer {
+    border-bottom: 1px solid #d7dbea;
+    padding: 30px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    margin: 20px 0;
+    gap: 18px;
   }
 
-  .label {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    padding-bottom: 6px;
+  .imageContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
   }
-  .input {
-    border: 1px solid #d7dbea80;
-    border-radius: 8px;
-    background-color: #fafafa;
-    font-size: 16px;
-    line-height: 24px;
-    outline: none;
-    padding: 10px 14px;
-    /*!! rengi sor color: rgba(34, 46, 85, 1); */
+
+  .image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #d7dbea;
+      display: flex;
+      justify-content: center;
+      align-items: center;
   }
-  .input:placeholder-shown {
-    color: rgba(102, 112, 133, 1);
+
+  .uploadBtn {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #d4aa2c;
+      color: #f1f4f8;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+
+  }
+
+  .title {
+    color: #141417;
+    font-size: 18px;
+    font-weight: 600;
+    word-wrap: break-word;
+    margin: 0;
   }
 
   .info {
-    line-height: 20px;
+    margin: 0;
+    color: #14141799;
     font-size: 14px;
-    color: rgba(71, 84, 103, 1);
+    font-weight: 400;
+    letter-spacing: 0.14;
+    word-wrap: break-word;
+    margin: 0;
   }
+
+  .formContainer {
+    padding: 20px 24px;
+  }
+
+  .formTitle {
+    color: #141417;
+    font-size: 14px;
+    font-weight: 500;
+    word-wrap: break-word;
+    margin: 0;
+  }
+
+  .btnGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 44px;
+  }
+
+  .cancelBtn {
+    cursor: pointer;
+    border-radius: 12px;
+    border: 1px solid #072947;
+    padding: 20px 40px;
+    background-color: unset;
+    color: #072947;
+
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.26px;
+    text-transform: uppercase;
+  }
+
+  .saveBtn {
+    cursor: pointer;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 12px;
+    background: #d4aa2c;
+    color: #f1f4f8;
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px; /* 184.615% */
+    letter-spacing: 0.26px;
+    text-transform: uppercase;
+  }
+
+
+  .formGroup {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .label {
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 20px;
+      padding-bottom: 6px;
+    }
+    .input {
+      border: 1px solid #d7dbea80;
+      border-radius: 8px;
+      background-color: #fafafa;
+      font-size: 16px;
+      line-height: 24px;
+      outline: none;
+      padding: 10px 14px;
+      /*!! rengi sor color: rgba(34, 46, 85, 1); */
+    }
+    .input:placeholder-shown {
+      color: rgba(102, 112, 133, 1);
+    }
+
+    .info {
+      line-height: 20px;
+      font-size: 14px;
+      color: rgba(71, 84, 103, 1);
+    }

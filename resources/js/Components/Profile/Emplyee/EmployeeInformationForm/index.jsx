@@ -1,23 +1,18 @@
 import React from "react";
 import styles from "./style.module.css";
-import FormGroup from "../../../FormGroup";
 import { useForm } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
 
 
-const EmployeeInformationForm = ({auth, flash}) => {
-
-
-
-
+const EmployeeInformationForm = ({auth}) => {
   const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
     summary: auth.user.summary ? auth.user.summary : '',
     university: auth.user.university ? auth.user.university : '',
     department: auth.user.department ? auth.user.department : '',
     certificate_source: auth.user.certificate_source ? auth.user.certificate_source : '',
     certificate: auth.user.certificate ? auth.user.certificate : '',
-    specializations: auth.user.specializations ? auth.user.specializations : '',
     profession: auth.user.profession ? auth.user.profession : '',
+    specializations: auth.user.specializations ? auth.user.specializations : '',
+
     });
 
   const onChange = () => {};
@@ -45,7 +40,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                 <textarea
                     className={styles.textArea}
                     name="summary"
-                    value={auth.user.summary ? auth.user.summary : ''}
+                    value={data.summary}
                     onChange={(e) => setData('summary', e.target.value)}
                 ></textarea>
             </div>
@@ -56,7 +51,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                     type="text"
                     name="university"
                     className={styles.input}
-                    value={auth.user.university ? auth.user.university : ''}
+                    value={data.university}
                     onChange={(e) => setData('university', e.target.value)}
                 />
             </div>
@@ -67,7 +62,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                     type="text"
                     name="department"
                     className={styles.input}
-                    value={auth.user.department ? auth.user.department : ''}
+                    value={data.department}
                     onChange={(e) => setData('department', e.target.value)}
                 />
             </div>
@@ -78,7 +73,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                     type="text"
                     name="certificate_source"
                     className={styles.input}
-                    value={auth.user.certificate_source ? auth.user.certificate_source : ''}
+                    value={data.certificate_source}
                     onChange={(e) => setData('certificate_source', e.target.value)}
                 />
             </div>
@@ -89,7 +84,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                     type="text"
                     name="certificate"
                     className={styles.input}
-                    value={auth.user.certificate ? auth.user.certificate : ''}
+                    value={data.certificate}
                     onChange={(e) => setData('certificate', e.target.value)}
                 />
             </div>
@@ -100,7 +95,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                     type="text"
                     name="profession"
                     className={styles.input}
-                    value={auth.user.profession ? auth.user.profession : ''}
+                    value={data.profession}
                     onChange={(e) => setData('profession', e.target.value)}
                 />
             </div>
@@ -112,7 +107,7 @@ const EmployeeInformationForm = ({auth, flash}) => {
                 <textarea
                     className={styles.textArea}
                     name="specializations"
-                    value={auth.user.specializations ? auth.user.specializations : ''}
+                    value={data.specializations}
                     onChange={(e) => setData('specializations', e.target.value)}
                 ></textarea>
 

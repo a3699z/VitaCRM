@@ -150,7 +150,7 @@ export default function Login({ status, canResetPassword }) {
                         </button>
                         <p className={styles.registerText}>
                             Sie haben noch kein Konto?{" "}
-                            <Link to="/register" className={styles.link}>
+                            <Link href="/register" className={styles.link}>
                             Registieren
                             </Link>
                         </p>

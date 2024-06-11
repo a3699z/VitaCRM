@@ -46,7 +46,9 @@ const Footer = () => {
       <div className={styles.footer}>
         <div className={styles.col}>
           <div>
-            <img src={logo} alt="" className={styles.logo} />
+          <Link href="/">
+              <img src={logo} alt="" className={styles.logo} />
+            </Link>
           </div>
           <p className={styles.paragraph}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit

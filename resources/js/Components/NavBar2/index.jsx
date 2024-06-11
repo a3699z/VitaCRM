@@ -12,7 +12,9 @@ const NavBar2 = () => {
     <nav className={styles.container}>
       <div className={styles.navbar}>
         <div className={styles.rightContainer}>
-          <img src={logo} alt="logo" />
+        <Link href="/">
+            <img src={logo} alt="logo" />
+          </Link>
 
           <div className={styles.linkContainer}>
             <Link className={styles.link}>Was wir machen</Link>

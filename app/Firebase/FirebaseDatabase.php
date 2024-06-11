@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
 
+
 use App\Http\Facades\Auth;
 
 class FirebaseDatabase
