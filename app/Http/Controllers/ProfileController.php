@@ -47,7 +47,7 @@ class ProfileController extends Controller
     {
         $loggedInUser = Auth::getUID();
         $reservation = Database::getOneReference('reservations/' . $key);
-        if ($reservation['is_online'] == true) {
+        if (isset($reservation['is_online']) && $reservation['is_online'] == true) {
             $call = Database::getOneWhere('calls', 'reservation_key', $key);
         }
         if (!empty($call)) {
