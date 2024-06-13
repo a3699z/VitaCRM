@@ -57,6 +57,10 @@ class UserController extends Controller
             ]);
         }
 
+        if (!empty($request->team_key)) {
+            $data['team_key'] = $request->team_key;
+        }
+
         if (!empty($data)) {
             Database::update('users/' . Auth::getUserData($uid)['key'], $data);
         }
@@ -135,7 +139,27 @@ class UserController extends Controller
         $request->merge([
             'user_type' => 'employee',
         ]);
-        Auth::createUser($request);
+        $auth = Auth::createUser($request);
+        if (!$auth) {
+            return back()->withErrors([
+                'email' => 'The provided email is already registered.',
+            ]);
+        }
+        $data =  [
+            'username' => $request->username,
+            'user_type' => $request->user_type ? $request->user_type : 'patient',
+            'uid' => $auth->uid,
+            'name' => $request->name,
+        ];
+        if (isset($request->team_key)) {
+            $data['team_key'] = $request->team_key;
+        }
+
+
+        Database::push('users', $data);
+
+        Auth::sendEmailVerificationLink($request->email);
+
         return Redirect::route('admin.users.employees');
     }
 
