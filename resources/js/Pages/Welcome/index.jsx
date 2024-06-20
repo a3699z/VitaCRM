@@ -1,4 +1,4 @@
-import { Link, Head, useForm } from '@inertiajs/react';
+import { Link, Head, useForm, usePage } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import axios from 'axios';
 import { useState } from 'react';
@@ -14,6 +14,10 @@ import Stepper from "@/Components/Home/Stepper";
 
 
 export default function Welcome({ auth, laravelVersion, phpVersion, employees }) {
+
+    const { status } = usePage().props;
+
+    console.log(status);
     const handleImageError = () => {
         document.getElementById('screenshot-container')?.classList.add('!hidden');
         document.getElementById('docs-card')?.classList.add('!row-span-1');

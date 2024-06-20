@@ -1,18 +1,23 @@
 import React from "react";
 import styles from "./style.module.css";
+import FormGroup from "../../../FormGroup";
 import { useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 
-const EmployeeInformationForm = ({auth}) => {
+const EmployeeInformationForm = ({auth, flash}) => {
+
+
+
+
   const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
     summary: auth.user.summary ? auth.user.summary : '',
     university: auth.user.university ? auth.user.university : '',
     department: auth.user.department ? auth.user.department : '',
     certificate_source: auth.user.certificate_source ? auth.user.certificate_source : '',
     certificate: auth.user.certificate ? auth.user.certificate : '',
-    profession: auth.user.profession ? auth.user.profession : '',
     specializations: auth.user.specializations ? auth.user.specializations : '',
-
+    profession: auth.user.profession ? auth.user.profession : '',
     });
 
   const onChange = () => {};
@@ -40,7 +45,7 @@ const EmployeeInformationForm = ({auth}) => {
                 <textarea
                     className={styles.textArea}
                     name="summary"
-                    value={data.summary}
+                    value={auth.user.summary ? auth.user.summary : ''}
                     onChange={(e) => setData('summary', e.target.value)}
                 ></textarea>
             </div>
@@ -51,7 +56,7 @@ const EmployeeInformationForm = ({auth}) => {
                     type="text"
                     name="university"
                     className={styles.input}
-                    value={data.university}
+                    value={auth.user.university ? auth.user.university : ''}
                     onChange={(e) => setData('university', e.target.value)}
                 />
             </div>
@@ -62,7 +67,7 @@ const EmployeeInformationForm = ({auth}) => {
                     type="text"
                     name="department"
                     className={styles.input}
-                    value={data.department}
+                    value={auth.user.department ? auth.user.department : ''}
                     onChange={(e) => setData('department', e.target.value)}
                 />
             </div>
@@ -73,7 +78,7 @@ const EmployeeInformationForm = ({auth}) => {
                     type="text"
                     name="certificate_source"
                     className={styles.input}
-                    value={data.certificate_source}
+                    value={auth.user.certificate_source ? auth.user.certificate_source : ''}
                     onChange={(e) => setData('certificate_source', e.target.value)}
                 />
             </div>
@@ -84,7 +89,7 @@ const EmployeeInformationForm = ({auth}) => {
                     type="text"
                     name="certificate"
                     className={styles.input}
-                    value={data.certificate}
+                    value={auth.user.certificate ? auth.user.certificate : ''}
                     onChange={(e) => setData('certificate', e.target.value)}
                 />
             </div>
@@ -95,7 +100,7 @@ const EmployeeInformationForm = ({auth}) => {
                     type="text"
                     name="profession"
                     className={styles.input}
-                    value={data.profession}
+                    value={auth.user.profession ? auth.user.profession : ''}
                     onChange={(e) => setData('profession', e.target.value)}
                 />
             </div>
@@ -107,7 +112,7 @@ const EmployeeInformationForm = ({auth}) => {
                 <textarea
                     className={styles.textArea}
                     name="specializations"
-                    value={data.specializations}
+                    value={auth.user.specializations ? auth.user.specializations : ''}
                     onChange={(e) => setData('specializations', e.target.value)}
                 ></textarea>
 

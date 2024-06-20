@@ -8,8 +8,12 @@ use App\Http\Facades\Auth;
 use App\Http\Facades\Database;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use App\Mail\ReservationBooked as MailReservationBooked;
+use App\Mail\ReservationBookedEmployee;
+use App\Mail\ReservationBookedPatient;
+use Google\Rpc\Context\AttributeContext\Response;
 use Illuminate\Support\Facades\Mail;
+// inertia response
+use Inertia\Response as InertiaResponse;
 
 
 class ReservationController extends Controller
@@ -100,12 +104,25 @@ class ReservationController extends Controller
             $reservation = Database::push('reservations', $reservation);
             $request->session()->forget('reservation');
 
-            Mail::to($employee['email'])->send(new MailReservationBooked($reservation->getKey()));
+            // $reservation = Database::getOneReference('reservations/'.$reservation->getKey());
+            $reservation = $reservation->getValue();
 
+            $patient = Auth::getUserData();
+
+            // dd($reservation, $employee, $patient);
+
+            Mail::to($employee['email'])->send(new ReservationBookedEmployee($reservation, $employee, $patient));
+
+            Mail::to(Auth::getUserData()['email'])->send(new ReservationBookedPatient($reservation, $patient, $employee));
+
+            // dd('alsdkjflsd');
         } catch (\Exception $e) {
             return Redirect::back()->with('error', 'Error occured while booking reservation');
         }
-        return Redirect::route('site.index');
+
+        // with notification
+        // return Redirect::route('site.index')->with('status', 'Reservation booked successfully Date: '.$request->date.' Time: '.$request->hour);
+        return Redirect::back()->with('success', 'Reservation booked successfully Date: '.$request->date.' Time: '.$request->hour);
     }
 
     public function reservation_exists($reservation)
@@ -191,5 +208,76 @@ class ReservationController extends Controller
             'hours' => $hours
         ]);
     }
+
+    public function cancel(Request $request)
+    {
+        $key = $request->key;
+        $call = Database::getOneWhere('calls', 'reservation_key', $key);
+        if ($call) {
+            Database::delete('calls/'.$call['key']);
+        }
+        Database::delete('reservations/'.$key);
+        return Redirect::route('profile.index')->with('status', 'Reservation cancelled');
+    }
+
+    public function quick(Request $request, $uid)
+    {
+        // dd($uid);
+        $request->session()->put('quick_reservation', [
+            'employee_uid' => $uid,
+        ]);
+
+        if (!Auth::check()) {
+            return Redirect::route('login', ['ref' => 'quick_reserve']);
+        } else {
+
+            if (!$request->session()->has('quick_reservation')) {
+                return Redirect::route('site.index');
+            }
+
+            $reservation_session = $request->session()->get('quick_reservation');
+            $employee = Auth::getUserData($reservation_session['employee_uid']);
+            return Inertia::render('Reservation/Quick/index', [
+                'employee' => $employee,
+            ]);
+
+        }
+    }
+
+    public function quick_store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'insurance_type' => 'required',
+            'insurance_policy_number' => 'required',
+            'employee_uid' => 'required',
+        ]);
+
+        try {
+            $employee = Auth::getUserData($request->employee_uid);
+            $quick_reservation = [
+                'user_uid' => Auth::getUID(),
+                'employee_uid' => $employee['uid'],
+                'insurance_type' => $request->insurance_type,
+                'insurance_policy_number' => $request->insurance_policy_number,
+            ];
+            $quick_reservation = Database::push('quick_reservations', $quick_reservation);
+            $request->session()->forget('quick_reservation');
+
+            $quick_reservation = $quick_reservation->getValue();
+
+            $patient = Auth::getUserData();
+
+
+            // Mail::to($employee['email'])->send(new QuickReservationBookedEmployee($quick_reservation, $employee, $patient));
+
+            // Mail::to(Auth::getUserData()['email'])->send(new QuickReservationBookedPatient($quick_reservation, $patient, $employee));
+
+        } catch (\Exception $e) {
+            return Redirect::back()->with('error', 'Error occured while booking reservation');
+        }
+
+        return Redirect::back()->with('success', 'Quick Reservation booked successfully');
+    }
+
 
 }

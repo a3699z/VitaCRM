@@ -4,7 +4,7 @@ import styles from "./style.module.css";
 import proilePhoto from "@/Assets/Profile/profileInfo/profile.png";
 
 const ProfileInfo = ({auth}) => {
-    const proilePhoto = 'images/' +auth.user.profile_image;
+    const proilePhoto =auth.user.profile_image? 'images/' +auth.user.profile_image : 'images/profile.png';
   return (
     <div className={styles.container}>
       <div className={styles.content}>

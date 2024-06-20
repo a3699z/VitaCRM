@@ -12,9 +12,12 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Intervention\Image\Drivers\Gd\Driver;
-use Kreait\Firebase\Contract\Auth as FirebaseAuth;
-use Kreait\Firebase\Contract\Database as FirebaseDatabase;
 use Intervention\Image\ImageManager;
+
+use App\Mail\ReservationBookedEmployee;
+use App\Mail\ReservationBookedPatient;
+use Illuminate\Support\Facades\Mail;
+
 
 // user query
 // use Kreait\Firebase\Auth\UserInfo;
@@ -25,23 +28,6 @@ use App\CustomFirebaseAuth;
 
 class ProfileController extends Controller
 {
-
-    protected $auth;
-
-    protected $database;
-
-    public function __construct( FirebaseAuth $auth, FirebaseDatabase $database)
-    {
-        // check if user is authenticated using firebase
-        // dd(app('firebase.auth'));
-        $this->auth = $auth;
-        // get authenticated user
-        // dd($this->auth->getUser(session()->get('uid')));
-        // $user = UserInfo::
-        $this->database = $database;
-
-
-    }
 
     public function visit(Request $request, $key)
     {
@@ -106,6 +92,73 @@ class ProfileController extends Controller
             ]);
         }
 
+    }
+
+    public function quick_reservations() {
+
+        $user_data = Auth::getUserData();
+        if ($user_data['user_type'] == 'employee') {
+            $reservations = Database::getWhere('quick_reservations', 'employee_uid', $user_data['uid']);
+            // dd($reservations);
+            $reservations = array_map(function($reservation) {
+                $reservation['patient'] = Auth::getUserData($reservation['user_uid']);
+                if (!empty($reservation['patient'])) {
+                    return $reservation;
+                }
+            }, $reservations);
+            $reservations = array_filter($reservations);
+            // return json response
+            return response()->json($reservations);
+
+        } else {
+            $reservations = Database::getWhere('quick_reservations', 'user_uid', $user_data['uid']);
+            $reservations = array_map(function($reservation) {
+                $reservation['employee'] = Auth::getUserData($reservation['employee_uid']);
+                // if (!empty($reservation['employee'])) {
+                    return $reservation;
+                // }
+            }, $reservations);
+
+            // return json response
+            return response()->json($reservations);
+        }
+
+    }
+
+    public function quick(Request $request, $key)
+    {
+        $loggedInUser = Auth::getUID();
+        $reservation = Database::getOneReference('quick_reservations/' . $key);
+        if ($reservation['employee_uid'] == $loggedInUser) {
+
+            $dates = [];
+            $date = date('Y-m-d');
+            $end_date = date('Y-m-d', strtotime('+1 month', strtotime($date)));
+            while (strtotime($date) <= strtotime($end_date)) {
+                $dates[] = [
+                    'date' => $date,
+                    'day' => date('d M', strtotime($date)),
+                    'weekday' => date('l', strtotime($date)),
+                ];
+                $date = date('Y-m-d', strtotime($date . ' +1 day'));
+            }
+
+            // dd($dates);
+
+
+            $reservation['patient'] = Auth::getUserData($reservation['user_uid']);
+            return Inertia::render('Profile/Employee/Quick/index', [
+                'reservation' => $reservation,
+                'dates' => $dates
+            ]);
+        // } else if ($reservation['user_uid'] == $loggedInUser) {
+            // $reservation['employee'] = Auth::getUserData($reservation['employee_uid']);
+            // return Inertia::render('Profile/Patient/Quick/index', [
+                // 'reservation' => $reservation
+            // ]);
+        } else {
+            return Redirect::route('profile.index');
+        }
     }
 
     /**
@@ -188,6 +241,51 @@ class ProfileController extends Controller
         return Redirect::route('profile.index');
     }
 
+
+    public function quick_accept(Request $request)
+    {
+        $quick_reservation = Database::getOneReference('quick_reservations/' . $request->quick_key);
+        // dd($quick_reservation);
+        $reservation = [
+            'user_uid' => $quick_reservation['user_uid'],
+            'employee_uid' => $quick_reservation['employee_uid'],
+            'date' => $request->date,
+            'hour' => $request->hour,
+            'insurance_type' => $quick_reservation['insurance_type'],
+            'insurance_policy_number' => $quick_reservation['insurance_policy_number'],
+            'is_online' => true,
+            'status' => 'accepted',
+        ];
+        $reservation = Database::push('reservations', $reservation);
+        $key = $reservation->getKey();
+        // dd($key);
+
+        $call = [
+            'employee_uid' => $quick_reservation['employee_uid'],
+            'patient_uid' => $quick_reservation['user_uid'],
+            'date' => $request->date,
+            'hour' => $request->hour,
+            'reservation_key' => $key,
+            'room_name' => 'call_'.$key,
+            'topic' => 'Call between patient and doctor on '.$reservation['date'].' at '.$reservation['hour'].'.'
+        ];
+
+        Database::push('calls', $call);
+
+
+        Database::delete('quick_reservations/' . $request->quick_key);
+
+        $patient = Auth::getUserData($quick_reservation['user_uid']);
+        $employee  = Auth::getUserData($quick_reservation['employee_uid']);
+
+        Mail::to($employee['email'])->send(new ReservationBookedEmployee($reservation->getValue(), $employee, $patient));
+
+        Mail::to(Auth::getUserData()['email'])->send(new ReservationBookedPatient($reservation->getValue(), $patient, $employee));
+
+
+        return Redirect::route('profile.index');
+
+    }
 
 
 }

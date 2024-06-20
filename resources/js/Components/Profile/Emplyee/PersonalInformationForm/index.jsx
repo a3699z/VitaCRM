@@ -88,7 +88,7 @@ const PersonalInformation = ({auth}) => {
                 className={styles.input}
                 placeholder="ritaaagreiner"
                 onChange={ (e) => setData('userName', e.target.value) }
-                value={data.userName}
+                value={auth.user.username}
             />
             </div>
           {/* <FormGroup
@@ -111,7 +111,7 @@ const PersonalInformation = ({auth}) => {
                     className={styles.input}
                     placeholder="Rita Greiner"
                     onChange={ (e) => setData('name', e.target.value) }
-                    value={data.name}
+                    value={auth.user.name}
                 />
             </div>
           {/* <FormGroup
@@ -134,7 +134,7 @@ const PersonalInformation = ({auth}) => {
                     className={styles.input}
                     placeholder="ritagreiner@gmail.com"
                     onChange={ (e) => setData('email', e.target.value) }
-                    value={data.email}
+                    value={auth.user.email}
                 />
             </div>
         </form>

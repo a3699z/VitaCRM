@@ -28,6 +28,9 @@ Route::get('/employee/{uid}', [EmployeeController::class, 'show'])->name('employ
 Route::post('/reservation/check/', [ReservationController::class, 'check'])->name('reservation.check');
 Route::get('/reservation/get_hours/', [ReservationController::class, 'get_hours'])->name('reservation.get_hours');
 
+Route::get('/reservation/quick/{uid}', [ReservationController::class, 'quick'])->name('reservation.quick');
+
+
 // Route::middleware('auth')->group(function () {
 Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
 
@@ -35,6 +38,9 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
         Route::get('/reservation/accept/{key}', [ReservationController::class, 'accept'])->name('reservation.accept');
         Route::get('/reservation/decline/{key}', [ReservationController::class, 'decline'])->name('reservation.decline');
     });
+
+    // Route::post('/cancel/{key}', [ReservationController::class, 'cancel'])->name('reservation.cancel');
+    Route::post('/cancel-reservation', [ReservationController::class, 'cancel'])->name('reservation.cancel');
 
     Route::get('call/{key}', [VideoController::class, 'call'])->name('call');
     Route::get('/api/call/{key}', [VideoController::class, 'api_call'])->name('api_call');
@@ -51,13 +57,24 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/visit/{key}', [ProfileController::class, 'visit'])->name('visit');
 
+    Route::get('/quick_reservations', [ProfileController::class, 'quick_reservations'])->name('quick_reservations');
+    Route::get('/quick/{key}', [ProfileController::class, 'quick'])->name('quick');
+    Route::post('/quick/accept', [ProfileController::class, 'quick_accept'])->name('quick.accept');
+
     Route::middleware('patient')->group(function () {
         Route::get('/reservation/create', [ReservationController::class, 'create'])->name('reservation.create');
         Route::get('/reservation/session', function( Request $request) {
             return $request->session()->get('reservation');
         })->name('reservation.session');
         Route::post('/reservation/store', [ReservationController::class, 'store'])->name('reservation.store');
+
+
+        Route::post('/reservation/quick/store', [ReservationController::class, 'quick_store'])->name('reservation.quick_store');
     });
+
+
+
+
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
 });
 

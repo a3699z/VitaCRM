@@ -6,6 +6,7 @@ import NavBar from '@/Components/Navbar';
 import NavBar2 from "@/Components/NavBar2";
 import Hashtag from "@/Components/NewAppointment/Hashtags";
 import SpeedAppointment from "@/Components/NewAppointment/SpeedAppointment";
+import QuickAppointmentRequest from "@/Components/NewAppointment/QuickAppointmentRequest";
 import Footer from "@/Components/Footer";
 import Resume from "@/Components/NewAppointment/Resume";
 import Education from "@/Components/NewAppointment/Education";
@@ -64,6 +65,10 @@ export default function Employee({ auth, employee, dates }) {
 
                     <Hashtag tags={employee.specializations?employee.specializations:[]} />
                     <SpeedAppointment dates={dates} employeeUID={employee.uid} />
+
+                    <QuickAppointmentRequest employeeUID={employee.uid} />
+
+
                     </div>
                 </div>
                 <Footer />

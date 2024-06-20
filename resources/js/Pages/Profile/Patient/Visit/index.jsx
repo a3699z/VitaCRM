@@ -1,15 +1,26 @@
 import React from "react";
-import { Link } from '@inertiajs/react';
 
 import styles from "./style.module.css";
 
 import profilePhoto from "@/Assets/Profile/visit/profile.png";
 import calendarIcon from "@/Assets/Profile/visit/calendarIcon.svg";
 import rightArrowIcon from "@/Assets/Profile/visit/rightArrowIcon.svg";
-
 import NavBar from '@/Components/NavBar';
+import { Head, Link, useForm } from '@inertiajs/react';
+// import axios from 'axios';
+
+// import { router } from '@inertiajs/react';
 
 const VisitDetails = ({auth, reservation}) => {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        key: reservation.key
+    });
+
+    const cancelReservation = (key) => {
+        post(route('reservation.cancel'));
+    };
+
+
   return (
     <>
         <NavBar user={auth.user} />
@@ -102,6 +113,24 @@ const VisitDetails = ({auth, reservation}) => {
                     :
                     <></>
                     }
+
+                    {/* cancel */}
+                    <div className={styles.row}>
+                        <div className={styles.groupContainer}>
+                            <div className={styles.iconContainer}>
+                                <img src={calendarIcon} alt="" />
+                            </div>
+                            <div className={styles.group}>
+                                <h5 className={styles.groupTitle}>Do you need to cancel the Appointment?</h5>
+                            </div>
+                            <form className={styles.btnGroup} onSubmit={(e) => {e.preventDefault(); cancelReservation(reservation.key)}}>
+                                <button className={styles.btn}>
+                                    Stornieren
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

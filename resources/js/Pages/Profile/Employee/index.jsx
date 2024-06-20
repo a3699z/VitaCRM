@@ -5,6 +5,7 @@ import Menu from "@/Components/Profile/Emplyee/Menu";
 
 import styles from "./style.module.css";
 import Visits from "@/Components/Profile/Emplyee/Visits";
+import Quicks from "@/Components/Profile/Emplyee/Quicks";
 import AccountSettings from "@/Components/Profile/Emplyee/AccountSettings";
 import { useNavigate, useParams } from "react-router-dom";
 import VisitDetails from "@/Components/Profile/Emplyee/VisitDetails";
@@ -17,6 +18,11 @@ const Profile = ({auth, reservations}) => {
           id: "profile",
           label: "Meine Termine",
           component: <Visits reservations={reservations} />,
+        },
+        {
+            id: "quickReservations",
+            label: "Schnellreservierung",
+            component: <Quicks />,
         },
         {
           id: "accountSettings",

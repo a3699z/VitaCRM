@@ -72,7 +72,7 @@ class FirebaseAuth
             $token = $this->auth->verifyIdToken($firebase_token);
             $this->session->put('uid', $token->claims()->get('sub'));
             return true;
-        } catch (\Kreait\Firebase\Exception\AuthException $e) {
+        } catch (\Kreait\Firebase\Exception\Auth\FailedToVerifyToken $e) {
             if (!empty($this->session->get('firebase_refresh_token'))) {
                 $idToken = $this->renewIdToken(session('firebase_refresh_token'));
                 if ($idToken) {
@@ -291,6 +291,43 @@ class FirebaseAuth
     {
         try {
             $this->auth->deleteUser($uid);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function getUserByEmail($email)
+    {
+        try {
+            // return $this->auth->getUserByEmail($email);
+            return $this->getUserData($this->auth->getUserByEmail($email)->uid);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function sendPasswordResetEmail($email)
+    {
+        try {
+            $this->auth->sendPasswordResetLink($email);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function createToken($uid)
+    {
+        try {
+            return $this->auth->createCustomToken($uid);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function verifyPasswordResetCode($oobCode)
+    {
+        try {
+            return $this->auth->verifyPasswordResetCode($oobCode);
         } catch (\Throwable $th) {
             return null;
         }

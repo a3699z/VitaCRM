@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Facades\Auth;
 
 class PasswordResetLinkController extends Controller
 {
@@ -29,13 +30,26 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // dd($request->all());
         $request->validate([
             'email' => 'required|email',
         ]);
 
+        $user = Auth::getUserByEmail($request->email);
+
+        dd(Auth::createToken($user['uid']));
+
+        Auth::sendPasswordResetEmail($request->email);
+
+        return back()->with('status', 'We have emailed your password reset link!');
+
+
+
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
+
+        // Password::tokens->create($user);
         $status = Password::sendResetLink(
             $request->only('email')
         );

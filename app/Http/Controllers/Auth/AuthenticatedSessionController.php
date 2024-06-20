@@ -55,8 +55,12 @@ class AuthenticatedSessionController extends Controller
         }
 
 
-        if (!empty($request->ref) && $request->ref == 'reserve') {
-            return redirect()->intended(route('reservation.create'));
+        if (!empty($request->ref)) {
+            if ($request->ref == 'reserve') {
+                return redirect()->intended(route('reservation.create'));
+            } else if ($request->ref == 'reserve_quick') {
+                return redirect()->intended(route('reservation.quick', $request->session()->get('quick_reservation')['employee_uid']));
+            }
         }
         return redirect()->intended(route('site.index', absolute: false));
     }

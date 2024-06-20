@@ -14,6 +14,11 @@ import videoIcon from "@/Assets/Profile/visit/videoIcon.svg";
 import editIcon from "@/Assets/Profile/visit/editIcon.svg";
 import calendarIcon from "@/Assets/Profile/visit/calendarIcon.svg";
 import InputError from '@/Components/InputError';
+// import {useState, useEffect} from 'react';
+
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Create({ auth, employee, date, hour, is_online }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -24,9 +29,25 @@ export default function Create({ auth, employee, date, hour, is_online }) {
         hour: hour,
         is_online: is_online
     });
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => {
+        setShow(false);
+        window.location.href = '/';
+    }
+    // const handleShow = () => setShow(true);
     const submit = (e) => {
         e.preventDefault();
-        post(route('reservation.store'));
+        post(route('reservation.store'),
+        {
+            onSuccess: ( page ) => {
+                console.log(page.props.flash.success);
+                setSuccessMessage(page.props.flash.success);
+                setShow(true);
+            }
+        });
     }
     return (
 
@@ -125,6 +146,20 @@ export default function Create({ auth, employee, date, hour, is_online }) {
                         </div>
                         </div>
             </div>
+            {successMessage &&
+            <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>
+                Success
+            </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{successMessage}</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+                Ok
+            </Button>
+            </Modal.Footer>
+        </Modal>}
         </>
         );
 }

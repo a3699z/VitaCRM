@@ -154,6 +154,11 @@ export default function Login({ status, canResetPassword }) {
                             Registieren
                             </Link>
                         </p>
+                        <p className={styles.forgetPasswordText}>
+                            <Link href={route('password.request')} className={styles.link}>
+                                Passwort vergessen?
+                            </Link>
+                        </p>
                         </form>
                     </div>
                     <div className={styles.footerContainer}>
