@@ -100,13 +100,18 @@ class FirebaseDatabase
     public function getAllUsers()
     {
         $users = $this->database->getReference('users')->getValue();
-        $users = array_map(function ($user, $key) {
-            $user['key'] = $key;
-            $user_data = Auth::getUser($user['uid']);
-            $user['email'] = $user_data->email;
-            // $user['name'] = $user_data->displayName;
-            return $user;
+        $users = array_map(function ($user_data, $uid) {
+            $user = Auth::getUser($uid);
+            $user_data['uid'] = $uid;
+            $user_data['email'] = $user->email;
+            $user_data['email_verified'] = $user->emailVerified;
+
+            $user_data['name'] = $user->displayName;
+
+            return $user_data;
+
         }, $users, array_keys($users));
+        // dd($users);
         return $users;
     }
 

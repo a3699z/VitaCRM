@@ -32,8 +32,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function update (ProfileUpdateRequest $request, $uid)
+    public function update (Request $request, $uid)
     {
+        // dd($request->all());
         $data = array();
         if (!empty($request->username)) {
             $data['username'] = $request->username;
@@ -62,8 +63,10 @@ class UserController extends Controller
         }
 
         if (!empty($data)) {
-            Database::update('users/' . Auth::getUserData($uid)['key'], $data);
+            Database::update('users/' . $uid, $data);
         }
+
+        // dd($request->all());
 
         return Redirect::route('admin.users.show', ['uid' => $uid]);
     }
@@ -107,6 +110,7 @@ class UserController extends Controller
             return Auth::getUserData($user['uid']);
         }, $users);
         $users = array_filter($users);
+        // dd($users);
         return view('admin.users.list', [
             'users' => $users,
             'emptyMessage' => 'No employees found.'
@@ -156,8 +160,11 @@ class UserController extends Controller
         }
 
 
-        Database::push('users', $data);
+        // Database::push('users', $data);
 
+        Database::set('users/'. $auth->uid, $data);
+
+        // dd($request->all());
         Auth::sendEmailVerificationLink($request->email);
 
         return Redirect::route('admin.users.employees');

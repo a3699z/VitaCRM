@@ -59,9 +59,9 @@ class RegisteredUserController extends Controller
                 $data['team_key'] = $request->team_key;
             }
 
-            Database::push('users', $data);
+            // Database::push('users', $data);
 
-            // Database::set('users/'. $auth->uid, $data);
+            Database::set('users/'. $auth->uid, $data);
 
             Auth::signInWithEmailAndPassword($request);
 

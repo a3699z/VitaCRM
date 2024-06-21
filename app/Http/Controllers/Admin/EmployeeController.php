@@ -160,6 +160,7 @@ class EmployeeController extends Controller
                 'email' => $employee['email'],
             ];
         }, $employees, array_keys($employees));
+        // dd($employees);
         return Inertia::render('Admin/Employees', [
             'employees' =>$employees
         ]);

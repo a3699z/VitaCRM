@@ -228,16 +228,16 @@ class FirebaseAuth
         }
         try {
             $user = $this->auth->getUser($uid);
-            $user_data = $this->database->getReference('users')->orderByChild('uid')->equalTo($uid)->getValue();
-            // $user_data = Database::getOneReference('users/'.$uid);
+            // $user_data = $this->database->getReference('users')->orderByChild('uid')->equalTo($uid)->getValue();
+            $user_data = Database::getOneReference('users/'.$uid);
 
             // dd($user_data);
             // $user_data = Database::getOneWhere('users', 'uid', $uid);
-            $user_data = array_map(function ($value, $key) {
-                $value['key'] = $key;
-                return $value;
-            }, $user_data, array_keys($user_data));
-            $user_data = $user_data[0];
+            // $user_data = array_map(function ($value, $key) {
+            //     $value['key'] = $key;
+            //     return $value;
+            // }, $user_data, array_keys($user_data));
+            // $user_data = $user_data[0];
             // dd($user_data);
             $user_data['emailVerified'] = $user->emailVerified;
             $user_data['email'] = $user->email;
@@ -250,6 +250,7 @@ class FirebaseAuth
                 $specializations = explode(',', $user_data['specializations']);
                 $user_data['specializations'] = $specializations;
             }
+            // dd($user_data);
             return $user_data;
         } catch (\Throwable $th) {
             return null;
@@ -348,6 +349,21 @@ class FirebaseAuth
     {
         try {
             return $this->auth->verifyPasswordResetCode($oobCode);
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+
+    public function listUsers()
+    {
+        try {
+            $users = $this->auth->listUsers();
+            return $users;
+            foreach ($users as $key => $user) {
+                $users[$key] = $this->getUserData($user->uid);
+            }
+            dd($users);
+            return $users;
         } catch (\Throwable $th) {
             return null;
         }
