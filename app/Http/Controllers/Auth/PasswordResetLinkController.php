@@ -50,16 +50,16 @@ class PasswordResetLinkController extends Controller
         // need to show to the user. Finally, we'll send out a proper response.
 
         // Password::tokens->create($user);
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        // $status = Password::sendResetLink(
+        //     $request->only('email')
+        // );
 
-        if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
-        }
+        // if ($status == Password::RESET_LINK_SENT) {
+        //     return back()->with('status', __($status));
+        // }
 
-        throw ValidationException::withMessages([
-            'email' => [trans($status)],
-        ]);
+        // throw ValidationException::withMessages([
+        //     'email' => [trans($status)],
+        // ]);
     }
 }
