@@ -61,6 +61,8 @@ class RegisteredUserController extends Controller
 
             Database::push('users', $data);
 
+            // Database::set('users/'. $auth->uid, $data);
+
             Auth::signInWithEmailAndPassword($request);
 
             Auth::sendEmailVerificationLink($request->email);

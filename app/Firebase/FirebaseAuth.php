@@ -70,15 +70,32 @@ class FirebaseAuth
         }
         try {
             $token = $this->auth->verifyIdToken($firebase_token);
-            $this->session->put('uid', $token->claims()->get('sub'));
-            return true;
+            $uid = $token->claims()->get('sub');
+            $this->session->put('uid', $uid);
+                            // dd($this->getUserData($uid));
+
+            if ($this->getUserData($uid)) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (\Kreait\Firebase\Exception\Auth\FailedToVerifyToken $e) {
             if (!empty($this->session->get('firebase_refresh_token'))) {
                 $idToken = $this->renewIdToken(session('firebase_refresh_token'));
                 if ($idToken) {
-                    $this->session->put('firebase_token', $idToken->idToken());
-                    $this->session->put('uid', $this->auth->verifyIdToken($idToken->idToken())->claims()->get('sub'));
-                    return true;
+                    try {
+                        $this->session->put('firebase_token', $idToken->idToken());
+                        $uid = $this->auth->verifyIdToken($idToken->idToken())->claims()->get('sub');
+                        $this->session->put('uid', $uid);
+
+                        if ($this->getUserData($uid)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (\Kreait\Firebase\Exception\Auth\FailedToVerifyToken $e) {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
@@ -212,6 +229,9 @@ class FirebaseAuth
         try {
             $user = $this->auth->getUser($uid);
             $user_data = $this->database->getReference('users')->orderByChild('uid')->equalTo($uid)->getValue();
+            // $user_data = Database::getOneReference('users/'.$uid);
+
+            // dd($user_data);
             // $user_data = Database::getOneWhere('users', 'uid', $uid);
             $user_data = array_map(function ($value, $key) {
                 $value['key'] = $key;

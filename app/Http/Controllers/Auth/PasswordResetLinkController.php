@@ -37,7 +37,7 @@ class PasswordResetLinkController extends Controller
 
         $user = Auth::getUserByEmail($request->email);
 
-        dd(Auth::createToken($user['uid']));
+        // dd(Auth::createToken($user['uid']));
 
         Auth::sendPasswordResetEmail($request->email);
 
