@@ -267,7 +267,7 @@ class ProfileController extends Controller
             'hour' => $request->hour,
             'reservation_key' => $key,
             'room_name' => 'call_'.$key,
-            'topic' => 'Call between patient and doctor on '.$reservation['date'].' at '.$reservation['hour'].'.'
+            'topic' => 'Call between patient and doctor on '.$request->date .' at '.$request->hour .'.'
         ];
 
         Database::push('calls', $call);
@@ -280,7 +280,7 @@ class ProfileController extends Controller
 
         Mail::to($employee['email'])->send(new ReservationBookedEmployee($reservation->getValue(), $employee, $patient));
 
-        Mail::to(Auth::getUserData()['email'])->send(new ReservationBookedPatient($reservation->getValue(), $patient, $employee));
+        Mail::to($patient['email'])->send(new ReservationBookedPatient($reservation->getValue(), $patient, $employee));
 
 
         return Redirect::route('profile.index');
