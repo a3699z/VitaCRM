@@ -43,8 +43,10 @@ class FirebaseDatabase
         return $item;
     }
 
-    public function getWhere(string $path, string $key, $value)
+    public function getWhere(string $path, $key, $value)
     {
+        // dd(gettype($value));
+        $value = strval($value);
         $return =  $this->database->getReference($path)->orderByChild($key)->equalTo($value)->getValue();
         if (count($return) == 0) {
             return [];

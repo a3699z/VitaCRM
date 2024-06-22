@@ -11,6 +11,9 @@ import InputError from '@/Components/InputError';
 import rightArrowIcon from "@/Assets/NewAppointment/rightArrowIcon.svg";
 import leftArrowIcon from "@/Assets/NewAppointment/leftArrowIcon.svg";
 
+import QuickAppointmentRequest from "@/Components/NewAppointment/QuickAppointmentRequest";
+
+
 import { Head, Link, useForm } from '@inertiajs/react';
 
 
@@ -107,6 +110,8 @@ const SpeedAppointment = ({dates, employeeUID}) => {
 
   return (
     <div className={styles.container}>
+
+      <QuickAppointmentRequest employeeUID={employeeUID} />
       <h6 className={styles.title}>Speed Termin</h6>
 
       <div
@@ -192,7 +197,9 @@ const SpeedAppointment = ({dates, employeeUID}) => {
 
         <button className={styles.submitBtn} onClick={() => submit()}>Termin vereinbaren</button>
       </div>
+
     </div>
+
   );
 };
 

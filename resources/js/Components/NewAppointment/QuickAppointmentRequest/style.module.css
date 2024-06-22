@@ -63,7 +63,7 @@
     height: 1px;
   }
 
-  .submitBtn {
+  .submitBtnQuick {
     outline: none;
     border: none;
     border-radius: 8px;
@@ -73,6 +73,14 @@
     color: #ffffff;
     font-size: 16px;
     font-weight: 600;
+    width: 100%;
+  }
+
+  .quickContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 20px;
   }
 
   .dateTitle {

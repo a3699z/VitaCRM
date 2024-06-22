@@ -20,7 +20,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Create({ auth, employee, date, hour, is_online }) {
+export default function Create({ auth, employee, date, hour, is_online, success, reservation_key }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         insurance_type: 'legal',
         insurance_policy_number: '',
@@ -30,25 +30,34 @@ export default function Create({ auth, employee, date, hour, is_online }) {
         is_online: is_online
     });
     const [successMessage, setSuccessMessage] = useState('');
+    const [reservationKey, setReservationKey] = useState('');
 
     const [show, setShow] = useState(false);
 
     const handleClose = () => {
         setShow(false);
-        window.location.href = '/';
+        window.location.href = '/visit/'+reservationKey;
     }
     // const handleShow = () => setShow(true);
     const submit = (e) => {
         e.preventDefault();
-        post(route('reservation.store'),
-        {
-            onSuccess: ( page ) => {
-                console.log(page.props.flash.success);
-                setSuccessMessage(page.props.flash.success);
-                setShow(true);
-            }
-        });
+        post(route('reservation.store'));
+        // axios.post('/reservation/store', data).then((response) => {
+        //     console.log(response);
+        //     setSuccessMessage(response.data.success);
+        //     setShow(true);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
     }
+
+    useEffect(() => {
+        if(success) {
+            setSuccessMessage('Reservation has been created successfully');
+            setReservationKey(reservation_key);
+            setShow(true);
+        }
+    });
     return (
 
         <>

@@ -19,6 +19,7 @@ export default function Register() {
         name: '',
         email: '',
         password: '',
+        password_confirmation: '',
         checked: false,
         // password_confirmation: '',
     });
@@ -150,8 +151,23 @@ export default function Register() {
                             />
                             <span className={styles.info}>Muss mindestens 8 Zeichen haben.</span>
                         </div>
-
                         <InputError message={errors.password} className="mt-2" />
+
+                        {/* password confirmation */}
+                        <div className={styles.formGroup}>
+                            <label htmlFor="password_confirmation" className={styles.label}>
+                                Passwort bestätigen*
+                            </label>
+                            <input
+                                type="password"
+                                name="password_confirmation"
+                                id="password_confirmation"
+                                className={styles.input}
+                                placeholder="••••••••"
+                                onChange={ (e) => setData('password_confirmation', e.target.value) }
+                            />
+                        </div>
+                        <InputError message={errors.password_confirmation} className="mt-2" />
 
                             <div className={styles.container}>
                                 <label

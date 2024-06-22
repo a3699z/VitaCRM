@@ -19,6 +19,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
+        // dd('here');
         // $users = User::all();
         return Inertia::render('Auth/Register/index');
     }
@@ -35,7 +36,7 @@ class RegisteredUserController extends Controller
             'username' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255',
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults(), 'confirmed'],
             'checked' => 'required|accepted',
         ]);
 

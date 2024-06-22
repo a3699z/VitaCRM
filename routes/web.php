@@ -28,7 +28,7 @@ Route::get('/employee/{uid}', [EmployeeController::class, 'show'])->name('employ
 Route::post('/reservation/check/', [ReservationController::class, 'check'])->name('reservation.check');
 Route::get('/reservation/get_hours/', [ReservationController::class, 'get_hours'])->name('reservation.get_hours');
 
-Route::get('/reservation/quick/{uid}', [ReservationController::class, 'quick'])->name('reservation.quick');
+Route::post('/reservation/quick/', [ReservationController::class, 'quick'])->name('reservation.quick');
 
 
 // Route::middleware('auth')->group(function () {

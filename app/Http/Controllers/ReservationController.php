@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Mail\ReservationBookedEmployee;
 use App\Mail\ReservationBookedPatient;
-use Google\Rpc\Context\AttributeContext\Response;
+// use Google\Rpc\Context\AttributeContext\Response;
 use Illuminate\Support\Facades\Mail;
 // inertia response
 use Inertia\Response as InertiaResponse;
+// response
+use Illuminate\Http\Response;
 
 
 class ReservationController extends Controller
@@ -31,13 +33,14 @@ class ReservationController extends Controller
             'hour' => 'required',
         ]);
         // dd($request->all());
-        $request->session()->put('reservation', [
+        $reservation = array(
             'employee_uid' => $request->employeeUID,
             'date' => $request->date,
             'hour' => $request->hour,
             'is_online' => $request->online
-        ]);
-        $check = $this->reservation_exists($request->session()->get('reservation'));
+        );
+        $request->session()->put('reservation', $reservation);
+        $check = $this->reservation_exists($request->session()->get('reservation'), $request->employeeUID);
         if ($check) {
             $request->session()->forget('reservation');
             return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
@@ -54,13 +57,21 @@ class ReservationController extends Controller
         if (!$request->session()->has('reservation')) {
             return Redirect::route('site.index');
         }
-        $check = $this->reservation_exists($request->session()->get('reservation'));
-        if ($check) {
-            $request->session()->forget('reservation');
-            return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
-        }
+        // $check = $this->reservation_exists($request->session()->get('reservation'), $request->session()->get('reservation')['employee_uid']);
+        // if ($check) {
+        //     $request->session()->forget('reservation');
+        //     return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
+        // }
         $reservation_session = $request->session()->get('reservation');
-        $employee = Auth::getUserData($reservation_session['employee_uid']);
+        // $employee = Auth::getUserData($reservation_session['employee_uid']);
+        if (is_array($reservation_session) && isset($reservation_session['employee_uid'])) {
+            $employee = Auth::getUserData($reservation_session['employee_uid']);
+        } else {
+            // Handle the case where $reservation_session is not an array or does not contain 'employee_uid'
+            // For example, redirect back with an error message
+            return Redirect::back()->with('error', 'Invalid reservation session data');
+        }
+        // dd($employee);
         return Inertia::render('Reservation/Create/index', [
             'employee' => $employee,
             'date' => $reservation_session['date'],
@@ -69,7 +80,7 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
             'insurance_type' => 'required',
@@ -79,12 +90,13 @@ class ReservationController extends Controller
             'date' => 'required',
             'hour' => 'required',
         ]);
+        // dd($request->all());
         try {
             $check = $this->reservation_exists(array(
                 'employee_uid' => $request->employee_uid,
                 'date' => $request->date,
                 'hour' => $request->hour
-            ));
+            ), $request->employee_uid);
             if ($check) {
                 $request->session()->forget('reservation');
                 return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
@@ -105,9 +117,13 @@ class ReservationController extends Controller
             $request->session()->forget('reservation');
 
             // $reservation = Database::getOneReference('reservations/'.$reservation->getKey());
+            $reservation_key = $reservation->getKey();
             $reservation = $reservation->getValue();
 
+
             $patient = Auth::getUserData();
+
+            // dd($reservation, $employee, $patient);
 
             // dd($reservation, $employee, $patient);
 
@@ -116,18 +132,58 @@ class ReservationController extends Controller
             Mail::to(Auth::getUserData()['email'])->send(new ReservationBookedPatient($reservation, $patient, $employee));
 
             // dd('alsdkjflsd');
-        } catch (\Exception $e) {
-            return Redirect::back()->with('error', 'Error occured while booking reservation');
-        }
+            // dd($reservation);
 
-        // with notification
-        // return Redirect::route('site.index')->with('status', 'Reservation booked successfully Date: '.$request->date.' Time: '.$request->hour);
-        return Redirect::back()->with('success', 'Reservation booked successfully Date: '.$request->date.' Time: '.$request->hour);
+            // return send the reservation key to the frontend make the flash persistent
+            // return Redirect::back()->with(['success' => 'Reservation booked successfully', 'reservation' => $reservation_key]);
+            // return Redirect::back()->keep(['success' => 'Reservation booked successfully', 'reservation' => $reservation_key]);
+
+            // return a response with the reservation key
+            // return Response::json([
+            //     'message' => 'Reservation booked successfully',
+            //     'reservation' => $reservation_key
+            // ]);
+            // return response()->json([
+            //     'message' => 'Reservation booked successfully',
+            //     'reservation' => $reservation_key
+            // ]);
+
+            // using inertia response
+            return Inertia::render('Reservation/Create/index', [
+                'employee' => $employee,
+                'date' => $reservation['date'],
+                'hour' => $reservation['hour'],
+                'is_online' => $reservation['is_online'],
+                'success' => 'Reservation booked successfully',
+                'reservation_key' => $reservation_key
+            ]);
+
+        } catch (\Exception $e) {
+            // return Redirect::back()->with('error', 'Error occured while booking reservation');
+            // return response()->json([
+            //     'message' => 'Error occured while booking reservation',
+            //     'error' => $e->getMessage()
+            // ], 500);
+            return Inertia::render('Reservation/Create/index', [
+                'employee' => $employee,
+                'date' => $reservation['date'],
+                'hour' => $reservation['hour'],
+                'is_online' => $reservation['is_online'],
+                'error' => 'Error occured while booking reservation',
+                'error_message' => $e->getMessage()
+            ]);
+        }
+        // $data = [
+        //     'message' => 'Reservation booked successfully',
+        //     'reservation' => $reservation->getKey()
+        // ];
     }
 
-    public function reservation_exists($reservation)
+    public function reservation_exists($reservation, $uid)
     {
-        $reservations = Database::getWhere('reservations', 'employee_uid', $reservation['employee_uid']);
+        // dd($reservation['employee_uid']);
+        $uid = $reservation['employee_uid'];
+        $reservations = Database::getWhere('reservations', 'employee_uid', $uid);
         $reservations = array_filter($reservations, function($res) use ($reservation) {
             return $res['date'] == $reservation['date'] && $res['hour'] == $reservation['hour'];
         });
@@ -220,28 +276,92 @@ class ReservationController extends Controller
         return Redirect::route('profile.index')->with('status', 'Reservation cancelled');
     }
 
-    public function quick(Request $request, $uid)
+    public function quick(Request $request)
     {
+        // $uid = strval($uid);
         // dd($uid);
-        $request->session()->put('quick_reservation', [
-            'employee_uid' => $uid,
-        ]);
+        // $request->session()->put('quick_reservation', [
+        //     'employee_uid' => $uid,
+        // ]);
 
-        if (!Auth::check()) {
-            return Redirect::route('login', ['ref' => 'quick_reserve']);
-        } else {
+        // if (!Auth::check()) {
+        //     return Redirect::route('login', ['ref' => 'quick_reserve']);
+        // } else {
 
-            if (!$request->session()->has('quick_reservation')) {
-                return Redirect::route('site.index');
-            }
+        //     if (!$request->session()->has('quick_reservation')) {
+        //         return Redirect::route('site.index');
+        //     }
 
-            $reservation_session = $request->session()->get('quick_reservation');
-            $employee = Auth::getUserData($reservation_session['employee_uid']);
-            return Inertia::render('Reservation/Quick/index', [
-                'employee' => $employee,
-            ]);
+        //     $reservation_session = $request->session()->get('quick_reservation');
+        //     $employee = Auth::getUserData($reservation_session['employee_uid']);
+        //     return Inertia::render('Reservation/Quick/index', [
+        //         'employee' => $employee,
+        //     ]);
 
+        // }
+
+        // get the first available date and time
+        // $employee = Auth::getUserData($uid);
+        // dd(gettype($uid));
+        // time gmt +2
+
+        $uid = $request->employeeUID;
+        $date = date('Y-m-d');
+        $data = $this->quick_hour($date, $uid);
+        if (empty($data['hour'])) {
+            return Redirect::back()->with('error', 'No available time for today');
         }
+        $reservation = array(
+            'employee_uid' => $uid,
+            'date' => $data['date'],
+            'hour' => $data['hour'],
+            'is_online' => true,
+        );
+        $request->session()->put('reservation', $reservation);
+        $check = $this->reservation_exists($request->session()->get('reservation'), $request->employeeUID);
+        if ($check) {
+            $request->session()->forget('reservation');
+            return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
+        }
+        if (Auth::check()) {
+            return Redirect::route('reservation.create');
+        } else {
+            return Redirect::route('login', ['ref' => 'reserve']);
+        }
+    }
+
+    public function quick_hour($date, $uid) {
+        $start_hour = '08:00';
+        $end_hour = '15:00';
+        if (strtotime(date('H:i')) > strtotime('15:00')) {
+            $date = date('Y-m-d', strtotime($date . ' +1 day'));
+        }
+        $hour = '';
+        // dd($date, $hour, $end_hour);
+        $reservations = Database::getWhere('reservations', 'employee_uid', $uid);
+        while (strtotime($start_hour) <= strtotime($end_hour)) {
+            $isBooked = false;
+
+            foreach ($reservations as $reservation) {
+                if ($reservation['date'] == $date && $reservation['hour'] == $start_hour) {
+                    $isBooked = true;
+                    break;
+                }
+            }
+            if ($isBooked) {
+                $start_hour = date('H:i', strtotime($start_hour . ' +60 minutes'));
+            } else {
+                $hour = $start_hour;
+                break;
+            }
+        }
+        if (empty($hour)) {
+            $hour = $this->quick_hour(date('Y-m-d', strtotime($date . ' +1 day')), $uid);
+        }
+        return array(
+            'hour' => $hour,
+            'date' => $date
+        );
     }
 
     public function quick_store(Request $request): RedirectResponse

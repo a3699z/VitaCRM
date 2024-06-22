@@ -1,1 +1,0 @@
-import{j as s}from"./app-DAcVjhCz.js";import{N as r}from"./index-FUIWOrOh.js";function n({children:e}){return s.jsxs(s.Fragment,{children:[s.jsx(r,{user:null}),s.jsx("div",{className:"min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100",children:e})]})}export{n as G};
