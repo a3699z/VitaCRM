@@ -26,4 +26,12 @@ class SiteController extends Controller
             'employees' => $employees
         ]);
     }
+
+    public function get_employees()
+    {
+        $employees = Database::getWhere2('users', 'user_type', 'employee');
+        return response()->json($employees);
+    }
+
+
 }

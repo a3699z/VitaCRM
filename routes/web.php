@@ -78,5 +78,7 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
 });
 
+Route::get('/get_employees', [SiteController::class, 'get_employees'])->name('get_employees');
+
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

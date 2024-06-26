@@ -59,7 +59,7 @@ export default function Employee({ auth, employee, dates }) {
 
                     <div className={styles.right}>
                     <div>
-                        <h5 className={styles.doctorName}>Spezialist, {employee.name}</h5>
+                        <h5 className={styles.doctorName}>Spezialist, {employee.username} {employee.name}</h5>
                         { employee.profession ? <p className={styles.doctorProfession}>{employee.profession}</p> : '' }
                     </div>
 

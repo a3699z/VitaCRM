@@ -132,7 +132,7 @@ const SelectBox = (employees) => {
                 href={route('employee.show', employee.uid)}
             >
               <div>
-                <h5 className={styles.doctorName}>{employee.name}</h5>
+                <h5 className={styles.doctorName}>{employee.username} {employee.name}</h5>
                 <p className={styles.doctorProfession}>{employee.profession}</p>
               </div>
               <img src={employee.profile_image?'/images/'+employee.profile_image:avatar3} alt="" />

@@ -58,6 +58,11 @@ class FirebaseDatabase
         return $return;
     }
 
+    public function getWhere2( string $path, string $key, $value)
+    {
+        return $this->database->getReference($path)->orderByChild($key)->equalTo($value)->getValue();
+    }
+
     public function getOneWhere(string $path, string $key, $value)
     {
         $return =  $this->database->getReference($path)->orderByChild($key)->equalTo($value)->getValue();
