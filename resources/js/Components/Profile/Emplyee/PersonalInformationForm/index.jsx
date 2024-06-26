@@ -79,7 +79,8 @@ const PersonalInformation = ({auth}) => {
           /> */}
           <div className={styles.formGroup}>
             <label htmlFor="userName" className={styles.label}>
-                Benutzername
+                {/* Benutzername */}
+                Name
             </label>
             <input
                 type="text"
@@ -102,7 +103,8 @@ const PersonalInformation = ({auth}) => {
           /> */}
             <div className={styles.formGroup}>
                 <label htmlFor="name" className={styles.label}>
-                    Name
+                    {/* Name */}
+                    Nachname
                 </label>
                 <input
                     type="text"

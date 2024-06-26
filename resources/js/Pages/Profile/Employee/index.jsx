@@ -19,11 +19,11 @@ const Profile = ({auth, reservations}) => {
           label: "Meine Termine",
           component: <Visits reservations={reservations} />,
         },
-        {
-            id: "quickReservations",
-            label: "Schnellreservierung",
-            component: <Quicks />,
-        },
+        // {
+        //     id: "quickReservations",
+        //     label: "Schnellreservierung",
+        //     component: <Quicks />,
+        // },
         {
           id: "accountSettings",
           label: "Account Einstellungen",

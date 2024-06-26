@@ -67,14 +67,15 @@ export default function Register() {
                         /> */}
                         <div className={styles.formGroup}>
                             <label htmlFor="username" className={styles.label}>
-                                Benutzername*
+                                {/* Benutzername* */}
+                                Name*
                             </label>
                             <input
                                 type="text"
                                 name="username"
                                 id="username"
                                 className={styles.input}
-                                placeholder="username"
+                                placeholder="name"
                                 onChange={(e) => setData('username', e.target.value)}
                             />
                         </div>
@@ -90,14 +91,14 @@ export default function Register() {
                         /> */}
                         <div className={styles.formGroup}>
                             <label htmlFor="name" className={styles.label}>
-                                Name*
+                                Nachname*
                             </label>
                             <input
                                 type="text"
                                 name="name"
                                 id="name"
                                 className={styles.input}
-                                placeholder="Ihre name eingeben"
+                                placeholder="Ihre nachname eingeben"
                                 onChange={(e) => setData('name', e.target.value)}
                             />
                         </div>
