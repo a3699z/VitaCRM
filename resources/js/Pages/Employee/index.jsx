@@ -64,7 +64,7 @@ export default function Employee({ auth, employee, dates }) {
                     </div>
 
                     <Hashtag tags={employee.specializations?employee.specializations:[]} />
-                    <SpeedAppointment dates={dates} employeeUID={employee.uid} />
+                    <SpeedAppointment dates={dates} employeeUID={employee.uid} quickDate={employee.quick_date} quickHour={employee.quick_hour} />
 
 
 

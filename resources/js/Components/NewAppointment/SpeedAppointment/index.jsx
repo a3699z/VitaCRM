@@ -29,7 +29,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 const deToday = "Heute";
 const deTomorrow = "Morgen";
 
-const SpeedAppointment = ({dates, employeeUID}) => {
+const SpeedAppointment = ({dates, employeeUID, quickDate, quickHour}) => {
     const [hours, setHours] = useState([]);
     const [activeTab, setActiveTab] = useState("online");
 
@@ -111,7 +111,7 @@ const SpeedAppointment = ({dates, employeeUID}) => {
   return (
     <div className={styles.container}>
 
-      <QuickAppointmentRequest employeeUID={employeeUID} />
+      <QuickAppointmentRequest employeeUID={employeeUID} quickDate={quickDate} quickHour={quickHour} />
       <h6 className={styles.title}>Speed Termin</h6>
 
       <div

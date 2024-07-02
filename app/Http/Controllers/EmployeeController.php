@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 use App\Http\Facades\Auth;
+use App\Http\Facades\Database;
 
 
 class EmployeeController extends Controller
@@ -50,6 +51,13 @@ class EmployeeController extends Controller
         }
 
 
+        $date = date('Y-m-d');
+        $data = $this->quick_hour($date, $uid);
+        if (!empty($data['hour'])) {
+            $employee['quick_date'] = $data['date'];
+            $employee['quick_hour'] = $data['hour'];
+        }
+
         return Inertia::render('Employee/index', [
             'employee' => $employee,
             'dates' => $dates
@@ -57,6 +65,39 @@ class EmployeeController extends Controller
 
     }
 
+    public function quick_hour($date, $uid) {
+        $start_hour = '08:00';
+        $end_hour = '15:00';
+        if (strtotime(date('H:i')) > strtotime('15:00')) {
+            $date = date('Y-m-d', strtotime($date . ' +1 day'));
+        }
+        $hour = '';
+        // dd($date, $hour, $end_hour);
+        $reservations = Database::getWhere('reservations', 'employee_uid', $uid);
+        while (strtotime($start_hour) <= strtotime($end_hour)) {
+            $isBooked = false;
+
+            foreach ($reservations as $reservation) {
+                if ($reservation['date'] == $date && $reservation['hour'] == $start_hour) {
+                    $isBooked = true;
+                    break;
+                }
+            }
+            if ($isBooked) {
+                $start_hour = date('H:i', strtotime($start_hour . ' +60 minutes'));
+            } else {
+                $hour = $start_hour;
+                break;
+            }
+        }
+        if (empty($hour)) {
+            $hour = $this->quick_hour(date('Y-m-d', strtotime($date . ' +1 day')), $uid);
+        }
+        return array(
+            'hour' => $hour,
+            'date' => $date
+        );
+    }
     /**
      * check reservation
      */

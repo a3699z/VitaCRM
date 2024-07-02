@@ -6,7 +6,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 
 
 
-const QuickAppointmentRequest = ({employeeUID}) => {
+const QuickAppointmentRequest = ({employeeUID, quickDate, quickHour}) => {
 
     const { data, setData, post, get, processing, errors, reset } = useForm({
         employeeUID: employeeUID,
@@ -26,6 +26,9 @@ const QuickAppointmentRequest = ({employeeUID}) => {
         <form className={styles.form} onSubmit={e => { e.preventDefault(); submit(); }}>
             <button type="submit" className={styles.submitBtnQuick}>Quick Appointment</button>
         </form>
+        <center>
+            {quickDate} {quickHour}
+        </center>
 
     </div>
   );
