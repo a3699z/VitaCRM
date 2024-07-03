@@ -135,7 +135,7 @@ const SelectBox = (employees) => {
                 <h5 className={styles.doctorName}>{employee.username} {employee.name}</h5>
                 <p className={styles.doctorProfession}>{employee.profession}</p>
               </div>
-              <img src={employee.profile_image?'/images/'+employee.profile_image:avatar3} alt="" />
+              <img src={employee.profile_image?'/images/'+employee.profile_image:avatar3} alt="" className={styles.doctorImg} />
             </Link>
           ))}
         </div>

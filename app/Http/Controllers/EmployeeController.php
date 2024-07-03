@@ -39,7 +39,8 @@ class EmployeeController extends Controller
         $avialable_dates = [];
 
         $dates = [];
-        $date = date('Y-m-d');
+        // one month early
+        $date = date('Y-m-d', strtotime('-1 month'));
         $end_date = date('Y-m-d', strtotime('+1 month', strtotime($date)));
         $germanDaysOfWeek = [
             'Sunday' => 'Sonntag',
@@ -50,10 +51,25 @@ class EmployeeController extends Controller
             'Friday' => 'Freitag',
             'Saturday' => 'Samstag'
         ];
+        $germanMonths = [
+            'January' => 'Januar',
+            'February' => 'Februar',
+            'March' => 'März',
+            'April' => 'April',
+            'May' => 'Mai',
+            'June' => 'Juni',
+            'July' => 'Juli',
+            'August' => 'August',
+            'September' => 'September',
+            'October' => 'Oktober',
+            'November' => 'November',
+            'December' => 'Dezember'
+        ];
         while (strtotime($date) <= strtotime($end_date)) {
             $dates[] = [
                 'date' => $date,
-                'day' => date('d M', strtotime($date)),
+                // 'day' => date('d M', strtotime($date)),
+                'day' => date('d', strtotime($date)) . ' ' . $germanMonths[date('F', strtotime($date))],
                 // 'weekday' => date('l', strtotime($date)),
                 'weekday' => $germanDaysOfWeek[date('l', strtotime($date))],
             ];
