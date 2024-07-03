@@ -41,14 +41,26 @@ class EmployeeController extends Controller
         $dates = [];
         $date = date('Y-m-d');
         $end_date = date('Y-m-d', strtotime('+1 month', strtotime($date)));
+        $germanDaysOfWeek = [
+            'Sunday' => 'Sonntag',
+            'Monday' => 'Montag',
+            'Tuesday' => 'Dienstag',
+            'Wednesday' => 'Mittwoch',
+            'Thursday' => 'Donnerstag',
+            'Friday' => 'Freitag',
+            'Saturday' => 'Samstag'
+        ];
         while (strtotime($date) <= strtotime($end_date)) {
             $dates[] = [
                 'date' => $date,
                 'day' => date('d M', strtotime($date)),
-                'weekday' => date('l', strtotime($date)),
+                // 'weekday' => date('l', strtotime($date)),
+                'weekday' => $germanDaysOfWeek[date('l', strtotime($date))],
             ];
             $date = date('Y-m-d', strtotime($date . ' +1 day'));
         }
+
+        // dd($dates);
 
 
         $date = date('Y-m-d');
