@@ -76,6 +76,23 @@
     width: 100%;
   }
 
+  
+.submitBtnQuick:hover {
+  background-color: #c99b314d;
+  color: #ca9b31;
+  border: 1px solid #ca9b31;
+}
+
+
+.submitBtnQuick:active {
+  background-color: #ca9b31;
+  color: #ffffff;
+
+  border: 1px solid #ca9b31;
+}
+
+
+
   .quickContainer{
     display: flex;
     flex-direction: column;

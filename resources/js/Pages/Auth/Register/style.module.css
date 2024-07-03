@@ -86,6 +86,7 @@
   text-align: center;
   margin-top: 32px;
 }
+
 .link {
   color: rgba(212, 170, 44, 1);
   font-weight: 600;
@@ -101,57 +102,84 @@
   font-size: 14px;
   line-height: 20px;
 }
+
 .check_container {
-    display: flex;
-    gap: 8px;
-  }
-  .ckeckboxInput + span {
-    min-width: 16px;
-    height: 16px !important;
-    border: 1px solid rgba(208, 213, 221, 1);
-    border-radius: 4px;
-    margin-top: 3px;
-    background-color: rgba(255, 255, 255, 1);
-  }
-  .ckeckboxInput:checked + span {
-    background-color: rgba(212, 170, 44, 1);
-    border-color: rgba(212, 170, 44, 1);
-  }
+  display: flex;
+  gap: 8px;
+}
 
-  .ckeckboxInput {
-    display: none;
-  }
+.ckeckboxInput + span {
+  min-width: 16px;
+  height: 16px !important;
+  border: 1px solid rgba(208, 213, 221, 1);
+  border-radius: 4px;
+  margin-top: 3px;
+  background-color: rgba(255, 255, 255, 1);
+}
 
+.ckeckboxInput:checked + span {
+  background-color: rgba(212, 170, 44, 1);
+  border-color: rgba(212, 170, 44, 1);
+}
 
-  .formGroup {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: 20px 0;
-  }
+.ckeckboxInput {
+  display: none;
+}
 
-  .label {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    padding-bottom: 6px;
-  }
-  .input {
-    border: 1px solid #d7dbea80;
-    border-radius: 8px;
-    background-color: #fafafa;
-    font-size: 16px;
-    line-height: 24px;
-    outline: none;
-    padding: 10px 14px;
-    /*!! rengi sor color: rgba(34, 46, 85, 1); */
-  }
-  .input:placeholder-shown {
-    color: rgba(102, 112, 133, 1);
-  }
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 20px 0;
+}
 
-  .info {
-    line-height: 20px;
-    font-size: 14px;
-    color: rgba(71, 84, 103, 1);
-  }
+.label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  padding-bottom: 6px;
+}
+
+.input {
+  border: 1px solid #d7dbea80;
+  border-radius: 8px;
+  background-color: #fafafa;
+  font-size: 16px;
+  line-height: 24px;
+  outline: none;
+  padding: 10px 14px;
+  color: rgba(34, 46, 85, 1); /* Adjusted color */
+}
+
+.input::placeholder {
+  color: rgba(102, 112, 133, 1);
+}
+
+.info {
+  line-height: 20px;
+  font-size: 14px;
+  color: rgba(71, 84, 103, 1);
+}
+
+.passwordContainer {
+  position: relative;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: rgba(102, 112, 133, 1);
+  margin-top: 6px;
+}
+.confirmPasswordToggle {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  color: rgba(102, 112, 133, 1);
+  cursor: pointer;
+  margin-top: 16px; 
+}

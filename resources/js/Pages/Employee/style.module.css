@@ -9,12 +9,12 @@
 }
 
 .left {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-end; */
 }
 .imgContainer {
-  max-width: 800px;
+  /* max-width: 800px; */
   width: 100%;
 }
 .profileImg {
@@ -31,7 +31,7 @@
   padding-right: 24px;
 }
 .doctorName {
-  margin: 0;
+  /* margin: 0; */
   color: #141417;
   font-size: 28px;
   font-weight: 700;

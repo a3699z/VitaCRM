@@ -123,7 +123,7 @@ const VisitDetails = ({auth, reservation}) => {
                             <div className={styles.group}>
                                 <h5 className={styles.groupTitle}>Do you need to cancel the Appointment?</h5>
                             </div>
-                            <form className={styles.btnGroup} onSubmit={(e) => {e.preventDefault(); cancelReservation(reservation.key)}}>
+                            <form  className={`${styles.btnGroup} flex items-center justify-between gap-6`}  onSubmit={(e) => {e.preventDefault(); cancelReservation(reservation.key)}}>
                                 <button className={styles.btn}>
                                     Stornieren
                                 </button>

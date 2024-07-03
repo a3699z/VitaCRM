@@ -111,8 +111,8 @@ const SpeedAppointment = ({dates, employeeUID, quickDate, quickHour}) => {
   return (
     <div className={styles.container}>
 
-      <QuickAppointmentRequest employeeUID={employeeUID} quickDate={quickDate} quickHour={quickHour} />
-      <h6 className={styles.title}>Speed Termin</h6>
+<QuickAppointmentRequest employeeUID={employeeUID} quickDate={quickDate} quickHour={quickHour} />
+      
 
       <div
         className={styles.tabMenu}
@@ -152,7 +152,7 @@ const SpeedAppointment = ({dates, employeeUID, quickDate, quickHour}) => {
                     {dates.map((date, index) => {
                         return (
                             <div className={styles.dateBox} key={index} onClick={() => selectDate(date.date)} data-date={date.date}>
-                                <h6 className={styles.dateBoxTitle}>{date.day}</h6>
+                                <h6 className={   styles.dateBoxTitle   }>{date.day}</h6>
                                 <p className={styles.dateBoxDayInfo}>{date.weekday}</p>
                             </div>
                         );
@@ -173,7 +173,7 @@ const SpeedAppointment = ({dates, employeeUID, quickDate, quickHour}) => {
 
         <div className={styles.timeSelectContainer}>
             <h5 className={styles.dateTitle}>Verfügbare Stunden</h5>
-            <div className={styles.timeSelect}>
+            <div className={`${styles.timeSelect} grid md:grid-cols-3 grid-cols-2 gap-2  `}>
                 {/* <div className={[styles.timeBox, styles.timeBoxSelected].join(" ")}>
                 9:00
                 </div>

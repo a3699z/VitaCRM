@@ -1,0 +1,1 @@
+import{r as a,j as r}from"./app-X7rQuqzQ.js";import"./Dropdown-BQqw1rnm.js";import{N as t}from"./index-0w41dl_r.js";function x({user:e,header:i,children:s}){return a.useState(!1),r.jsxs(r.Fragment,{children:[r.jsx(t,{user:e}),r.jsx("div",{className:"min-h-screen bg-gray-100",children:r.jsx("main",{children:s})})]})}export{x as A};

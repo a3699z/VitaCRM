@@ -1,12 +1,12 @@
 .container {
-  /* ! kaldır */
-  width: 300px;
-  /* ! kaldır */
+
+  /* width: 300px;
+
   height: fit-content;
   background-color: #ffffff;
   border: 1px solid #d7dbea80;
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px; */
 }
 .menu {
   display: flex;

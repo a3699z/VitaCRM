@@ -41,7 +41,7 @@ const Profile = ({auth, reservations}) => {
         <Navbar user={auth.user} />
         <div className={styles.container}>
             <ProfileInfo auth={auth} />
-            <div className={styles.contentContainer}>
+            <div className={`${styles.contentContainer} flex md:flex-row flex-col`}>
                 <Menu tabs={tabs} activeTab={activeTab} changeTab={changeTab} />
                 <div className={styles.content}>
                     {tabs.find((t) => t.id === activeTab).component}

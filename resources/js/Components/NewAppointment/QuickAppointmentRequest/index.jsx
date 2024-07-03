@@ -22,9 +22,9 @@ const QuickAppointmentRequest = ({employeeUID, quickDate, quickHour}) => {
 
   return (
     <div className={styles.quickContainer}>
-      <h6 className={styles.title}>Quick Appointment Request</h6>
+      <h6 className={styles.title}>Nächstmöglicher Termin Request</h6>
         <form className={styles.form} onSubmit={e => { e.preventDefault(); submit(); }}>
-            <button type="submit" className={styles.submitBtnQuick}>Quick Appointment</button>
+            <button type="submit" className={styles.submitBtnQuick}>Nächstmöglicher Termin</button>
         </form>
         <center>
             {quickDate} {quickHour}

@@ -3,6 +3,8 @@
   background-color: rgba(249, 248, 242, 1);
   padding: 140px 0;
   z-index: 0;
+  margin-top: 140px;
+
 }
 .content {
   display: flex;
@@ -19,7 +21,8 @@
   word-wrap: break-word;
   text-align: center;
   margin: 0;
-  margin-bottom: 16px;
+  margin-bottom: 80px;
+
 }
 
 .titleColored {

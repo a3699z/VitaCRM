@@ -67,8 +67,8 @@ export default function Create({ auth, employee, date, hour, is_online, success,
                 <div className={styles.visitContainer}>
 
                     <div className={styles.container}>
-                        <div className={styles.appointmentInfo}>
-                            <div className={styles.doctorInfo}>
+                    <div className={`${styles.appointmentInfo} flex md:flex-row flex-col justify-between gap-2 `}>
+                    <div className={`${styles.doctorInfo} flex md:flex-row flex-col gap-3 justify-center items-start  md:items-center   `}>
                             <img src={employee.profile_image ? '/images/'+employee.profile_image : profilePhoto} alt="" className={styles.profilePhoto} />
                             <div className={styles.info}>
                                 {is_online ?
@@ -81,7 +81,7 @@ export default function Create({ auth, employee, date, hour, is_online, success,
                                 { employee.profession ? <h6 className={styles.profession}>{employee.profession}</h6> : '' }
                             </div>
                             </div>
-                            <div className={styles.dateInfo}>
+                            <div className={`${styles.dateInfo} flex flex-col gap-1 md:justify-center justify-start   `}>
                             <div className={styles.date}>{date}</div>
                             <div className={styles.time}>{hour}</div>
                             </div>

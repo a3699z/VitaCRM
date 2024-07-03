@@ -20,15 +20,15 @@
 }
 
 .appointmentInfo {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
 }
 
 .doctorInfo {
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 24px;
+  gap: 24px; */
 }
 
 .profilePhoto {
@@ -45,7 +45,7 @@
 .appointmentType {
   margin: 0;
   color: #d4aa2c;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 19px;
   word-wrap: break-word;
@@ -69,20 +69,22 @@
 }
 
 .dateInfo {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   gap: 4px;
+  align-items: center;
+  justify-content: center; */
 }
 
 .date {
   color: #000000;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 500;
   word-wrap: break-word;
 }
 .time {
   color: #000000;
-  font-size: 12px;
+  font-size: 20px;
   font-weight: 500;
   word-wrap: break-word;
 }
@@ -155,7 +157,8 @@
   .container {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 4px;
+    padding: 4px 20px;
+    
   }
 
   .titleContainer {

@@ -17,9 +17,10 @@ const VisitCard = ({
     profile_image="",
 }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.appointmentInfo}>
-        <div className={styles.doctorInfo}>
+    <div className={`${styles.container} w-full p-6 rounded-lg shadow  `}>
+          <div className={`${styles.appointmentInfo} flex md:flex-row flex-col md:justify-between justify-start  `}>
+    
+        <div className={`${styles.doctorInfo} flex md:flex-row flex-col md:justify-between justify-start gap-4  `}>
           <img src={profile_image ? '/images/' +profile_image : profilePhoto} alt="" className={styles.profilePhoto} />
           <div className={styles.info}>
             <h4 className={styles.appointmentType}>

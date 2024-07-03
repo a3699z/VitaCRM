@@ -110,7 +110,7 @@ const SelectQuickDate = ({dates, reservation, auth}) => {
 
   return (
     <div className={styles.container}>
-      <h6 className={styles.title}>Speed Termin</h6>
+      <h6 className={styles.title}>Nächstmöglicher Termin</h6>
 
 
       <div className={styles.appointmentDateContainer}>

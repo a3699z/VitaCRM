@@ -1,6 +1,8 @@
 .container {
   background-color: #f9f8f2;
   padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .contentContainer {

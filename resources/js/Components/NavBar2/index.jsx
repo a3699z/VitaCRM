@@ -16,11 +16,11 @@ const NavBar2 = () => {
             <img src={logo} alt="logo" />
           </Link>
 
-          <div className={styles.linkContainer}>
+          {/* <div className={styles.linkContainer}>
             <Link className={styles.link}>Was wir machen</Link>
             <Link className={styles.link}>Über uns</Link>
             <Link className={styles.link}>Kontakt</Link>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.leftContainer}>

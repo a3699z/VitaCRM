@@ -64,8 +64,9 @@ const Visits = ({reservations}) => {
 //   visits = reservations
 
   return (
-    <div className={styles.container}>
-      <h5 className={styles.title}>Abgeschlossene Besuche</h5>
+    <div className={`${styles.container} flex flex-col w-full gap-4 p-4 md:p-0 `}>
+
+      <h5 className={styles.title}>Abgeschlossene Besuche </h5>
       <div className={styles.visitContainer}>
         {visits.map((reservation) => (
           <VisitCard

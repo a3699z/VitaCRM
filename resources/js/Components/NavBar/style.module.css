@@ -59,16 +59,15 @@
 }
 
 .profileBtn {
-  border-radius: 8px;
-  background: #c7982e;
+  /* border-radius: 8px;
+  background: #c7982e; */
   display: flex;
-  padding: 16px 32px;
+  /* padding: 16px 32px; */
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  color: white;
-  color: #fff;
-  font-size: 16px;
+  gap: 6px;
+color: #fafafa;
+  font-size: 24px;
   font-weight: 600;
   text-decoration: none;
 }

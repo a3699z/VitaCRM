@@ -49,11 +49,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, employees })
             <Navbar user={auth.user} />
 
             <Banner employees={employees} />
-            <Stepper />
+            {/* <Stepper /> */}
             <About />
+            <ContactUs />
             <ChooseUs />
             {/* <Reviews /> */}
-            <ContactUs />
             <Footer />
 
 

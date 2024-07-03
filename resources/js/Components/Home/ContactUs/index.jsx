@@ -10,20 +10,21 @@ const ContactUs = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h5 className={styles.title}>
-          Einfach einen <span className={styles.titleColored}>Termin</span>{" "}
-          vereinbaren
+          {/* Einfach einen <span className={styles.titleColored}>Termin</span>{" "} */}
+          Vereinbaren Sie hier Ihren Termin
         </h5>
-        <p className={styles.paragraph}>
+        {/* <p className={styles.paragraph}>
           Buchen Sie ganz einfach einen Termin bei einem Spezialisten Ihrer Wahl
           und vereinbaren Sie einen Termin für eine Konsultation mit dem besten
           Spezialisten.
-        </p>
-        <Link href="/" className={styles.btn}>
+        </p> */}
+        <Link href="/register" className={styles.btn}>
           Kontaktieren Sie uns
+          {/* Registrieren */}
         </Link>
       </div>
-      <img src={leftTop} alt="" className={styles.leftTop} />
-      <img src={rightBottom} alt="" className={styles.rightBottom} />
+      {/* <img src={leftTop} alt="" className={styles.leftTop} />
+      <img src={rightBottom} alt="" className={styles.rightBottom} /> */}
     </div>
   );
 };
